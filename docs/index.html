@@ -1,0 +1,39 @@
+<html><head>
+        <title>Auber | 3³</title>
+        <link rel="icon" type="image/png" href="logo.png">
+        <link rel="stylesheet" href="https://use.typekit.net/qui7hwg.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&amp;display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h1>
+            <img src="logo.png" alt="3³ Studios">
+            studios
+        </h1>
+        <h2>Auber</h2>
+        <div id="content">
+            <div id="contents-box">
+                <p>Contents</p>
+            <li style="padding-left: 0px"><a href="#documentation">Documentation</a></li><li style="padding-left: 0px"><a href="#builds">Builds</a></li><li style="padding-left: 0px"><a href="#assessment-documents">Assessment Documents</a></li></div>
+            <h3 id="documentation">Documentation</h3>
+            <h3 id="builds">Builds</h3>
+            <h3 id="assessment-documents">Assessment Documents</h3>
+            <p><a href="pdfs/Auber Brief.pdf">Auber Brief</a></p>
+            <p><a href="pdfs/Assessment Brief.pdf">Assessment Brief</a></p>
+        </div>
+        <script>
+            const contentsBox = document.getElementById('contents-box')
+            const headers = document.querySelectorAll('h3, h4, h5, h6')
+
+            for (var i=0; i<headers.length; i++) {
+                var item = headers[i]
+                if (item.id === '') {
+                    item.id = item.innerHTML.toLowerCase().replace(' ', '-')
+                }
+                var indentation = (parseInt(item.tagName[1]) - 3) * 20
+                contentsBox.innerHTML += '<li style="padding-left: ' + indentation.toString() + 'px"><a href="#' + item.id + '">' + item.innerHTML + '</a></li>'
+            }
+        </script>
+</body></html>

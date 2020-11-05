@@ -1,8 +1,8 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class GameEntity {
@@ -17,7 +17,7 @@ public abstract class GameEntity {
   public Vector2 velocity;
   public float rotation = 0f;
 
-  public void render(SpriteBatch batch) {
+  public void render(Batch batch) {
     sprite.setRotation(rotation);
     sprite.setPosition(position.x, position.y);
     sprite.draw(batch);

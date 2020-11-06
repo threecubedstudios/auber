@@ -23,18 +23,19 @@ public class Main extends ApplicationAdapter {
 
   @Override
   public void create () {
-    Gdx.graphics.setWindowedMode(960, 540);
+    Gdx.graphics.setWindowedMode(1920, 1080);
 
     entities = new ArrayList<>();
-    entities.add(new Player(0f, 0f));
+    entities.add(new Player(50f, 50f));
 
     // Load the tilemap
     map = new TmxMapLoader().load("map.tmx");
-    renderer = new OrthogonalTiledMapRenderer(map, 1/16f);
+    renderer = new OrthogonalTiledMapRenderer(map);
 
     camera = new OrthographicCamera();
-    camera.setToOrtho(false, 16, 9);
+    camera.setToOrtho(false, 480, 270);
     camera.update();
+
   }
 
   @Override
@@ -51,8 +52,11 @@ public class Main extends ApplicationAdapter {
     // TODO: Make .update() call every 5 frames? better performance
     batch.begin();
     for (GameEntity entity : entities) {
-      entity.update();
+      entity.update(map);
       entity.render(batch);
+
+      camera.position.set(entity.position.x, entity.position.y, 0);
+      camera.update();
     }
     batch.end();
   }

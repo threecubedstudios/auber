@@ -2,21 +2,14 @@ package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 
 public class Player extends GameEntity {
   public Player(float x, float y) {
-    texture = new Texture("llama.png");
-    sprite = new Sprite(texture);
-
-    position = new Vector2(x, y);
-    velocity = new Vector2(0, 0);
+    super(x, y);
   }
 
-  public void update() {
-    velocity.scl(friction);
+  public void update(TiledMap map) {
 
     if (Gdx.input.isKeyPressed(Input.Keys.W)) {
       velocity.y = Math.min(velocity.y + speed, max_speed);
@@ -31,6 +24,6 @@ public class Player extends GameEntity {
       velocity.x = Math.min(velocity.x + speed, max_speed);
     }
 
-    position.add(velocity);
+    move(velocity, map);
   }
 }

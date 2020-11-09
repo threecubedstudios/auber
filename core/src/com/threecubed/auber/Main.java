@@ -26,7 +26,7 @@ public class Main extends ApplicationAdapter {
     Gdx.graphics.setWindowedMode(1920, 1080);
 
     entities = new ArrayList<>();
-    entities.add(new Player(50f, 50f));
+    entities.add(new Player(32f, 32f));
 
     // Load the tilemap
     map = new TmxMapLoader().load("map.tmx");
@@ -52,7 +52,7 @@ public class Main extends ApplicationAdapter {
     // TODO: Make .update() call every 5 frames? better performance
     batch.begin();
     for (GameEntity entity : entities) {
-      entity.update(map);
+      entity.update(map, camera);
       entity.render(batch);
 
       camera.position.set(entity.position.x, entity.position.y, 0);

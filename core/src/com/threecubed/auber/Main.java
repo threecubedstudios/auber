@@ -22,11 +22,11 @@ public class Main extends ApplicationAdapter {
   OrthographicCamera camera;
 
   @Override
-  public void create () {
+  public void create() {
     Gdx.graphics.setWindowedMode(1920, 1080);
 
     entities = new ArrayList<>();
-    entities.add(new Player(32f, 32f));
+    entities.add(new Player(96f, 128f));
 
     // Load the tilemap
     map = new TmxMapLoader().load("map.tmx");
@@ -39,15 +39,15 @@ public class Main extends ApplicationAdapter {
   }
 
   @Override
-  public void render () {
-    Batch batch = renderer.getBatch();
+  public void render() {
     // Set the background color
-    Gdx.gl.glClearColor(0, 0, 200, 1);
+    Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     renderer.setView(camera);
     renderer.render();
 
+    Batch batch = renderer.getBatch();
     // Iterate over all entities. Perform movement logic and render them.
     // TODO: Make .update() call every 5 frames? better performance
     batch.begin();
@@ -62,6 +62,6 @@ public class Main extends ApplicationAdapter {
   }
 
   @Override
-  public void dispose () {
+  public void dispose() {
   }
 }

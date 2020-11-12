@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.2" name="tileset" tilewidth="16" tileheight="16" tilecount="204" columns="12">
- <image source="tileset.png" width="192" height="272"/>
+<tileset version="1.4" tiledversion="1.4.2" name="tileset" tilewidth="16" tileheight="16" tilecount="199" columns="12">
+ <image source="tileset.png" width="192" height="192"/>
  <tile id="0">
   <properties>
    <property name="solid" type="bool" value="false"/>
@@ -180,13 +180,6 @@
   <properties>
    <property name="solid" type="bool" value="true"/>
   </properties>
-  <animation>
-   <frame tileid="35" duration="100"/>
-   <frame tileid="22" duration="100"/>
-   <frame tileid="34" duration="100"/>
-   <frame tileid="33" duration="100"/>
-   <frame tileid="21" duration="100"/>
-  </animation>
  </tile>
  <tile id="36">
   <properties>

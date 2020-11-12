@@ -42,7 +42,7 @@ public class Main extends ApplicationAdapter {
   public void render () {
     Batch batch = renderer.getBatch();
     // Set the background color
-    Gdx.gl.glClearColor(0, 0, 0, 1);
+    Gdx.gl.glClearColor(0, 0, 200, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     renderer.setView(camera);

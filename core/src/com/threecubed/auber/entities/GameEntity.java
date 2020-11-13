@@ -72,6 +72,8 @@ public abstract class GameEntity {
    * */
   public void move(Vector2 velocity, TiledMap map) {
     TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("collision_layer");
+    float velocitySignX = Math.signum(velocity.x);
+    float velocitySignY = Math.signum(velocity.y);
 
     for (float[] offset : collisionOffsets) {
       Cell cell = collisionLayer.getCell(
@@ -79,11 +81,9 @@ public abstract class GameEntity {
             (int) ((position.y + offset[1]) / collisionLayer.getTileHeight())
       );
 
-      while (cell != null && velocity.x != 0) {
-        velocity.x -= Math.signum(velocity.x) * 0.1f;
-        if (velocity.x < 0.01f) {
-          velocity.x = 0f;
-        }
+      while (cell != null) {
+        velocity.x -= velocitySignX * 0.1f;
+        System.out.println(velocity.x);
 
         cell = collisionLayer.getCell(
             (int) ((position.x + velocity.x + offset[0]) / collisionLayer.getTileWidth()),
@@ -94,11 +94,8 @@ public abstract class GameEntity {
             (int) ((position.x + offset[0]) / collisionLayer.getTileWidth()),
             (int) ((position.y + velocity.y + offset[1]) / collisionLayer.getTileHeight())
       );
-      while (cell != null && velocity.y != 0) {
-        velocity.y -= Math.signum(velocity.y) * 0.1f;
-        if (velocity.y < 0.01f) {
-          velocity.y = 0f;
-        }
+      while (cell != null) {
+        velocity.y -= velocitySignY * 0.1f;
 
         cell = collisionLayer.getCell(
             (int) ((position.x + offset[0]) / collisionLayer.getTileWidth()),
@@ -109,13 +106,5 @@ public abstract class GameEntity {
 
     position.add(velocity);
     velocity.scl(friction);
-
-    // TODO: Come up with a more permanent solution to the weird collision bug
-    if (Math.abs(velocity.x) < 0.1f) {
-      velocity.x = 0;
-    }
-    if (Math.abs(velocity.y) < 0.1f) {
-      velocity.y = 0;
-    }
   }
 }

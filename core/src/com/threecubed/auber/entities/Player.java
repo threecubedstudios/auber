@@ -4,17 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class Player extends GameEntity {
-  Texture texture = new Texture("player.png");  
+  public static Texture texture = new Texture("player.png");  
 
   public Player(float x, float y) {
-    super(x, y);
+    super(x, y, texture);
   }
 
   /**
@@ -37,34 +41,46 @@ public class Player extends GameEntity {
       velocity.x = Math.min(velocity.x + speed, maxSpeed);
     }
     
-    if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+    // TODO: Abstract into different method
+    if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
       // Interact with an object
-      TiledMapTileLayer interactionLayer = (TiledMapTileLayer) map.getLayers().get("interaction_layer");
-      int[] playerTile = {
-        (int) position.x / interactionLayer.getTileWidth(),
-        (int) position.y / interactionLayer.getTileHeight()
-        };
+      MapLayer interactionLayer = map.getLayers().get("object_layer");
+      MapObjects objects = interactionLayer.getObjects();
 
-      int[][] potentialTiles = {
-          playerTile,
-          {playerTile[0] - 1, playerTile[1]},
-          {playerTile[0] + 1, playerTile[1]},
-          {playerTile[0], playerTile[1] - 1},
-          {playerTile[0], playerTile[1] + 1},
-        };
+      for (MapObject object : objects) {
+        if (object instanceof RectangleMapObject) {
+          RectangleMapObject rectangularObject = (RectangleMapObject) object;
+          if (Intersector.overlaps(sprite.getBoundingRectangle(), rectangularObject.getRectangle())) {
+            MapProperties properties = rectangularObject.getProperties();
+            String type = properties.get("type", String.class);
 
-      for (int[] tileCoordinates : potentialTiles) {
-        Cell currentTile = interactionLayer.getCell(tileCoordinates[0], tileCoordinates[1]);
-        if (currentTile != null) {
-          // Tile
+            switch (type) {
+              case "teleporter":
+                String linkedTeleporterId = properties.get("linked_teleporter", String.class); 
+                RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(linkedTeleporterId);
+                velocity.setZero();
+                position.x = linkedTeleporter.getRectangle().getX();
+                position.y = linkedTeleporter.getRectangle().getY();
+                break;
+
+              default:
+                break;
+            }
+          }
         }
       }
     }
 
     Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(mousePosition);
-    Vector2 mousePosition_2d = new Vector2(mousePosition.x, mousePosition.y);
-    rotation = (float) (Math.toDegrees(Math.atan2((mousePosition_2d.y-position.y),(mousePosition_2d.x-position.x))) - 90f);
+    Vector2 mousePosition2d = new Vector2(mousePosition.x, mousePosition.y);
+
+    // Set the rotation to the angle theta where theta is the angle between the mouse cursor and
+    // player position. Correct the player position to be measured from the centre of the sprite.
+    rotation = (float) (Math.toDegrees(Math.atan2(
+            (mousePosition2d.y - position.y - (sprite.getWidth() / 2)),
+            (mousePosition2d.x - position.x - (sprite.getHeight() / 2)))
+          ) - 90f);
 
     move(velocity, map);
   }

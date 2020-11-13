@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class GameEntity {
-  public Texture texture = new Texture("default.png");
   public Sprite sprite;
 
   public float speed = 0.4f;
@@ -24,22 +23,23 @@ public abstract class GameEntity {
   private float[][] collisionOffsets;
 
   /**
-   * Initialise a game entity at a given x and y coordinates
+   * Initialise a game entity at a given x and y coordinates.
    *
    * @param x The x coordinate of the entity
    * @param y The y coordinate of the entity
    * */
-  public GameEntity(float x, float y) {
+  public GameEntity(float x, float y, Texture texture) {
     sprite = new Sprite(texture);
+    sprite.setOriginCenter();
 
     position = new Vector2(x, y);
     velocity = new Vector2(0, 0);
 
     collisionOffsets = new float[][] {
-        {0f, 0f},
-        {sprite.getWidth(), 0f},
-        {0f, sprite.getHeight()},
-        {sprite.getWidth(), sprite.getHeight()}
+        {2f, 2f},
+        {sprite.getWidth() - 2f, 2f},
+        {2f, sprite.getHeight() - 2f},
+        {sprite.getWidth() - 2f, sprite.getHeight() - 2f}
       };
   }
 
@@ -57,6 +57,7 @@ public abstract class GameEntity {
   /**
    * The "brain" of the entity, run any code that should be run at each render cycle that isn't
    * related to rendering the entity.
+   *
    * @param map The tilemap of the world
    * @param camera The world camera
    * */

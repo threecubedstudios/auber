@@ -45,6 +45,7 @@ public class Main extends ApplicationAdapter {
       map.getLayers().getIndex("collision_layer")
       };
 
+    // IDs of layers that should be rendered infront of entities
     foregroundLayersIds = new int[] {
       map.getLayers().getIndex("foreground_layer")
       };

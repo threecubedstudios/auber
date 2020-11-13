@@ -109,5 +109,13 @@ public abstract class GameEntity {
 
     position.add(velocity);
     velocity.scl(friction);
+
+    // TODO: Come up with a more permanent solution to the weird collision bug
+    if (Math.abs(velocity.x) < 0.1f) {
+      velocity.x = 0;
+    }
+    if (Math.abs(velocity.y) < 0.1f) {
+      velocity.y = 0;
+    }
   }
 }

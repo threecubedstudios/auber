@@ -1,7 +1,5 @@
 package com.threecubed.auber;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,6 +10,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
+import java.util.ArrayList;
+
 
 public class Main extends ApplicationAdapter {
   ArrayList<GameEntity> entities;
@@ -21,12 +21,15 @@ public class Main extends ApplicationAdapter {
 
   OrthographicCamera camera;
 
+  int[] backgroundLayersIds;
+  int[] foregroundLayersIds;
+
   @Override
   public void create() {
     Gdx.graphics.setWindowedMode(1920, 1080);
 
     entities = new ArrayList<>();
-    entities.add(new Player(96f, 128f));
+    entities.add(new Player(290f, 290f));
 
     // Load the tilemap
     map = new TmxMapLoader().load("map.tmx");
@@ -36,6 +39,15 @@ public class Main extends ApplicationAdapter {
     camera.setToOrtho(false, 480, 270);
     camera.update();
 
+    // IDs of layers that should be rendered behind entities
+    backgroundLayersIds = new int[] {
+      map.getLayers().getIndex("background_layer"),
+      map.getLayers().getIndex("collision_layer")
+      };
+
+    foregroundLayersIds = new int[] {
+      map.getLayers().getIndex("foreground_layer")
+      };
   }
 
   @Override
@@ -45,7 +57,7 @@ public class Main extends ApplicationAdapter {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     renderer.setView(camera);
-    renderer.render();
+    renderer.render(backgroundLayersIds);
 
     Batch batch = renderer.getBatch();
     // Iterate over all entities. Perform movement logic and render them.
@@ -59,6 +71,7 @@ public class Main extends ApplicationAdapter {
       camera.update();
     }
     batch.end();
+    renderer.render(foregroundLayersIds);
   }
 
   @Override

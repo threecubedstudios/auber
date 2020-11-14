@@ -65,8 +65,8 @@ public class Main extends ApplicationAdapter {
     // TODO: Make .update() call every 5 frames? better performance
     batch.begin();
     for (GameEntity entity : entities) {
-      entity.update(map, camera);
-      entity.render(batch);
+      entity.update(map, camera, entities);
+      entity.render(batch, camera);
 
       camera.position.set(entity.position.x, entity.position.y, 0);
       camera.update();

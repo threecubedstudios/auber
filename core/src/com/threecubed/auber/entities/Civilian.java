@@ -1,5 +1,20 @@
 package com.threecubed.auber.entities;
 
-public class Civilian extends Npc{
-    
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import java.util.List;
+
+
+public abstract class Civilian extends Npc {
+  private static Texture texture = new Texture("player.png");  
+
+  public Civilian(float x, float y) {
+    super(x, y, texture);
+  }
+
+  @Override
+  public void update(TiledMap map, Camera camera, List<GameEntity> entities) {}
 }
+
+

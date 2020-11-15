@@ -12,7 +12,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.threecubed.auber.World;
+
 import java.util.List;
 
 
@@ -66,11 +69,9 @@ public abstract class GameEntity {
    * The "brain" of the entity, run any code that should be run at each render cycle that isn't
    * related to rendering the entity.
    *
-   * @param map The tilemap of the world
-   * @param camera The world's camera
-   * @param entities A list of all active entities in the game world.
+   * @param world The game world
    * */
-  public abstract void update(TiledMap map, Camera camera, List<GameEntity> entities);
+  public abstract void update(World world);
 
   /**
    * Update the entity's {@link Position}, taking into account any obstacles and their current
@@ -82,7 +83,7 @@ public abstract class GameEntity {
   public void move(Vector2 velocity, TiledMap map) {
     TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get("collision_layer");
 
-    // Store the direction of the velocty. More efficient than calling function multiple times,
+    // Store the direction of the velocity. More efficient than calling function multiple times,
     // also helps with the eventuality that the velocity sign might flip when avoiding collisions
     float velocitySignX = Math.signum(velocity.x);
     float velocitySignY = Math.signum(velocity.y);

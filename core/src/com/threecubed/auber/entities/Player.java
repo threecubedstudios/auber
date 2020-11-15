@@ -17,6 +17,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
+import com.threecubed.auber.World;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,11 +38,10 @@ public class Player extends GameEntity {
   /**
    * Handle player controls such as movement, interaction and firing the teleporing gun.
    *
-   * @param map The game world's tilemap
-   * @param camera The game world's camera
+   * @param world The game world
    * */
   @Override
-  public void update(TiledMap map, Camera camera, List<GameEntity> entities) {
+  public void update(World world) {
     if (Gdx.input.isKeyPressed(Input.Keys.W)) {
       velocity.y = Math.min(velocity.y + speed, maxSpeed);
     }
@@ -62,19 +64,23 @@ public class Player extends GameEntity {
         }
       }, 0.25f);
 
-      for (GameEntity entity : entities) {
-        if (entity != this) {
+      List<GameEntity> shotEntities = new ArrayList<>();
+      for (GameEntity entity : world.getEntities()) {
+        if (entity != this && entity instanceof Npc) {
           Rectangle entityRectangle = entity.sprite.getBoundingRectangle();
-          if (Intersector.intersectSegmentRectangle(getCenter(), Utils.getMouseCoordinates(camera), entityRectangle)) {
-            System.out.println("Kapow");
+          if (Intersector.intersectSegmentRectangle(getCenter(),
+                Utils.getMouseCoordinates(world.camera), entityRectangle)) {
+            shotEntities.add(entity);
+            entity = (Npc) entity;
           }
         }
       }
+      world.removeEntities(shotEntities);
     }
 
     if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
       // Interact with an object
-      RectangleMapObject nearbyObject = getNearbyObjects(map);
+      RectangleMapObject nearbyObject = getNearbyObjects(world.map);
 
       if (nearbyObject != null) {
         MapProperties properties = nearbyObject.getProperties();
@@ -82,7 +88,7 @@ public class Player extends GameEntity {
 
         switch (type) {
           case "teleporter":
-            MapObjects objects = map.getLayers().get("object_layer").getObjects();
+            MapObjects objects = world.map.getLayers().get("object_layer").getObjects();
 
             String linkedTeleporterId = properties.get("linked_teleporter", String.class); 
             RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(linkedTeleporterId);
@@ -97,7 +103,7 @@ public class Player extends GameEntity {
       }
     }
 
-    Vector2 mousePosition = Utils.getMouseCoordinates(camera);
+    Vector2 mousePosition = Utils.getMouseCoordinates(world.camera);
 
     // Set the rotation to the angle theta where theta is the angle between the mouse cursor and
     // player position. Correct the player position to be measured from the centre of the sprite.
@@ -106,7 +112,7 @@ public class Player extends GameEntity {
             (mousePosition.x - getCenterX()))
           ) - 90f);
 
-    move(velocity, map);
+    move(velocity, world.map);
   }
 
   /**

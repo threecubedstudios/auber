@@ -77,7 +77,16 @@ public abstract class Npc extends GameEntity {
                     path = generatePath();
                 }
                 else {
+                    Vector2 diff = new Vector2(path.get(0).x - position.x, position.y - path.get(0).y);
                     
+                    diff.x = diff.x > 0 ? 1 : 0;
+                    diff.y = diff.y > 0 ? 1 : 0;
+
+                    position = diff;
+
+                    if (position == path.get(0)) {
+                        path.remove(0);
+                    }
                 }
             }
     }

@@ -1,9 +1,7 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import java.util.List;
+import com.threecubed.auber.World;
 
 
 public abstract class Infiltrator extends Npc {
@@ -14,6 +12,6 @@ public abstract class Infiltrator extends Npc {
   }
 
   @Override
-  public void update(TiledMap map, Camera camera, List<GameEntity> entities) {}
+  public void update(World world) {}
 }
 

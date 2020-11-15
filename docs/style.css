@@ -57,6 +57,10 @@ h1 img {
   padding: 10px;
 }
 
+#contents-box li {
+  list-style: none;
+}
+
 #contents-box p {
   text-align: center;
   text-transform: uppercase;

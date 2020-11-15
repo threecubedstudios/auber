@@ -8,9 +8,10 @@ import java.util.List;
 
 public abstract class Civilian extends Npc {
   private static Texture texture = new Texture("player.png");  
-
+  
   public Civilian(float x, float y) {
     super(x, y, texture);
+    
   }
 
   @Override

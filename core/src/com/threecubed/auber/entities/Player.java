@@ -18,9 +18,9 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class Player extends GameEntity {
@@ -70,8 +70,10 @@ public class Player extends GameEntity {
           Rectangle entityRectangle = entity.sprite.getBoundingRectangle();
           if (Intersector.intersectSegmentRectangle(getCenter(),
                 Utils.getMouseCoordinates(world.camera), entityRectangle)) {
-            shotEntities.add(entity);
-            entity = (Npc) entity;
+            Npc npc = (Npc) entity;
+            npc.aiEnabled = false;
+            npc.position.x = (new Random().nextFloat() * 128) + 368;
+            npc.position.y = (new Random().nextFloat() * 48) + 736;
           }
         }
       }

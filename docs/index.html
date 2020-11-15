@@ -1,4 +1,6 @@
-<html><head>
+<!DOCTYPE html>
+<html>
+    <head>
         <title>Auber | 3³</title>
         <link rel="icon" type="image/png" href="logo.png">
         <link rel="stylesheet" href="https://use.typekit.net/qui7hwg.css">
@@ -16,10 +18,11 @@
         <div id="content">
             <div id="contents-box">
                 <p>Contents</p>
-            <li style="padding-left: 0px"><a href="#documentation">Documentation</a></li><li style="padding-left: 0px"><a href="#builds">Builds</a></li><li style="padding-left: 0px"><a href="#assessment-documents">Assessment Documents</a></li></div>
+            </div>
             <h3 id="documentation">Documentation</h3>
             <h3 id="builds">Builds</h3>
             <h3 id="assessment-documents">Assessment Documents</h3>
+            <h4>Links</h4>
             <p><a href="pdfs/Auber Brief.pdf">Auber Brief</a></p>
             <p><a href="pdfs/Assessment Brief.pdf">Assessment Brief</a></p>
         </div>
@@ -36,4 +39,5 @@
                 contentsBox.innerHTML += '<li style="padding-left: ' + indentation.toString() + 'px"><a href="#' + item.id + '">' + item.innerHTML + '</a></li>'
             }
         </script>
-</body></html>
+    </body>
+</html>

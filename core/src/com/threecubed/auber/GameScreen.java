@@ -3,11 +3,9 @@ package com.threecubed.auber;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
-import com.threecubed.auber.entities.Npc;
 import com.threecubed.auber.entities.Player;
 
 
@@ -17,11 +15,9 @@ public class GameScreen extends ScreenAdapter {
 
   public GameScreen(AuberGame game) {
     this.game = game;
-    Gdx.graphics.setWindowedMode(1920, 1080);
 
     world = new World();
     world.addEntity(new Player(290f, 290f));
-    world.addEntity(new Npc(300f, 290f, new Texture("player.png")));
   }
 
   @Override

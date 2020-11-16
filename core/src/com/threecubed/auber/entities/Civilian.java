@@ -1,7 +1,7 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.threecubed.auber.World;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 
 
 public abstract class Civilian extends Npc {
@@ -12,10 +12,10 @@ public abstract class Civilian extends Npc {
     
   }
 
-  @Override
+  /*@Override
   public void update(TiledMap map, Camera camera, List<GameEntity> entities, World world) {
     super.update(map, camera, entities);
-  }
+  }*/
 }
 
 

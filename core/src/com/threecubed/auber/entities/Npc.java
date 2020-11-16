@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
+import java.util.Arrays;
 
 
 public abstract class Npc extends GameEntity {
@@ -148,12 +149,19 @@ public abstract class Npc extends GameEntity {
 
   private ArrayList<Vector2> getNeighbours() {
     ArrayList<Vector2> neighbours = new ArrayList<Vector2>();
-
-    neighbours.add(new Vector2(position.x + 1, position.y));
-    neighbours.add(new Vector2(position.x, position.y + 1));
-    neighbours.add(new Vector2(position.x - 1, position.y));
-    neighbours.add(new Vector2(position.x, position.y - 1));
+    List<Vector2> adjacencies = Arrays.asList(new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0));
+    
+    for (Vector2 v : adjacencies) {
+      if (inBounds(v, 0, 0, validPositions.length, validPositions.length) && validPositions[(int)v.x][(int)v.y]) {
+        neighbours.add(v);
+      }
+    }
 
     return neighbours;
+  }
+
+  private boolean inBounds(Vector2 pos, int minx, int miny, int maxx, int maxy) {
+    
+    return pos.x > minx && pos.x < maxx && pos.y > miny && pos.y < minx;
   }
 }

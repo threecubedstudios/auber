@@ -1,7 +1,7 @@
 package com.threecubed.auber;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,21 +11,21 @@ import com.threecubed.auber.entities.Npc;
 import com.threecubed.auber.entities.Player;
 
 
-public class Main extends ApplicationAdapter {
+public class GameScreen extends ScreenAdapter {
   World world;
+  AuberGame game;
 
-  @Override
-  public void create() {
+  public GameScreen(AuberGame game) {
+    this.game = game;
     Gdx.graphics.setWindowedMode(1920, 1080);
 
     world = new World();
     world.addEntity(new Player(290f, 290f));
     world.addEntity(new Npc(300f, 290f, new Texture("player.png")));
-
   }
 
   @Override
-  public void render() {
+  public void render(float delta) {
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

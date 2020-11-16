@@ -10,4 +10,3 @@ public class AuberGame extends Game {
     setScreen(new MenuScreen(this));
   }
 }
-

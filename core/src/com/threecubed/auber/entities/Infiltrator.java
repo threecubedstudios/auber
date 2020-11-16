@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.threecubed.auber.World;
 
 
-public class Infiltrator extends Npc{
+public class Infiltrator extends Npc {
   private static Texture texture = new Texture("player.png");  
 
   public Infiltrator(float x, float y, TiledMap map) {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.threecubed.auber.entities.Civilian;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 
@@ -18,6 +19,7 @@ public class GameScreen extends ScreenAdapter {
 
     world = new World();
     world.addEntity(new Player(290f, 290f));
+    world.addEntity(new Civilian(290f, 290f, world.map));
   }
 
   @Override

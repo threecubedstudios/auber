@@ -17,7 +17,7 @@ public class GameScreen extends ScreenAdapter {
   public GameScreen(AuberGame game) {
     this.game = game;
 
-    world = new World();
+    world = new World(game);
     world.addEntity(new Player(290f, 290f));
     world.addEntity(new Civilian(290f, 290f, world.map));
   }
@@ -54,5 +54,7 @@ public class GameScreen extends ScreenAdapter {
 
   @Override
   public void dispose() {
+    world.renderer.dispose();
+    world.map.dispose();
   }
 }

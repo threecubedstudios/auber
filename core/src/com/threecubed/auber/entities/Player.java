@@ -71,6 +71,7 @@ public class Player extends GameEntity {
                 Utils.getMouseCoordinates(world.camera), entityRectangle)) {
             Npc npc = (Npc) entity;
             npc.aiEnabled = false;
+            world.incrementBrigCount();
             npc.position.x = (new Random().nextFloat() * 128) + 368;
             npc.position.y = (new Random().nextFloat() * 48) + 736;
           }

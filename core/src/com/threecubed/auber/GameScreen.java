@@ -30,6 +30,8 @@ public class GameScreen extends ScreenAdapter {
 
     OrthogonalTiledMapRenderer renderer = world.renderer;
 
+    System.out.println(Utils.getMouseCoordinates(world.camera).toString());
+
     renderer.setView(world.camera);
     renderer.render(world.backgroundLayersIds);
 

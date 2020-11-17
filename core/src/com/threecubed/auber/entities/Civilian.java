@@ -18,6 +18,7 @@ public class Civilian extends Npc {
   @Override
   public void update(World world) {
     super.update(world);
+    
   }
 
   @Override

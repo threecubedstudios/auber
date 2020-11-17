@@ -12,11 +12,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
-
-import java.util.List;
 
 
 public abstract class GameEntity {
@@ -37,6 +34,7 @@ public abstract class GameEntity {
    *
    * @param x The x coordinate of the entity
    * @param y The y coordinate of the entity
+   * @param texture The texture of the entity sprite
    * */
   public GameEntity(float x, float y, Texture texture) {
     sprite = new Sprite(texture);
@@ -74,7 +72,7 @@ public abstract class GameEntity {
   public abstract void update(World world);
 
   /**
-   * Update the entity's {@link Position}, taking into account any obstacles and their current
+   * Update the entity's position, taking into account any obstacles and their current
    * velocity.
    *
    * @param velocity The entity's current velocity
@@ -123,6 +121,7 @@ public abstract class GameEntity {
   /**
    * Return any interactable objects on the entities position.
    *
+   * @param map The game world map
    * @return A {@link RectangleMapObject} on the entities position
    * */
   public RectangleMapObject getNearbyObjects(TiledMap map) {

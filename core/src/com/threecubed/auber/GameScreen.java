@@ -19,7 +19,7 @@ public class GameScreen extends ScreenAdapter {
 
     world = new World();
     world.addEntity(new Player(290f, 290f));
-    world.addEntity(new Civilian(290f, 290f, world.map));
+    world.addEntity(new Civilian(288f, 288f, world.map));
   }
 
   @Override

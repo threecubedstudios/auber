@@ -31,7 +31,7 @@ public abstract class Npc extends GameEntity {
   private long waitTimeEnd = 0;
 
   protected boolean[][] validPositions;
-  private ArrayList<float[]> path;
+  private ArrayList<Vector2> path;
 
   public boolean aiEnabled = true;
 
@@ -100,18 +100,18 @@ public abstract class Npc extends GameEntity {
 
     if (waitTimeEnd < System.currentTimeMillis()) {
       //Idle Phase
-      if (position == newPos) {
+      if (position.equals(newPos)) {
         waitTimeEnd = generateWaitTime();
         newPos = generateNewPos();
       } 
       else {
         //Movement Phase
         if (path.isEmpty()) {
-          path = generatePath(position, newPos);
+          path = generatePath(new Vector2((float)Math.floor(position.x / 16), (float)Math.floor(position.y / 16)), new Vector2((float)Math.floor(newPos.x / 16), (float)Math.floor(newPos.y / 16)));
         } else {
           
           
-          Vector2 diff = new Vector2(path.get(0)[0] - position.x, path.get(0)[0] - position.y);
+          Vector2 diff = new Vector2((path.get(0).x * 16) - position.x, (path.get(0).y * 16) - position.y);
 
           if (diff.x > 0) {
             diff.x = 1;
@@ -129,7 +129,7 @@ public abstract class Npc extends GameEntity {
 
           position = new Vector2(position.x + diff.x, position.y + diff.y);
 
-          if (position.x == path.get(0)[0] && position.y == path.get(0)[0]) {
+          if (position.x == (path.get(0).x * 16) && position.y == (path.get(0).y * 16)) {
             path.remove(0);
           }
         }
@@ -145,21 +145,55 @@ public abstract class Npc extends GameEntity {
 
   private Vector2 generateNewPos() {
     Vector2 temp = new Vector2(
-        (position.x / 16) + rng.nextInt(10) - 5,
-        (position.y / 16) + rng.nextInt(10) - 5
+        (position.x / 16) + rng.nextInt(20) - 10,
+        (position.y / 16) + rng.nextInt(20) - 10
         );
     while (!validPositions[(int) temp.y][(int) temp.x] || !inBounds(temp, 0, 0, validPositions.length, validPositions.length)) {
       temp = new Vector2(
-        (position.x / 16) + rng.nextInt(10) - 5,
-        (position.y / 16) + rng.nextInt(10) - 5
+        (position.x / 16) + rng.nextInt(20) - 10,
+        (position.y / 16) + rng.nextInt(20) - 10
         );
     }
     return new Vector2(temp.x * 16, temp.y * 16);
   }
 
-  private ArrayList<float[]> generatePath(Vector2 startPosition, Vector2 endPosition) {
+  private ArrayList<Vector2> generatePath(Vector2 startPosition, Vector2 endPosition) {
     
-    
+    Comparator<float[]> customComparator = new Comparator<float[]>() {
+      public int compare(float[] f1, float[] f2) {
+        return Float.compare(f1[0], f2[0]);
+      }
+    };
+    PriorityQueue<float[]> fringe = new PriorityQueue<>(customComparator);
+    ArrayList<Vector2> visited = new ArrayList<>();
+    Vector2 node;
+    float pathCost, totalCost;
+
+    fringe.add(new float[] {generateHeur(startPosition, endPosition), 0, startPosition.x, startPosition.y});
+
+    while(!fringe.isEmpty())
+    {
+      totalCost = fringe.peek()[0];
+      pathCost = fringe.peek()[1];
+      node = new Vector2(fringe.peek()[2], fringe.peek()[3]);
+      fringe.remove();
+
+      if (!visited.contains(node)) {
+        visited.add(node);
+
+        if (node.equals(endPosition)) {
+          return visited;
+        }
+        
+        for (Vector2 n : getNeighbours(node)) {
+          if (!visited.contains(n)) {
+            fringe.add(new float[] {generateHeur(n, endPosition) + pathCost + 1, pathCost + 1, n.x, n.y});
+          }
+        }
+      }
+    }
+    return new ArrayList<Vector2>();
+
     /*ArrayList<Vector2> visited = new ArrayList<Vector2>();
     ArrayList<Vector2> neighbours = new ArrayList<Vector2>();
     ArrayList<Vector2> history = new ArrayList<Vector2>();
@@ -197,15 +231,15 @@ public abstract class Npc extends GameEntity {
     return Vector2.dst(startPosition.x, startPosition.y, endPosition.x, endPosition.y);
   }
 
-  private ArrayList<Vector2> getNeighbours(float[] node) {
+  private ArrayList<Vector2> getNeighbours(Vector2 node) {
     ArrayList<Vector2> neighbours = new ArrayList<Vector2>();
     List<Vector2> adjacencies = Arrays.asList(new Vector2(0, 1), new Vector2(1, 0), new Vector2(0, -1), new Vector2(-1, 0));
     Vector2 temp;
     
     for (Vector2 v : adjacencies) {
-      temp = new Vector2((float)Math.floor((node[0] / 16) + v.x), (float)Math.floor((node[1] / 16) + v.y));
+      temp = new Vector2((float)Math.floor((node.x) + v.x), (float)Math.floor((node.y) + v.y));
       if (inBounds(temp, 0, 0, validPositions.length, validPositions.length) && validPositions[(int)temp.x][(int)temp.y]) {
-        neighbours.add(new Vector2(temp.x * 16, temp.y * 16));
+        neighbours.add(new Vector2(temp.x, temp.y));
       }
     }
 

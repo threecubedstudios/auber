@@ -10,12 +10,18 @@ import java.util.List;
 
 
 public class World {
+  private AuberGame game;
+
   private List<GameEntity> entities = new ArrayList<>();
 
   public OrthographicCamera camera = new OrthographicCamera();
 
   public TiledMap map = new TmxMapLoader().load("map.tmx");
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
+
+  // Maximum size of brig, and number of entities currently in the brig
+  public final int brigCapacity = 5;
+  private int brigCount = 0;
 
   // IDs of layers that should be rendered behind entities
   public int[] backgroundLayersIds = {
@@ -31,10 +37,12 @@ public class World {
   /**
    * Initialise the game world.
    * */
-  public World() {
+  public World(AuberGame game) {
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
     camera.update();
+
+    this.game = game;
   }
 
   public List<GameEntity> getEntities() {
@@ -47,5 +55,16 @@ public class World {
 
   public void removeEntities(List<GameEntity> entities) {
     entities.removeAll(entities);
+  }
+
+  public void incrementBrigCount() {
+    brigCount += 1;
+    if (brigCount >= brigCapacity) {
+      game.setScreen(new GameOverScreen(this.game));
+    }
+  }
+
+  public int getBrigCount() {
+    return brigCount;
   }
 }

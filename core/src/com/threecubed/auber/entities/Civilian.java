@@ -1,7 +1,6 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 

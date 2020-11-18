@@ -16,7 +16,6 @@ import java.util.PriorityQueue;
  * produce this array of booleans. If a given set of coordinates do not have a tile, it is
  * considered inaccessible. For this reason, the background layer of the map is used as the input
  * for the navigation mesh.
- *
  * The class also contains functions required to facilitate A* pathfinding which entities that
  * inherit from Npc make use of.
  *

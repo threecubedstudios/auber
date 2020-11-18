@@ -22,6 +22,14 @@ import java.util.List;
 import java.util.Random;
 
 
+/**
+ * The player entity that the user controls. Handles keyboard input, and interaction with other
+ * entities and tiles in the game world.
+ *
+ * @author Daniel O'Brien
+ * @version 1.0
+ * @since 1.0
+ * */
 public class Player extends GameEntity {
   private static Texture texture = new Texture("player.png");  
 
@@ -93,7 +101,9 @@ public class Player extends GameEntity {
             MapObjects objects = world.map.getLayers().get("object_layer").getObjects();
 
             String linkedTeleporterId = properties.get("linked_teleporter", String.class); 
-            RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(linkedTeleporterId);
+            RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(
+                linkedTeleporterId
+                );
             velocity.setZero();
             position.x = linkedTeleporter.getRectangle().getX();
             position.y = linkedTeleporter.getRectangle().getY();

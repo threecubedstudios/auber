@@ -1,23 +1,33 @@
 package com.threecubed.auber.entities;
 
-import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import java.util.ArrayList;
 
 
-
+/**
+ * Npc is the class from which all AI controlled {@link GameEntity}s must extend.
+ * It contains the code that allows for those entities to interact with the
+ * {@link NavigationMesh} in the pathfinding package, along with handling the
+ * state of an entity
+ *
+ * @author Daniel O'Brien
+ * @version 1.0
+ * @since 1.0
+ * */
 public abstract class Npc extends GameEntity {
   private ArrayList<Vector2> currentPath = new ArrayList<>();
   private Vector2 targetDirection = new Vector2();
   private NavigationMesh navigationMesh;
 
-  private States state = States.IDLE;
-  public enum States {
+  protected States state = States.IDLE;
+
+  protected enum States {
     IDLE,
     NAVIGATING
-  };
+  }
 
   public boolean aiEnabled = true;
 
@@ -27,7 +37,7 @@ public abstract class Npc extends GameEntity {
   }
 
   /**
-   * Update the NPC by stepping it in the direction of its current target
+   * Update the NPC by stepping it in the direction of its current target.
    *
    * @param world The game world
    * */
@@ -83,7 +93,6 @@ public abstract class Npc extends GameEntity {
    * @return A {@link Vector2} representing the direction the NPC is currently heading in.
    * */
   public Vector2 getCurrentDirection() {
-    //System.out.println(currentPath.get(0).x);
     return new Vector2(
         Math.signum(currentPath.get(0).x - position.x),
         Math.signum(currentPath.get(0).y - position.y)

@@ -32,7 +32,7 @@ public class Title {
   }
 
   /**
-   * Render the title to a given {@link SpriteBatch}
+   * Render the title to a given {@link SpriteBatch}.
    *
    * @param spriteBatch The sprite batch to render to.
    * */

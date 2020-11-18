@@ -23,6 +23,8 @@ public class GameScreen extends ScreenAdapter {
   World world;
   AuberGame game;
 
+  int workingSystems = 0;
+
   /**
    * Initialise the game screen with the {@link AuberGame} object and add a few entities.
    *

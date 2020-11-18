@@ -10,10 +10,31 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 
+/**
+ * The NavigationMesh class is a wrapper around a 2d array of {@link Boolean}s representing which
+ * tiles within the game world are accessible. It reads in a {@link TiledMapTileLayer} in order to
+ * produce this array of booleans. If a given set of coordinates do not have a tile, it is
+ * considered inaccessible. For this reason, the background layer of the map is used as the input
+ * for the navigation mesh.
+ *
+ * The class also contains functions required to facilitate A* pathfinding which entities that
+ * inherit from {@link Npc} make use of.
+ *
+ * @author Daniel O'Brien
+ * @version 1.0
+ * @since 1.0
+ * */
 public class NavigationMesh {
   private boolean[][] mesh;
   TiledMapTileLayer navigationLayer;
 
+  /**
+   * Produce a navigation mesh from a given {@link TiledMapTileLayer}.
+   * This works by iterating over the given layer and appending either true or false to the mesh
+   * based upon whether a tile is present at the current coordinates
+   *
+   * @param navigationLayer The layer to produce a navigation mesh from
+   * */
   public NavigationMesh(TiledMapTileLayer navigationLayer) {
     this.navigationLayer = navigationLayer;
 
@@ -27,10 +48,24 @@ public class NavigationMesh {
     }
   }
 
+  /**
+   * Setter for the {@link NavigationMesh#mesh} variable that flips the x and y values
+   * so that the x and y values don't need to be flipped when accessing the array.
+   *
+   * @param x The x coordinate of the cell to set
+   * @param y The y coordinate of the cell to set
+   * */
   public void setCell(int x, int y, boolean value) {
     mesh[y][x] = value;
   }
 
+  /**
+   * Getter for {@link NavigationMesh#mesh} that returns whether a cell at given coordinates
+   * is accessible.
+   *
+   * @param x The x coordinate to test
+   * @param y The y coordinate to test
+   * */
   public boolean cellAccessible(int x, int y) {
     return mesh[y][x];
   }
@@ -54,7 +89,12 @@ public class NavigationMesh {
   }
 
   /**
-   * Return an {@link ArrayList} of all nodes surrounding a point.
+   * Return an {@link ArrayList} of all {@link PathNode}s surrounding a point.
+   *
+   * @param node The PathNode to find successors for
+   * @param destination The target destination of the pathfinding algorithm
+   *
+   * @return An {@link ArrayList} of {@link PathNode}s of possible moves that the npc could make
    * */
   public ArrayList<PathNode> getSuccessorNodes(PathNode node, int[] destination) {
     int[][] surroundingCoordinates = {
@@ -64,8 +104,8 @@ public class NavigationMesh {
       };
 
     int[][] diagonalCoordinates = {
-      {-1, -1}, {1, -1},
-      {-1, 1}, {1, 1}
+        {-1, -1}, {1, -1},
+        {-1, 1}, {1, 1}
       };
 
     ArrayList<PathNode> output = new ArrayList<>();
@@ -151,10 +191,13 @@ public class NavigationMesh {
   }
 
   /**
-   * Generate a path to a point in terms of real world coordinates.
+   * Generate a path to a point in terms of real world coordinates as opposed to tilemap
+   * coordinates.
    *
    * @param start A {@link Vector2} representing the start position
    * @param destination A {@link Vector2} representing the end position
+   *
+   * @return An {@link ArrayList} of {@link Vector2}s that represent a path to the requested point
    * */
   public ArrayList<Vector2> generateWorldPathToPoint(Vector2 start, Vector2 destination) {
     int[] startTile = {(int) start.x / navigationLayer.getTileWidth(),

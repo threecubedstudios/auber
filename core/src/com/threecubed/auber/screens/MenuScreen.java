@@ -29,27 +29,32 @@ public class MenuScreen extends ScreenAdapter {
   OrthogonalTiledMapRenderer renderer;
 
 
+  /**
+   * Instantiate the screen with the {@link AuberGame} object. Set the title and button up to be
+   * rendered.
+   *
+   * @param game The game object
+   * */
   public MenuScreen(AuberGame game) {
     this.game = game;
     this.world = new World(game);
-    this.title = new Title(new Vector2(Gdx.graphics.getWidth() / 2, 300 + (Gdx.graphics.getHeight() / 2)), 0.5f, "auberv11.png");
-    this.playButton = new Button(new Vector2(Gdx.graphics.getWidth() / 2, (Gdx.graphics.getHeight() / 2)), 1.0f, "playButton.png", game);
+    this.title = new Title(new Vector2(Gdx.graphics.getWidth() / 2,
+          300 + (Gdx.graphics.getHeight() / 2)), 0.5f, "auberv11.png");
+    this.playButton = new Button(new Vector2(Gdx.graphics.getWidth() / 2,
+          (Gdx.graphics.getHeight() / 2)), 1.0f, "playButton.png", game);
   }
 
   @Override
   public void render(float deltaTime) {
-
     if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
       game.setScreen(new GameScreen(game));
     }
-
     
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     SpriteBatch spriteBatch = new SpriteBatch();
-
     spriteBatch.begin();
 
     title.render(spriteBatch);

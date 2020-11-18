@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.threecubed.auber.entities.Civilian;
 import com.threecubed.auber.entities.GameEntity;
-import com.threecubed.auber.entities.NewNpc;
 import com.threecubed.auber.entities.Player;
 
 
@@ -20,7 +20,7 @@ public class GameScreen extends ScreenAdapter {
 
     world = new World(game);
     world.addEntity(new Player(290f, 290f));
-    world.addEntity(new NewNpc(288f, 288f, new Texture("player.png"), world.navigationMesh));
+    world.addEntity(new Civilian(288f, 288f, world.navigationMesh));
   }
 
   @Override

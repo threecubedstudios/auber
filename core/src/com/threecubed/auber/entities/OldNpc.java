@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 
 
-public abstract class Npc extends GameEntity {
+public abstract class OldNpc extends GameEntity {
   protected Random rng = new Random();
   protected Vector2 newPos;
 
@@ -41,7 +41,7 @@ public abstract class Npc extends GameEntity {
    * @param texture The texture to use as the NPC sprite
    * @param map The tilemap of the game world
    * */
-  public Npc(float x, float y, Texture texture, TiledMap map) {
+  public OldNpc(float x, float y, Texture texture, TiledMap map) {
     super(x, y, texture);
 
     validPositions = getNavMesh(map);

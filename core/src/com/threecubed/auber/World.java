@@ -72,7 +72,7 @@ public class World {
   public void incrementBrigCount() {
     brigCount += 1;
     if (brigCount >= brigCapacity) {
-      game.setScreen(new GameOverScreen(this.game));
+      game.setScreen(new GameOverScreen(this.game, "YOU WIN"));
     }
   }
 

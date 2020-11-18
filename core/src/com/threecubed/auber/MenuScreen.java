@@ -15,7 +15,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class MenuScreen extends ScreenAdapter {
   
-  World world;
   AuberGame game;
   Title title;
   Button playButton;
@@ -23,7 +22,6 @@ public class MenuScreen extends ScreenAdapter {
 
   public MenuScreen(AuberGame game) {
     this.game = game;
-    this.world = new World();
     this.title = new Title(new Vector2(Gdx.graphics.getWidth() / 2, 300 + (Gdx.graphics.getHeight() / 2)), 0.5f, "auberv11.png");
     this.playButton = new Button(new Vector2(Gdx.graphics.getWidth() / 2, (Gdx.graphics.getHeight() / 2)), 1.0f, "playButton.png", game);
   }
@@ -31,9 +29,9 @@ public class MenuScreen extends ScreenAdapter {
   @Override
   public void render(float deltaTime) {
 
-    if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-      game.setScreen(new GameScreen(game));
-    }
+    //if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+    //  game.setScreen(new GameScreen(game));
+    //}
 
     
     // Set the background color

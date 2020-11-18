@@ -13,6 +13,7 @@ import com.threecubed.auber.entities.Player;
 public class GameScreen extends ScreenAdapter {
   World world;
   AuberGame game;
+  int workingSystems;
 
   public GameScreen(AuberGame game) {
     this.game = game;
@@ -20,10 +21,16 @@ public class GameScreen extends ScreenAdapter {
     world = new World(game);
     world.addEntity(new Player(290f, 290f));
     world.addEntity(new Civilian(288f, 288f, world.map));
+
+    workingSystems = 0;
   }
 
   @Override
   public void render(float delta) {
+
+    if (workingSystems == 0) {
+      game.setScreen(new GameOverScreen(game));
+    }
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

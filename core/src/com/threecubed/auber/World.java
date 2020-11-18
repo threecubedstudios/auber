@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.screens.GameOverScreen;
 
 import java.util.ArrayList;
 import java.util.List;

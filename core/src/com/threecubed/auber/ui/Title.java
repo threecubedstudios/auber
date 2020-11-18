@@ -1,4 +1,4 @@
-package com.threecubed.auber;
+package com.threecubed.auber.ui;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

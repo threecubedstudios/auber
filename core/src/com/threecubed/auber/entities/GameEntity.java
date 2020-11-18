@@ -63,6 +63,7 @@ public abstract class GameEntity {
     sprite.setRotation(rotation);
     sprite.setPosition(position.x, position.y);
     sprite.draw(batch);
+    
   }
 
   /**

@@ -84,7 +84,6 @@ public abstract class Npc extends GameEntity {
     currentPath.clear();
     currentPath = navigationMesh.generateWorldPathToPoint(position, new Vector2(x, y));
     targetDirection = getCurrentDirection();
-    System.out.println(currentPath.toString());
   }
 
   /**

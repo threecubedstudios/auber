@@ -204,7 +204,6 @@ public class NavigationMesh {
   public ArrayList<Vector2> generateWorldPathToPoint(Vector2 start, Vector2 destination) {
     int[] startTile = {(int) start.x / navigationLayer.getTileWidth(),
                        (int) start.y / navigationLayer.getTileHeight()};
-    System.out.println(startTile);
 
     int[] destinationTile = {(int) destination.x / navigationLayer.getTileWidth(),
                              (int) destination.y / navigationLayer.getTileHeight()};

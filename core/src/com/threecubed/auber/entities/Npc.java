@@ -157,40 +157,39 @@ public abstract class Npc extends GameEntity {
 
   private ArrayList<Vector2> generatePath(Vector2 startPosition, Vector2 endPosition) {
     
-    Comparator<float[]> customComparator = new Comparator<float[]>() {
-      public int compare(float[] f1, float[] f2) {
-        return Float.compare(f1[0], f2[0]);
+    Comparator<Node> customComparator = new Comparator<Node>() {
+      public int compare(Node n1, Node n2) {
+        return Float.compare(n1.getHeur(), n2.getHeur());
       }
     };
-    PriorityQueue<float[]> fringe = new PriorityQueue<>(customComparator);
+    PriorityQueue<Node> fringe = new PriorityQueue<>(customComparator);
     ArrayList<Vector2> visited = new ArrayList<>();
-    Vector2 node;
+    Node node;
     float pathCost, totalCost;
 
-    fringe.add(new float[] {generateHeur(startPosition, endPosition), 0, startPosition.x, startPosition.y});
+    fringe.add(new Node(startPosition, new ArrayList<Vector2>(), 0,  generateHeur(startPosition, endPosition)));
+    //fringe.peek().addToPath(startPosition);
 
     while(!fringe.isEmpty())
     {
-      totalCost = fringe.peek()[0];
-      pathCost = fringe.peek()[1];
-      node = new Vector2(fringe.peek()[2], fringe.peek()[3]);
-      fringe.remove();
+      node = new Node(fringe.poll());
 
-      if (!visited.contains(node)) {
-        visited.add(node);
+      if (!visited.contains(node.getPos())) {
+        visited.add(node.getPos());
 
-        if (node.equals(endPosition)) {
-          return visited;
+        if (node.isEnd(endPosition)) {
+          return node.getPath();
         }
         
-        for (Vector2 n : getNeighbours(node)) {
+        for (Vector2 n : getNeighbours(node.getPos())) {
           if (!visited.contains(n)) {
-            fringe.add(new float[] {generateHeur(n, endPosition) + pathCost + 1, pathCost + 1, n.x, n.y});
+            fringe.add(new Node(n, new ArrayList<Vector2>(node.getPath()), node.getPathCost() + 1,  generateHeur(n, endPosition) + node.getPathCost() + 1));
+            //fringe.peek().addToPath(n);
           }
         }
       }
     }
-    return new ArrayList<Vector2>();
+    return visited;
 
     /*ArrayList<Vector2> visited = new ArrayList<Vector2>();
     ArrayList<Vector2> neighbours = new ArrayList<Vector2>();

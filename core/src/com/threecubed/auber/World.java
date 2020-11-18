@@ -2,9 +2,12 @@ package com.threecubed.auber;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
+import com.threecubed.auber.pathfinding.NavigationMesh;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,11 @@ public class World {
 
   public TiledMap map = new TmxMapLoader().load("map.tmx");
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
+
+  // Navigation mesh for AI to use
+  public NavigationMesh navigationMesh = new NavigationMesh(
+      (TiledMapTileLayer) map.getLayers().get("background_layer")
+      );
 
   // Maximum size of brig, and number of entities currently in the brig
   public final int brigCapacity = 5;
@@ -57,6 +65,9 @@ public class World {
     entities.removeAll(entities);
   }
 
+  /**
+   * Increment the number of entities in the brig by 1.
+   * */
   public void incrementBrigCount() {
     brigCount += 1;
     if (brigCount >= brigCapacity) {

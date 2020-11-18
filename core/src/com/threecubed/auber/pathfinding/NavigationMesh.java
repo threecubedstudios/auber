@@ -18,7 +18,7 @@ import java.util.PriorityQueue;
  * for the navigation mesh.
  *
  * The class also contains functions required to facilitate A* pathfinding which entities that
- * inherit from {@link Npc} make use of.
+ * inherit from Npc make use of.
  *
  * @author Daniel O'Brien
  * @version 1.0
@@ -54,6 +54,7 @@ public class NavigationMesh {
    *
    * @param x The x coordinate of the cell to set
    * @param y The y coordinate of the cell to set
+   * @param value The value to set the cell to
    * */
   public void setCell(int x, int y, boolean value) {
     mesh[y][x] = value;
@@ -65,6 +66,8 @@ public class NavigationMesh {
    *
    * @param x The x coordinate to test
    * @param y The y coordinate to test
+   *
+   * @return A boolean representing whether the chosen cell is accessible
    * */
   public boolean cellAccessible(int x, int y) {
     return mesh[y][x];

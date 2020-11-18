@@ -64,10 +64,11 @@ public abstract class Npc extends GameEntity {
   }
 
   /**
-   * Update the {@link NewNpc#currentPath} to a given set of x and y coordinates.
+   * Update the {@link Npc#currentPath} to a given set of x and y coordinates.
    *
    * @param x The x coordinate to navigate to
    * @param y The y coordinate to navigate to
+   * @param world The game world
    * */
   public void updatePath(float x, float y, World world) {
     currentPath.clear();
@@ -78,6 +79,8 @@ public abstract class Npc extends GameEntity {
 
   /**
    * Return a {@link Vector2} representing the direction the NPC is currently heading in.
+   *
+   * @return A {@link Vector2} representing the direction the NPC is currently heading in.
    * */
   public Vector2 getCurrentDirection() {
     //System.out.println(currentPath.get(0).x);

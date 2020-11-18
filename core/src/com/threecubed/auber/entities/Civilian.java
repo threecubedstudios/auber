@@ -16,5 +16,3 @@ public class Civilian extends Npc {
     stepTowardsTarget(world);
   }
 }
-
-

@@ -8,11 +8,18 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The world class stores information related to what is happening within the game world.
+ * It should only be used within the GameScreen screen.
+ *
+ * @author Daniel O'Brien
+ * @version 1.0
+ * @since 1.0
+ * */
 public class World {
   private AuberGame game;
 
@@ -45,6 +52,8 @@ public class World {
 
   /**
    * Initialise the game world.
+   *
+   * @param game The game object.
    * */
   public World(AuberGame game) {
     // Configure the camera

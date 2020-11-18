@@ -31,6 +31,7 @@ public class World {
   // Maximum size of brig, and number of entities currently in the brig
   public final int brigCapacity = 5;
   private int brigCount = 0;
+  int workingSystems = 10;
 
   // IDs of layers that should be rendered behind entities
   public int[] backgroundLayersIds = {
@@ -73,6 +74,13 @@ public class World {
     brigCount += 1;
     if (brigCount >= brigCapacity) {
       game.setScreen(new GameOverScreen(this.game, "YOU WIN"));
+    }
+  }
+
+  public void updateWorkingSystems(int update) {
+    this.workingSystems += update;
+    if (this.workingSystems == 0) {
+      game.setScreen(new GameOverScreen(this.game, "YOU LOSE"));
     }
   }
 

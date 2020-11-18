@@ -23,7 +23,6 @@ public class GameScreen extends ScreenAdapter {
   World world;
   AuberGame game;
 
-  int workingSystems = 5;
 
   /**
    * Initialise the game screen with the {@link AuberGame} object and add a few entities.
@@ -41,9 +40,7 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
 
-    if (this.workingSystems == 0) {
-      game.setScreen(new GameOverScreen(this.game, "YOU LOSE"));
-    }
+    
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

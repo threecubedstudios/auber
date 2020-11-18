@@ -16,6 +16,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
 
 
+/**
+ * The GameEntity class is the abstract class from which all entities, including the player must
+ * inherit from. It contains information regarding the speed and max speed of entities, code to
+ * render an entity to the game world and for entities like the {@link Player}, information
+ * information regarding friction and velocity and collision handlers. 
+ *
+ * @author Daniel O'Brien
+ * @version 1.0
+ * @since 1.0
+ * */
 public abstract class GameEntity {
   public Sprite sprite;
 

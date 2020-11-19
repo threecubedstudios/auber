@@ -176,14 +176,13 @@ public class NavigationMesh {
       ArrayList<PathNode> successorNodes = getSuccessorNodes(currentNode, destination);
       for (PathNode successor : successorNodes) {
         if (Arrays.equals(successor.position, destination)) {
-          // YAY
           while (successor.parent != null) {
             path.add(successor.position);
             successor = successor.parent;
           }
           Collections.reverse(path);
           return path;
-        } else if (!closedNodes.contains(successor)) {
+        } else if (!closedNodes.contains(successor) && !openNodes.contains(successor)) {
           openNodes.add(successor);
         }
       }

@@ -36,6 +36,23 @@ public class GameScreen extends ScreenAdapter {
     world = new World(game);
     world.addEntity(new Player(290f, 290f));
     world.addEntity(new Civilian(288f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(400f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(275f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(260f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(230f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
   }
 
   @Override

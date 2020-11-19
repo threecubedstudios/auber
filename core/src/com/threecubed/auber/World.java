@@ -1,6 +1,9 @@
 package com.threecubed.auber;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -10,6 +13,7 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -29,6 +33,10 @@ public class World {
 
   public TiledMap map = new TmxMapLoader().load("map.tmx");
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
+
+  public ArrayList<RectangleMapObject> systems = new ArrayList<>();
+
+  public Random randomNumberGenerator = new Random();
 
   // Navigation mesh for AI to use
   public NavigationMesh navigationMesh = new NavigationMesh(
@@ -61,6 +69,20 @@ public class World {
     camera.update();
 
     this.game = game;
+
+    MapObjects objects = map.getLayers().get("object_layer").getObjects();
+    for (MapObject object : objects) {
+      if (object instanceof RectangleMapObject) {
+        RectangleMapObject rectangularObject = (RectangleMapObject) object;
+        switch (rectangularObject.getProperties().get("type", String.class)) {
+          case "system":
+            systems.add(rectangularObject);
+            break;
+          default:
+            break;
+        }
+      }
+    }
   }
 
   public List<GameEntity> getEntities() {

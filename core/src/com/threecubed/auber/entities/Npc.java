@@ -1,7 +1,10 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
+import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import java.util.ArrayList;
@@ -26,10 +29,12 @@ public abstract class Npc extends GameEntity {
 
   protected enum States {
     IDLE,
-    NAVIGATING
+    NAVIGATING,
+    REACHED_DESTINATION
   }
 
   public boolean aiEnabled = true;
+  protected Timer npcTimer = new Timer();
 
   public Npc(float x, float y, Texture texture, NavigationMesh navigationMesh) {
     super(x, y, texture);
@@ -43,12 +48,11 @@ public abstract class Npc extends GameEntity {
    * */
   protected void stepTowardsTarget(World world) {
     if (aiEnabled) {
-      if (currentPath.size() == 0) {
-        updatePath(835f, 751f, world);
-      }
-
       Vector2 targetCoordinates = currentPath.get(0);
       Vector2 currentDirection = getCurrentDirection();
+
+      // Rotate the entity to face the direction its heading
+      rotation = currentDirection.angleDeg();
 
       boolean entityMoved = false;
       if (currentDirection.x == targetDirection.x && targetDirection.x != 0) {
@@ -68,8 +72,31 @@ public abstract class Npc extends GameEntity {
         currentPath.remove(0);
         if (!currentPath.isEmpty()) {
           targetDirection = getCurrentDirection();
+        } else {
+          state = States.REACHED_DESTINATION;
         }
       }
+    }
+  }
+
+  /**
+   * Control the state the NPC is in and fire any necessary events when need be.
+   *
+   * @param world The game world
+   * */
+  @Override
+  public void update(World world) {
+    switch (state) {
+      case NAVIGATING:
+        stepTowardsTarget(world);
+        return;
+      case REACHED_DESTINATION:
+        handleDestinationReached(world);
+        return;
+      case IDLE:
+        return;
+      default:
+        return;
     }
   }
 
@@ -81,10 +108,32 @@ public abstract class Npc extends GameEntity {
    * @param world The game world
    * */
   public void updatePath(float x, float y, World world) {
-    currentPath.clear();
+    if (!currentPath.isEmpty()) {
+      currentPath.clear();
+    }
     currentPath = navigationMesh.generateWorldPathToPoint(position, new Vector2(x, y));
     targetDirection = getCurrentDirection();
   }
+
+  /** 
+   * Pick a random system in the game world and navigate towards it.
+   *
+   * @param world The game world
+   * */
+  public void navigateToRandomSystem(World world) {
+    state = States.NAVIGATING;
+    RectangleMapObject system = world.systems.get(
+        Utils.randomIntInRange(world.randomNumberGenerator,
+          0, world.systems.size() - 1));
+
+    updatePath(system.getRectangle().getX(), system.getRectangle().getY(), world);
+  }
+
+  /**
+   * Handle the event of the NPC reaching its current destination. For {@link Infiltrator}s this
+   * might be to sabotage a system and for {@link Civilian}s this might be to idle for a bit
+   * */
+  public abstract void handleDestinationReached(World world);
 
   /**
    * Return a {@link Vector2} representing the direction the NPC is currently heading in.

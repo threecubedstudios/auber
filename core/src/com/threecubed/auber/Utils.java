@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import java.util.List;
 import java.util.Random;
 
 
@@ -51,5 +53,9 @@ public class Utils {
    * */
   public static int randomIntInRange(Random randomNumberGenerator, int lowerBound, int upperBound) {
     return randomNumberGenerator.nextInt(upperBound - lowerBound + 1) + lowerBound;
+  }
+
+  public static <T> T randomListItem(Random randomNumberGenerator, List<T> list) {
+    return list.get(randomIntInRange(randomNumberGenerator, 0, list.size()));
   }
 }

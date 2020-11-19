@@ -1,8 +1,9 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
-import com.threecubed.auber.pathfinding.NavigationMesh;
 
 
 /**
@@ -15,19 +16,35 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
  * @since 1.0
  * */
 public class Civilian extends Npc {
-  private static Texture texture = new Texture("civilian.png");
-
-  public Civilian(float x, float y, NavigationMesh navigationMesh) {
-    super(x, y, texture, navigationMesh);
-  }
+  private static String[] textureNames = {"alienA.png", "alienB.png"};
 
   /**
-   * Obtain navigation targets and step in their direction.
+   * Construct a {@link Civilian} entity at given coordinates, with a randomly chosen texture
+   * from the list of textureNames.
    *
+   * @param x The x coordinate of the civilian
+   * @param y The y coordinate of the civilian
    * @param world The game world
    * */
+  public Civilian(float x, float y, World world) {
+    super(x, y,
+        new Texture(textureNames[Utils.randomIntInRange(world.randomNumberGenerator,
+                                                        0, textureNames.length - 1)]),
+        world.navigationMesh);
+    navigateToRandomSystem(world);
+  }
+
   @Override
-  public void update(World world) {
-    stepTowardsTarget(world);
+  public void handleDestinationReached(final World world) {
+    state = States.IDLE;
+    npcTimer.scheduleTask(new Task() {
+      @Override
+      public void run() {
+        state = States.NAVIGATING;
+
+        // Pick new system to navigate to
+        navigateToRandomSystem(world);
+      }
+    }, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 10f));
   }
 }

@@ -13,6 +13,7 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -34,6 +35,8 @@ public class World {
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
 
   public ArrayList<RectangleMapObject> systems = new ArrayList<>();
+
+  public Random randomNumberGenerator = new Random();
 
   // Navigation mesh for AI to use
   public NavigationMesh navigationMesh = new NavigationMesh(

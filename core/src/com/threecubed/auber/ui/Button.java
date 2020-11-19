@@ -51,7 +51,7 @@ public class Button {
   public void render(SpriteBatch spriteBatch) {
     sprite.draw(spriteBatch);
 
-    if (sprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.input.getY())) {
+    if (sprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
       sprite.setScale(1.05f);
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
         game.setScreen(new GameScreen(game));

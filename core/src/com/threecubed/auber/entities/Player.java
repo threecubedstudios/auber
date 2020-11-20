@@ -3,6 +3,7 @@ package com.threecubed.auber.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
-import java.util.Random;
 
 
 /**
@@ -132,11 +132,12 @@ public class Player extends GameEntity {
   public void render(Batch batch, Camera camera) {
     if (!teleporterRayCoordinates.isZero()) {
       batch.end();
-
+      Gdx.gl.glEnable(GL20.GL_BLEND);
+      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       rayRenderer.setProjectionMatrix(camera.combined);
-      rayRenderer.begin(ShapeType.Line);
-      rayRenderer.line(getCenterX(), getCenterY(),
-          teleporterRayCoordinates.x, teleporterRayCoordinates.y);
+      rayRenderer.begin(ShapeType.Filled);
+      rayRenderer.rectLine(getCenterX(), getCenterY(),
+          teleporterRayCoordinates.x, teleporterRayCoordinates.y, 0.5f, World.rayColorA, World.rayColorB);
       rayRenderer.end();
 
       batch.begin();
@@ -150,7 +151,9 @@ public class Player extends GameEntity {
     Vector2 targetCoordinates = new Vector2(Utils.getMouseCoordinates(world.camera));
     float alpha = 0.1f;
     boolean rayIntersected = false;
-    while (!rayIntersected && alpha < 1) {
+    // Allow the ray to go 20x the distance between the mouse and player,
+    // prevents game from hanging if ray escapes map
+    while (!rayIntersected && alpha < 20) {
       output.x = position.x;
       output.y = position.y;
 
@@ -182,7 +185,6 @@ public class Player extends GameEntity {
           (int) output.x / collisionLayer.getTileWidth(),
           (int) output.y / collisionLayer.getTileHeight()
       );
-      System.out.println(targetCell);
       if (targetCell != null) {
         rayIntersected = true;
       }

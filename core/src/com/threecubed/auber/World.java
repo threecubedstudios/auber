@@ -1,5 +1,6 @@
 package com.threecubed.auber;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -50,6 +51,8 @@ public class World {
   public float auberTeleporterCharge = 0f;
   public static final float AUBER_CHARGE_RATE = 0.05f;
   public static final float AUBER_RAY_TIME = 0.25f;
+  public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
+  public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
 
   /** Coordinates for the bottom left and top right tiles of the brig. */
   public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};

@@ -42,9 +42,11 @@ public class Infiltrator extends Npc {
     npcTimer.scheduleTask(new Task() {
       @Override
       public void run() {
-        world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
-            World.SystemStates.DESTROYED);
-        navigateToRandomSystem(world);
+        if (aiEnabled) {
+          world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
+              World.SystemStates.DESTROYED);
+          navigateToRandomSystem(world);
+        }
       }
     }, World.SYSTEM_BREAK_TIME);
   }

@@ -13,6 +13,7 @@ import com.threecubed.auber.entities.Civilian;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
+import com.threecubed.auber.ui.GameUi;
 
 
 /**
@@ -26,7 +27,9 @@ public class GameScreen extends ScreenAdapter {
   World world;
   AuberGame game;
   Texture stars;
-  SpriteBatch backgroundBatch = new SpriteBatch();
+
+  SpriteBatch screenBatch = new SpriteBatch();
+  GameUi ui = new GameUi();
 
   int workingSystems = 0;
 
@@ -51,9 +54,9 @@ public class GameScreen extends ScreenAdapter {
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    backgroundBatch.begin();
-    backgroundBatch.draw(stars, 0, 0);
-    backgroundBatch.end();
+    screenBatch.begin();
+    screenBatch.draw(stars, 0, 0);
+    screenBatch.end();
 
     OrthogonalTiledMapRenderer renderer = world.renderer;
     renderer.setView(world.camera);
@@ -74,11 +77,13 @@ public class GameScreen extends ScreenAdapter {
     }
     batch.end();
     renderer.render(world.foregroundLayersIds);
+
+    // Draw the UI
+    ui.render(world, screenBatch);
   }
 
   @Override
   public void dispose() {
     world.renderer.dispose();
-    world.map.dispose();
   }
 }

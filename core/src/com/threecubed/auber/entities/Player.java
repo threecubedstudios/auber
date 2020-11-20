@@ -31,7 +31,7 @@ import java.util.Random;
  * @since 1.0
  * */
 public class Player extends GameEntity {
-  private static Texture texture = new Texture("player.png");  
+  private static Texture texture = new Texture("player.png");
 
   private boolean renderLaser = false;
   private Timer renderLaserTimer = new Timer();
@@ -61,7 +61,7 @@ public class Player extends GameEntity {
     if (Gdx.input.isKeyPressed(Input.Keys.D)) {
       velocity.x = Math.min(velocity.x + speed, maxSpeed);
     }
-    
+
     if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !renderLaser) {
       renderLaser = true;
       renderLaserTimer.scheduleTask(new Task() {
@@ -90,7 +90,7 @@ public class Player extends GameEntity {
 
     if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
       // Interact with an object
-      RectangleMapObject nearbyObject = getNearbyObjects(world.map);
+      RectangleMapObject nearbyObject = getNearbyObjects(World.map);
 
       if (nearbyObject != null) {
         MapProperties properties = nearbyObject.getProperties();
@@ -98,9 +98,9 @@ public class Player extends GameEntity {
 
         switch (type) {
           case "teleporter":
-            MapObjects objects = world.map.getLayers().get("object_layer").getObjects();
+            MapObjects objects = World.map.getLayers().get("object_layer").getObjects();
 
-            String linkedTeleporterId = properties.get("linked_teleporter", String.class); 
+            String linkedTeleporterId = properties.get("linked_teleporter", String.class);
             RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(
                 linkedTeleporterId
                 );
@@ -124,7 +124,7 @@ public class Player extends GameEntity {
             (mousePosition.x - getCenterX()))
           ) - 90f);
 
-    move(velocity, world.map);
+    move(velocity, World.map);
   }
 
   /**

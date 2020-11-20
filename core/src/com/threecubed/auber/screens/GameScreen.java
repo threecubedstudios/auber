@@ -3,12 +3,15 @@ package com.threecubed.auber.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
 import com.threecubed.auber.entities.Civilian;
 import com.threecubed.auber.entities.GameEntity;
+import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
 
 
@@ -22,6 +25,8 @@ import com.threecubed.auber.entities.Player;
 public class GameScreen extends ScreenAdapter {
   World world;
   AuberGame game;
+  Texture stars;
+  SpriteBatch backgroundBatch = new SpriteBatch();
 
   int workingSystems = 0;
 
@@ -34,25 +39,10 @@ public class GameScreen extends ScreenAdapter {
     this.game = game;
 
     world = new World(game);
-    world.addEntity(new Player(290f, 290f));
-    world.addEntity(new Civilian(288f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(400f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(275f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(260f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(230f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
-    world.addEntity(new Civilian(250f, 288f, world.navigationMesh));
+    world.addEntity(new Civilian(64f, 64f, world));
+    world.addEntity(new Player(64f, 64f));
+    world.addEntity(new Infiltrator(64f, 64f, world));
+    stars = new Texture("stars.png");
   }
 
   @Override
@@ -61,10 +51,14 @@ public class GameScreen extends ScreenAdapter {
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    OrthogonalTiledMapRenderer renderer = world.renderer;
+    backgroundBatch.begin();
+    backgroundBatch.draw(stars, 0, 0);
+    backgroundBatch.end();
 
+    OrthogonalTiledMapRenderer renderer = world.renderer;
     renderer.setView(world.camera);
     renderer.render(world.backgroundLayersIds);
+
 
     Batch batch = renderer.getBatch();
     // Iterate over all entities. Perform movement logic and render them.

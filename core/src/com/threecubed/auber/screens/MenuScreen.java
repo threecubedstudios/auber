@@ -29,7 +29,8 @@ public class MenuScreen extends ScreenAdapter {
   Title title;
   Button playButton;
   OrthogonalTiledMapRenderer renderer;
-  TextureRegion backgroundTexture = new TextureRegion(new Texture("background.png"), 0, 0, 1920, 1080);
+  TextureRegion backgroundTexture = new TextureRegion(new Texture("stars.png"), 0, 0,
+      1920, 1080);
 
   /**
    * Instantiate the screen with the {@link AuberGame} object. Set the title and button up to be

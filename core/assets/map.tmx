@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="46" height="46" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="25">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="46" height="46" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="26">
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="1" name="background_layer" width="46" height="46">
   <data encoding="csv">
@@ -96,7 +96,7 @@
 0,0,0,7,0,0,0,0,0,0,4,6,6,6,6,5,0,0,0,0,7,0,0,0,8,0,0,0,0,0,0,14,6,6,6,6,6,6,17,0,0,30,93,94,7,0,
 0,0,0,7,0,0,79,80,0,0,7,28,29,29,29,7,0,0,77,78,7,56,0,0,14,6,6,6,15,0,0,17,30,30,38,43,44,30,30,0,0,0,0,0,7,0,
 0,4,6,17,0,0,91,92,0,0,7,0,50,55,56,20,0,0,89,90,20,68,0,0,7,0,0,0,7,0,0,30,0,0,0,0,0,0,0,0,0,0,0,0,7,0,
-0,7,31,31,0,0,0,0,0,0,7,0,62,67,68,0,0,0,0,0,0,0,0,0,7,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,7,0,
+0,7,31,38,0,0,0,0,0,0,7,0,62,67,68,0,0,0,0,0,0,0,0,0,7,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,7,0,
 0,7,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,16,6,6,6,6,6,6,6,6,6,6,6,6,26,6,6,17,0,
 0,16,6,6,6,6,6,6,6,6,26,6,6,6,6,6,6,6,6,6,6,6,6,6,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -177,5 +177,6 @@
   <object id="22" type="system" x="624" y="560" width="16" height="16"/>
   <object id="23" type="system" x="544" y="672" width="16" height="16"/>
   <object id="24" type="system" x="576" y="224" width="16" height="16"/>
+  <object id="25" type="system" x="48" y="704" width="16" height="16"/>
  </objectgroup>
 </map>

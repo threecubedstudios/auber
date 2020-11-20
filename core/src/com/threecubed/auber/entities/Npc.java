@@ -30,7 +30,9 @@ public abstract class Npc extends GameEntity {
   protected enum States {
     IDLE,
     NAVIGATING,
-    REACHED_DESTINATION
+    REACHED_DESTINATION,
+    ATTACKING_SYSTEM,
+    ATTACKING_PLAYER
   }
 
   public boolean aiEnabled = true;
@@ -86,17 +88,19 @@ public abstract class Npc extends GameEntity {
    * */
   @Override
   public void update(World world) {
-    switch (state) {
-      case NAVIGATING:
-        stepTowardsTarget(world);
-        return;
-      case REACHED_DESTINATION:
-        handleDestinationReached(world);
-        return;
-      case IDLE:
-        return;
-      default:
-        return;
+    if (aiEnabled) {
+      switch (state) {
+        case NAVIGATING:
+          stepTowardsTarget(world);
+          break;
+        case REACHED_DESTINATION:
+          handleDestinationReached(world);
+          break;
+        case IDLE:
+          break;
+        default:
+          break;
+      }
     }
   }
 

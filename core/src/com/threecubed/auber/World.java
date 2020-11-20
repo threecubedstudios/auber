@@ -6,9 +6,9 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -44,22 +44,25 @@ public class World {
 
   // Navigation mesh for AI to use
   public final NavigationMesh navigationMesh = new NavigationMesh(
-      (TiledMapTileLayer) map.getLayers().get("background_layer")
+      (TiledMapTileLayer) map.getLayers().get("navigation_layer")
       );
 
-  // Maximum size of brig, and number of entities currently in the brig
-  public final int brigCapacity = 5;
-  private int brigCount = 0;
+  public float auberTeleporterCharge = 0f;
+  public static final float AUBER_CHARGE_RATE = 0.05f;
+  public static final float AUBER_RAY_TIME = 0.25f;
+
+  /** Coordinates for the bottom left and top right tiles of the brig. */
+  public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};
 
   // IDs of layers that should be rendered behind entities
   public final int[] backgroundLayersIds = {
     map.getLayers().getIndex("background_layer"),
-    map.getLayers().getIndex("collision_layer")
     };
 
   // IDs of layers that should be rendered infront of entities
   public final int[] foregroundLayersIds = {
-    map.getLayers().getIndex("foreground_layer")
+    map.getLayers().getIndex("foreground_layer"),
+    map.getLayers().getIndex("collision_layer")
     };
 
 
@@ -138,22 +141,12 @@ public class World {
     entities.add(entity);
   }
 
+  public void removeEntity(GameEntity entity) {
+    entities.remove(entity);
+  }
+
   public void removeEntities(List<GameEntity> entities) {
     entities.removeAll(entities);
-  }
-
-  /**
-   * Increment the number of entities in the brig by 1.
-   * */
-  public void incrementBrigCount() {
-    brigCount += 1;
-    if (brigCount >= brigCapacity) {
-      game.setScreen(new GameOverScreen(this.game));
-    }
-  }
-
-  public int getBrigCount() {
-    return brigCount;
   }
 
   /**

@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
+import com.threecubed.auber.pathfinding.NavigationMesh;
 
 
 /**
@@ -81,8 +82,18 @@ public class Player extends GameEntity {
       if (world.auberTeleporterCharge > 0.95f) {
         world.auberTeleporterCharge = 0;
 
-        teleporterRayCoordinates = getRayCollisionCoordinates(world);
+        for (GameEntity entity : world.getEntities()) {
+          float entityDistance = NavigationMesh.getEuclidianDistance(
+              new float[] {position.x, position.y},
+              new float[] {entity.position.x, entity.position.y}
+              );
+          if (entityDistance < World.NPC_EAR_STRENGTH && entity instanceof Npc) {
+            Npc npc = (Npc) entity;
+            npc.navigateToNearestFleepoint(world);
+          }
+        }
 
+        teleporterRayCoordinates = getRayCollisionCoordinates(world);
         teleporterRayTimer.scheduleTask(new Task() {
           @Override
           public void run() {

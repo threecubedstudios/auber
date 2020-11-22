@@ -2,6 +2,7 @@ package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -9,6 +10,7 @@ import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -32,6 +34,7 @@ public abstract class Npc extends GameEntity {
     IDLE,
     NAVIGATING,
     REACHED_DESTINATION,
+    FLEEING,
     ATTACKING_SYSTEM,
     ATTACKING_PLAYER
   }
@@ -92,6 +95,7 @@ public abstract class Npc extends GameEntity {
     if (aiEnabled) {
       switch (state) {
         case NAVIGATING:
+        case FLEEING:
           stepTowardsTarget(world);
           break;
         case REACHED_DESTINATION:
@@ -125,7 +129,7 @@ public abstract class Npc extends GameEntity {
    *
    * @param world The game world
    * */
-  public void navigateToRandomSystem(World world) {
+  protected void navigateToRandomSystem(World world) {
     state = States.NAVIGATING;
     RectangleMapObject system = world.systems.get(
         Utils.randomIntInRange(world.randomNumberGenerator,
@@ -162,6 +166,46 @@ public abstract class Npc extends GameEntity {
         navigateToRandomSystem(world);
       }
     }, seconds);
+  }
+
+  /**
+   * Create a path to the nearest flee point (euclidian) for the NPC to flee to.
+   *
+   * @param world The game world
+   * */
+  public void navigateToNearestFleepoint(final World world) {
+    state = States.FLEEING;
+    float shortestDistance = Float.POSITIVE_INFINITY;
+    float[] closestFleePoint = world.fleePoints.get(0);
+
+    Circle minimumFleeRange = new Circle(position, World.NPC_MIN_FLEE_DISTANCE);
+
+    for (float[] fleePoint : world.fleePoints) {
+      float distance = NavigationMesh.getEuclidianDistance(fleePoint,
+                                                           new float[] {position.x, position.y});
+
+      // Update the closest fleepoint with the current one, so long as it isn't too close to the
+      // current position.
+      if (distance < shortestDistance && !minimumFleeRange.contains(fleePoint[0], fleePoint[1])) {
+        shortestDistance = distance;
+        closestFleePoint = fleePoint;
+      }
+    }
+
+    currentPath = navigationMesh.generateWorldPathToPoint(
+        position,
+        new Vector2(closestFleePoint[0], closestFleePoint[1])
+    );
+
+    // Fleeing takes priority over all tasks
+    npcTimer.clear();
+    npcTimer.scheduleTask(new Task() {
+      @Override
+      public void run() {
+        state = States.NAVIGATING;
+        navigateToRandomSystem(world);
+      }
+    }, World.NPC_FLEE_TIME);
   }
 
   public States getState() {

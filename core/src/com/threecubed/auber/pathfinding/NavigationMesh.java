@@ -3,6 +3,8 @@ package com.threecubed.auber.pathfinding;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
+import com.threecubed.auber.World;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -227,9 +229,16 @@ public class NavigationMesh {
    *
    * @return The euclidian distance between the 2 points
    * */
-  public static float getEuclidianDistance(int[] firstPoint, int[] secondPoint) {
-    int horizontalDistance = secondPoint[0] - firstPoint[0];
-    int verticalDistance = secondPoint[1] - firstPoint[1];
+  public static float getEuclidianDistance(float[] firstPoint, float[] secondPoint) {
+    float horizontalDistance = secondPoint[0] - firstPoint[0];
+    float verticalDistance = secondPoint[1] - firstPoint[1];
     return (float) Math.sqrt(Math.pow(horizontalDistance, 2) + Math.pow(verticalDistance, 2));
+  }
+
+  public static float getEuclidianDistance(int[] firstPoint, int[] secondPoint) {
+    float[] convertedFirstPoint = {(float) firstPoint[0], (float) firstPoint[1]};
+    float[] convertedSecondPoint = {(float) secondPoint[0], (float) secondPoint[1]};
+
+    return getEuclidianDistance(convertedFirstPoint, convertedSecondPoint);
   }
 }

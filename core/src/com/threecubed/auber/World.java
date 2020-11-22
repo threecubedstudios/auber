@@ -41,23 +41,27 @@ public class World {
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
 
   public ArrayList<RectangleMapObject> systems = new ArrayList<>();
+  public ArrayList<float[]> spawnLocations = new ArrayList<>();
 
   public final Random randomNumberGenerator = new Random();
 
-  // Navigation mesh for AI to use
+  // ------------------NAVIGATION----------------
   public final NavigationMesh navigationMesh = new NavigationMesh(
       (TiledMapTileLayer) map.getLayers().get("navigation_layer")
       );
+  public ArrayList<float[]> fleePoints = new ArrayList<>();
 
+  /** Coordinates for the bottom left and top right tiles of the brig. */
+  public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};
+
+  // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
   public static final float AUBER_CHARGE_RATE = 0.05f;
   public static final float AUBER_RAY_TIME = 0.25f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
   public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
 
-  /** Coordinates for the bottom left and top right tiles of the brig. */
-  public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};
-
+  // ------------------RENDERING-----------------
   // IDs of layers that should be rendered behind entities
   public final int[] backgroundLayersIds = {
     map.getLayers().getIndex("background_layer"),
@@ -81,7 +85,10 @@ public class World {
 
     WALL_SYSTEM_DESTROYED(42),
     STANDALONE_SYSTEM_DESTROYED(66),
-    STANDALONE_SYSTEM_LIGHT_DESTROYED(54);
+    STANDALONE_SYSTEM_LIGHT_DESTROYED(54),
+
+    // Pathfinding tiles
+    FLEE_POINT(57);
 
 
 
@@ -117,11 +124,19 @@ public class World {
     }
   }
 
+  /** The amount of time it takes for an infiltrator to sabotage a system. */
   public static final float SYSTEM_BREAK_TIME = 5f;
+  /** The chance an infiltrator will sabotage after pathfinding to a system. */
   public static final float SYSTEM_SABOTAGE_CHANCE = 0.5f;
-
   /** The distance the infiltrator can see. Default: 5 tiles */
   public static final float INFILTRATOR_SIGHT_RANGE = 80f;
+
+  /** The maximum amount of time (in seconds) an NPC should flee for. */
+  public static final float NPC_FLEE_TIME = 10f;
+  /** The shortest distance an NPC should move from its current position when fleeing. */
+  public static final float NPC_MIN_FLEE_DISTANCE = 80f;
+  /** The distance an NPC can here the teleporter ray shoot from. */
+  public static final float NPC_EAR_STRENGTH = 80f;
 
   public static enum SystemStates {
     WORKING,
@@ -151,6 +166,21 @@ public class World {
             break;
           default:
             break;
+        }
+      }
+    }
+
+    TiledMapTileLayer navigationLayer = (TiledMapTileLayer) map.getLayers().get("navigation_layer");
+    for (int y = 0; y < navigationLayer.getHeight(); y++) {
+      for (int x = 0; x < navigationLayer.getWidth(); x++) {
+        Cell currentCell = navigationLayer.getCell(x, y);
+        float[] cellCoordinates = {x * navigationLayer.getTileWidth(),
+                                   y * navigationLayer.getTileHeight()};
+        if (currentCell != null) {
+          spawnLocations.add(cellCoordinates);
+          if (currentCell.getTile().getId() == Tiles.FLEE_POINT.tileId) {
+            fleePoints.add(cellCoordinates);
+          }
         }
       }
     }
@@ -214,8 +244,6 @@ public class World {
           // This line will never fire, However it needs to be here otherwise Java
           // will think that theres a chance newSystem and newSystemLight may not have been
           // initiated even though every enum state is covered
-          newSystem = new Cell();
-          newSystemLight = new Cell();
           return;
       }
       collisionLayer.setCell(systemPosition[0], systemPosition[1], newSystem);
@@ -298,5 +326,17 @@ public class World {
 
   public SystemStates getSystemState(RectangleMapObject system) {
     return getSystemState(system.getRectangle().x, system.getRectangle().y);
+  }
+
+  /**
+   * Move a given entity to a random location within the world.
+   *
+   * @param entity The entity to move.
+   **/
+  public void moveEntityToRandomLocation(GameEntity entity) {
+    float[] location = spawnLocations.get(Utils.randomIntInRange(randomNumberGenerator, 0,
+                                                                 spawnLocations.size() - 1));
+    entity.position.x = location[0];
+    entity.position.y = location[1];
   }
 }

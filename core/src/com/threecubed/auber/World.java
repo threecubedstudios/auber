@@ -16,6 +16,7 @@ import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -101,6 +102,21 @@ public class World {
       return output;
     }
 
+    /**
+     * Return a tile from this enum by a given tile ID.
+     *
+     * @param id The ID of the {@link Tiles} object to return
+     * @return A {@link Tiles} object of the given ID
+     * @throws IllegalArgumentException Thrown if no tile could be found with the given ID
+     * */
+    public static Tiles getTileById(int id) {
+      for (Tiles tile : Tiles.values()) {
+        if (tile.tileId == id) {
+          return tile;
+        }
+      }
+      throw new IllegalArgumentException("Tile of given ID not found.");
+    }
   }
 
   public static final float SYSTEM_BREAK_TIME = 5f;
@@ -161,8 +177,8 @@ public class World {
   /**
    * Update the sprite of a system to match a new state.
    *
-   * @param x The x coordinate of the system
-   * @param y The y coordinate of the system
+   * @param x The x coordinate of the system object (not the tile)
+   * @param y The y coordinate of the system object (not the tile)
    * @param newState The new state of the system
    **/
   public void updateSystemState(float x, float y, SystemStates newState) {
@@ -236,6 +252,49 @@ public class World {
           break;
         }
       }
+    }
+  }
+
+  /**
+   * Return the state of a system, given the coordinates of the system object (not the tile).
+   *
+   * @param x The x coordinate to check
+   * @param y The y coordinate to check
+   * @return A {@link SystemStates} representing the state of the system
+   * @throws IllegalArgumentException if a standalone system light is at the coordinates provided
+   * */
+  public SystemStates getSystemState(float x, float y) {
+    TiledMapTileLayer collisionLayer = (TiledMapTileLayer) World.map.getLayers()
+        .get("collision_layer");
+
+    int[] systemPosition = {
+      (int) x / collisionLayer.getTileWidth(),
+      (int) (y / collisionLayer.getTileHeight()) + 1
+      };
+
+    Cell attackedSystemCell = collisionLayer.getCell(systemPosition[0], systemPosition[1]);
+    if (attackedSystemCell == null) {
+      throw new IllegalArgumentException("No tile at given coordinates");
+    }
+
+    Tiles targetTile = Tiles.getTileById(attackedSystemCell.getTile().getId());
+
+    switch (targetTile) {
+      case WALL_SYSTEM:
+      case STANDALONE_SYSTEM:
+        return SystemStates.WORKING;
+
+      case WALL_SYSTEM_ATTACKED:
+      case STANDALONE_SYSTEM_ATTACKED:
+        return SystemStates.ATTACKED;
+
+      case WALL_SYSTEM_DESTROYED:
+      case STANDALONE_SYSTEM_DESTROYED:
+        return SystemStates.DESTROYED;
+      
+      default:
+        throw new IllegalArgumentException("Use the coordinates of the System object on the"
+                                           .concat("tilemap - not the system tile."));
     }
   }
 }

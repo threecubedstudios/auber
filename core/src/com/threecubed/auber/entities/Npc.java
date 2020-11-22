@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -27,7 +28,7 @@ public abstract class Npc extends GameEntity {
 
   protected States state = States.IDLE;
 
-  protected enum States {
+  public enum States {
     IDLE,
     NAVIGATING,
     REACHED_DESTINATION,
@@ -149,5 +150,21 @@ public abstract class Npc extends GameEntity {
         Math.signum(currentPath.get(0).x - position.x),
         Math.signum(currentPath.get(0).y - position.y)
         );
+  }
+
+  protected void idleForGivenTime(final World world, float seconds) {
+    npcTimer.scheduleTask(new Task() {
+      @Override
+      public void run() {
+        state = States.NAVIGATING;
+
+        // Pick new system to navigate to
+        navigateToRandomSystem(world);
+      }
+    }, seconds);
+  }
+
+  public States getState() {
+    return state;
   }
 }

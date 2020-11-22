@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -34,6 +35,8 @@ public class Player extends GameEntity {
   private Timer teleporterRayTimer = new Timer();
   private Vector2 teleporterRayCoordinates = new Vector2();
 
+  public boolean confused = true;
+
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
   public Player(float x, float y) {
@@ -47,8 +50,15 @@ public class Player extends GameEntity {
    * */
   @Override
   public void update(World world) {
-    // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged
+    // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged,
+    // hence the * 2
     float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
+
+    // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
+    // of flipped velocity will cancel out the first
+    if (confused) {
+      velocity.set(-velocity.x, -velocity.y);
+    }
 
     if (Gdx.input.isKeyPressed(Input.Keys.W)) {
       velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
@@ -63,8 +73,10 @@ public class Player extends GameEntity {
       velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
     }
 
+
     if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && teleporterRayCoordinates.isZero()) {
-      world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge + World.AUBER_CHARGE_RATE, 1f);
+      world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge + World.AUBER_CHARGE_RATE,
+                                             1f);
     } else {
       if (world.auberTeleporterCharge > 0.95f) {
         world.auberTeleporterCharge = 0;
@@ -118,6 +130,11 @@ public class Player extends GameEntity {
             (mousePosition.x - getCenterX()))
           ) - 90f);
 
+    // Handle the confused debuff
+    if (confused) {
+      velocity.set(-velocity.x, -velocity.y);
+    }
+
     move(velocity, World.map);
   }
 
@@ -167,6 +184,12 @@ public class Player extends GameEntity {
             if (entity instanceof Infiltrator) {
               Infiltrator infiltrator = (Infiltrator) entity;
 
+              if (infiltrator.getState() == Npc.States.ATTACKING_SYSTEM) {
+                RectangleMapObject system = infiltrator.getNearbyObjects(World.map);
+                Rectangle boundingBox = system.getRectangle();
+
+                world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);
+              }
               infiltrator.position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
                   World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
               infiltrator.position.y = Utils.randomFloatInRange(world.randomNumberGenerator,

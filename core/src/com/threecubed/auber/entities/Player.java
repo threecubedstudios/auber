@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
+import com.threecubed.auber.pathfinding.NavigationMesh;
 
 
 /**
@@ -35,7 +36,7 @@ public class Player extends GameEntity {
   private Timer teleporterRayTimer = new Timer();
   private Vector2 teleporterRayCoordinates = new Vector2();
 
-  public boolean confused = true;
+  public boolean confused = false;
 
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
@@ -81,8 +82,18 @@ public class Player extends GameEntity {
       if (world.auberTeleporterCharge > 0.95f) {
         world.auberTeleporterCharge = 0;
 
-        teleporterRayCoordinates = getRayCollisionCoordinates(world);
+        for (GameEntity entity : world.getEntities()) {
+          float entityDistance = NavigationMesh.getEuclidianDistance(
+              new float[] {position.x, position.y},
+              new float[] {entity.position.x, entity.position.y}
+              );
+          if (entityDistance < World.NPC_EAR_STRENGTH && entity instanceof Npc) {
+            Npc npc = (Npc) entity;
+            npc.navigateToNearestFleepoint(world);
+          }
+        }
 
+        teleporterRayCoordinates = getRayCollisionCoordinates(world);
         teleporterRayTimer.scheduleTask(new Task() {
           @Override
           public void run() {
@@ -154,7 +165,8 @@ public class Player extends GameEntity {
       rayRenderer.setProjectionMatrix(camera.combined);
       rayRenderer.begin(ShapeType.Filled);
       rayRenderer.rectLine(getCenterX(), getCenterY(),
-          teleporterRayCoordinates.x, teleporterRayCoordinates.y, 0.5f, World.rayColorA, World.rayColorB);
+          teleporterRayCoordinates.x, teleporterRayCoordinates.y, 0.5f,
+          World.rayColorA, World.rayColorB);
       rayRenderer.end();
 
       batch.begin();
@@ -171,8 +183,8 @@ public class Player extends GameEntity {
     // Allow the ray to go 20x the distance between the mouse and player,
     // prevents game from hanging if ray escapes map
     while (!rayIntersected && alpha < 20) {
-      output.x = position.x;
-      output.y = position.y;
+      output.x = getCenterX();
+      output.y = getCenterY();
 
       output.lerp(targetCoordinates, alpha);
 

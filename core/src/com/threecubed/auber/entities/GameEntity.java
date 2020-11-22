@@ -16,6 +16,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
 
 
+/**
+ * The GameEntity class is the abstract class from which all entities, including the player must
+ * inherit from. It contains information regarding the speed and max speed of entities, code to
+ * render an entity to the game world and for entities like the {@link Player}, information
+ * information regarding friction and velocity and collision handlers.
+ *
+ * @author Daniel O'Brien
+ * @version 1.0
+ * @since 1.0
+ * */
 public abstract class GameEntity {
   public Sprite sprite;
 
@@ -61,7 +71,6 @@ public abstract class GameEntity {
     sprite.setRotation(rotation);
     sprite.setPosition(position.x, position.y);
     sprite.draw(batch);
-    
   }
 
   /**
@@ -138,6 +147,22 @@ public abstract class GameEntity {
       }
     }
     return null;
+  }
+
+  /**
+   * Check if the {@link GameEntity} is currently visible on-screen. This will return true, even
+   * if the entity is only partially on the screen.
+   *
+   * @param world The game world
+   * @return A boolean dictating whether the entity is visible by the world's camera
+   * */
+  public boolean entityOnScreen(World world) {
+    float halfWidth = world.camera.viewportWidth / 2;
+    float halfHeight = world.camera.viewportHeight / 2;
+    return (position.x + sprite.getWidth() > world.camera.position.x - halfWidth
+            && position.y + sprite.getHeight() > world.camera.position.y - halfHeight
+            && position.x < world.camera.position.x + halfWidth
+            && position.y < world.camera.position.y + halfHeight);
   }
 
   /**

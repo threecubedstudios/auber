@@ -42,8 +42,12 @@ public class GameScreen extends ScreenAdapter {
     this.game = game;
 
     world = new World(game);
+
+    Player player = new Player(64f, 64f);
+    world.addEntity(player);
+    world.player = player;
+
     world.addEntity(new Civilian(64f, 64f, world));
-    world.addEntity(new Player(64f, 64f));
     world.addEntity(new Infiltrator(64f, 64f, world));
     stars = new Texture("stars.png");
   }

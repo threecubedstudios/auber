@@ -35,7 +35,7 @@ public class Player extends GameEntity {
   private Timer teleporterRayTimer = new Timer();
   private Vector2 teleporterRayCoordinates = new Vector2();
 
-  public boolean confused = true;
+  public boolean confused = false;
 
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
@@ -154,7 +154,8 @@ public class Player extends GameEntity {
       rayRenderer.setProjectionMatrix(camera.combined);
       rayRenderer.begin(ShapeType.Filled);
       rayRenderer.rectLine(getCenterX(), getCenterY(),
-          teleporterRayCoordinates.x, teleporterRayCoordinates.y, 0.5f, World.rayColorA, World.rayColorB);
+          teleporterRayCoordinates.x, teleporterRayCoordinates.y, 0.5f,
+          World.rayColorA, World.rayColorB);
       rayRenderer.end();
 
       batch.begin();

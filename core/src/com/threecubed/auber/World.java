@@ -14,9 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
-import com.threecubed.auber.screens.GameOverScreen;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -296,5 +294,9 @@ public class World {
         throw new IllegalArgumentException("Use the coordinates of the System object on the"
                                            .concat("tilemap - not the system tile."));
     }
+  }
+
+  public SystemStates getSystemState(RectangleMapObject system) {
+    return getSystemState(system.getRectangle().x, system.getRectangle().y);
   }
 }

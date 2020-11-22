@@ -24,7 +24,7 @@ import com.threecubed.auber.ui.Title;
  * @since 1.0
  * */
 public class MenuScreen extends ScreenAdapter {
-  World world;
+  //World world;
   AuberGame game;
   Title title;
   Button playButton;
@@ -41,7 +41,7 @@ public class MenuScreen extends ScreenAdapter {
    * */
   public MenuScreen(AuberGame game) {
     this.game = game;
-    this.world = new World(game);
+    //this.world = new World(game);
     this.title = new Title(new Vector2(Gdx.graphics.getWidth() / 4,
           300 + (Gdx.graphics.getHeight() / 3)), 0.5f, "auberv11.png");
     this.playButton = new Button(new Vector2(Gdx.graphics.getWidth() / 4,

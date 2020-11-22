@@ -178,15 +178,15 @@ public class World {
    * Increment the number of entities in the brig by 1.
    * */
   public void incrementBrigCount() {
-    brigCount += 1;
-    if (brigCount >= brigCapacity) {
+    //brigCount += 1;
+    if (true) {
       game.setScreen(new GameOverScreen(this.game, "YOU WIN"));
     }
   }
 
   public void updateWorkingSystems(int update) {
-    this.workingSystems += update;
-    if (this.workingSystems == 0) {
+    //this.workingSystems += update;
+    if (true) {
       game.setScreen(new GameOverScreen(this.game, "YOU LOSE"));
     }
   }

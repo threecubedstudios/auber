@@ -1,7 +1,6 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 
@@ -37,14 +36,6 @@ public class Civilian extends Npc {
   @Override
   public void handleDestinationReached(final World world) {
     state = States.IDLE;
-    npcTimer.scheduleTask(new Task() {
-      @Override
-      public void run() {
-        state = States.NAVIGATING;
-
-        // Pick new system to navigate to
-        navigateToRandomSystem(world);
-      }
-    }, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 10f));
+    idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 10f));
   }
 }

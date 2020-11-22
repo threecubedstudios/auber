@@ -172,8 +172,8 @@ public class Player extends GameEntity {
     // Allow the ray to go 20x the distance between the mouse and player,
     // prevents game from hanging if ray escapes map
     while (!rayIntersected && alpha < 20) {
-      output.x = position.x;
-      output.y = position.y;
+      output.x = getCenterX();
+      output.y = getCenterY();
 
       output.lerp(targetCoordinates, alpha);
 

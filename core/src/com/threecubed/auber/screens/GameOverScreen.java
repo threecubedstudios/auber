@@ -23,16 +23,13 @@ public class GameOverScreen extends ScreenAdapter {
   BitmapFont font = new BitmapFont();
   SpriteBatch batch = new SpriteBatch();
   GlyphLayout layout = new GlyphLayout();
+  String text;
 
-  /**
-   * Instantiate the screen with an {@link AuberGame} object.
-   *
-   * @param game The game object. 
-   * */
-  public GameOverScreen(AuberGame game) {
+  public GameOverScreen(AuberGame game, String text) {
     this.game = game;
     font.getData().setScale(2);
-    layout.setText(font, "GAME OVER");
+    layout.setText(font, text);
+    this.text = text;
   }
 
   @Override
@@ -42,8 +39,7 @@ public class GameOverScreen extends ScreenAdapter {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     batch.begin();
-    font.draw(batch, "GAME OVER", (Gdx.graphics.getWidth() - layout.width) / 2,
-        300 + (Gdx.graphics.getHeight() - layout.height) / 2);
+    font.draw(batch, text, (Gdx.graphics.getWidth() - layout.width) / 2, 300 + (Gdx.graphics.getHeight() - layout.height) / 2);
     batch.end();
   }
   

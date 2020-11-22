@@ -31,7 +31,6 @@ public class GameScreen extends ScreenAdapter {
   SpriteBatch screenBatch = new SpriteBatch();
   GameUi ui = new GameUi();
 
-  int workingSystems = 0;
 
   /**
    * Initialise the game screen with the {@link AuberGame} object and add a few entities.
@@ -54,6 +53,8 @@ public class GameScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+
+    
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

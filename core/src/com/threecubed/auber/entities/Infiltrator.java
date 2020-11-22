@@ -2,7 +2,9 @@ package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 
 
@@ -15,7 +17,7 @@ import com.threecubed.auber.World;
  * @since 1.0
  * */
 public class Infiltrator extends Npc {
-  private static Texture texture = new Texture("player.png");  
+  private static Texture texture = new Texture("player.png");
 
   public Infiltrator(float x, float y, World world) {
     super(x, y, texture, world.navigationMesh);
@@ -25,7 +27,13 @@ public class Infiltrator extends Npc {
   @Override
   public void handleDestinationReached(World world) {
     state = States.IDLE;
-    attackNearbySystem(world);
+    if (!playerNearby(world)
+        && Utils.randomFloatInRange(world.randomNumberGenerator, 0, 1)
+        > World.SYSTEM_SABOTAGE_CHANCE) {
+      attackNearbySystem(world);
+    } else {
+      idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 8f));
+    }
   }
 
   /**
@@ -35,7 +43,7 @@ public class Infiltrator extends Npc {
     state = States.ATTACKING_SYSTEM;
 
     final RectangleMapObject system = getNearbyObjects(World.map);
-    
+
     world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
         World.SystemStates.ATTACKED);
 
@@ -49,5 +57,13 @@ public class Infiltrator extends Npc {
         }
       }
     }, World.SYSTEM_BREAK_TIME);
+  }
+
+  private boolean playerNearby(World world) {
+    Circle infiltratorSight = new Circle(position, World.INFILTRATOR_SIGHT_RANGE);
+    if (infiltratorSight.contains(world.player.position)) {
+      return true;
+    }
+    return false;
   }
 }

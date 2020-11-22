@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
+import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.Random;
  * */
 public class World {
   private AuberGame game;
+  public Player player;
 
   private List<GameEntity> entities = new ArrayList<>();
 
@@ -102,6 +104,10 @@ public class World {
   }
 
   public static final float SYSTEM_BREAK_TIME = 5f;
+  public static final float SYSTEM_SABOTAGE_CHANCE = 0.5f;
+
+  /** The distance the infiltrator can see. Default: 5 tiles */
+  public static final float INFILTRATOR_SIGHT_RANGE = 80f;
 
   public static enum SystemStates {
     WORKING,
@@ -199,7 +205,10 @@ public class World {
           return;
       }
       collisionLayer.setCell(systemPosition[0], systemPosition[1], newSystem);
-      collisionLayer.setCell(systemPosition[0], systemPosition[1] + 1, newSystemLight);
+
+      TiledMapTileLayer foregroundLayer = (TiledMapTileLayer) map.getLayers()
+          .get("foreground_layer");
+      foregroundLayer.setCell(systemPosition[0], systemPosition[1] + 1, newSystemLight);
     } else {
       Cell newSystem;
       switch (newState) {

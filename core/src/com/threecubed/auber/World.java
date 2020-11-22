@@ -175,29 +175,12 @@ public class World {
   }
 
   /**
-   * Increment the number of entities in the brig by 1.
-   * */
-  public void incrementBrigCount() {
-    //brigCount += 1;
-    if (true) {
-      game.setScreen(new GameOverScreen(this.game, "YOU WIN"));
-    }
-  }
-
-  public void updateWorkingSystems(int update) {
-    //this.workingSystems += update;
-    if (true) {
-      game.setScreen(new GameOverScreen(this.game, "YOU LOSE"));
-    }
-  }
-
-  /**
    * Update the sprite of a system to match a new state.
    *
    * @param x The x coordinate of the system object (not the tile)
    * @param y The y coordinate of the system object (not the tile)
    * @param newState The new state of the system
-   * */
+   **/
   public void updateSystemState(float x, float y, SystemStates newState) {
     TiledMapTileLayer collisionLayer = (TiledMapTileLayer) World.map.getLayers()
         .get("collision_layer");

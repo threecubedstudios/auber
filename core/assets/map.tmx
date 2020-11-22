@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="46" height="46" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="26">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="46" height="46" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="26">
  <tileset firstgid="1" source="tileset.tsx"/>
  <layer id="7" name="navigation_layer" width="46" height="46" locked="1">
   <data encoding="csv">
@@ -202,31 +202,31 @@
 </data>
  </layer>
  <objectgroup id="5" name="object_layer" locked="1">
-  <object id="2" name="Teleporter B" type="teleporter" x="560" y="80" width="16" height="16">
+  <object id="2" name="Teleporter 2" type="teleporter" x="560" y="80" width="16" height="16">
    <properties>
     <property name="linked_teleporter" value="Teleporter A"/>
    </properties>
   </object>
-  <object id="4" name="Teleporter A" type="teleporter" x="448" y="608" width="16" height="16">
+  <object id="4" name="Teleporter 1" type="teleporter" x="448" y="608" width="16" height="16">
    <properties>
     <property name="linked_teleporter" value="Teleporter B"/>
    </properties>
   </object>
-  <object id="6" name="Laboratory System C" type="system" x="80" y="560" width="16" height="16"/>
-  <object id="8" name="Laboratory System B" type="system" x="192" y="704" width="16" height="16"/>
-  <object id="12" name="Zone B System B" type="system" x="400" y="528" width="16" height="16"/>
-  <object id="13" name="Engine B System" type="system" x="352" y="432" width="16" height="16"/>
-  <object id="14" name="Engine A System B" type="system" x="192" y="352" width="16" height="16"/>
-  <object id="15" name="Engine A System A" type="system" x="16" y="368" width="16" height="16"/>
-  <object id="16" name="Corridor System B" type="system" x="320" y="288" width="16" height="16"/>
-  <object id="17" name="Zone A System B" type="system" x="80" y="192" width="16" height="16"/>
-  <object id="18" name="Zone A System A" type="system" x="32" y="192" width="16" height="16"/>
-  <object id="19" name="Navigation System B" type="system" x="480" y="96" width="16" height="16"/>
-  <object id="20" name="Navigation System A" type="system" x="480" y="32" width="16" height="16"/>
-  <object id="21" name="Engine C System" type="system" x="624" y="416" width="16" height="16"/>
-  <object id="22" name="Zone B System A" type="system" x="624" y="560" width="16" height="16"/>
-  <object id="23" name="Zone C System" type="system" x="544" y="672" width="16" height="16"/>
-  <object id="24" name="Corridor System A" type="system" x="576" y="224" width="16" height="16"/>
-  <object id="25" name="Laboratory System A" type="system" x="48" y="704" width="16" height="16"/>
+  <object id="6" name="Laboratory System 3" type="system" x="80" y="560" width="16" height="16"/>
+  <object id="8" name="Laboratory System 2" type="system" x="192" y="704" width="16" height="16"/>
+  <object id="12" name="Zone 2 System 1" type="system" x="400" y="528" width="16" height="16"/>
+  <object id="13" name="Engine 2 System 1" type="system" x="352" y="432" width="16" height="16"/>
+  <object id="14" name="Engine 1 System 2" type="system" x="192" y="352" width="16" height="16"/>
+  <object id="15" name="Engine 1 System 1" type="system" x="16" y="368" width="16" height="16"/>
+  <object id="16" name="Corridor System 2" type="system" x="320" y="288" width="16" height="16"/>
+  <object id="17" name="Zone 1 System 2" type="system" x="80" y="192" width="16" height="16"/>
+  <object id="18" name="Zone 1 System 1" type="system" x="32" y="192" width="16" height="16"/>
+  <object id="19" name="Navigation System 2" type="system" x="480" y="96" width="16" height="16"/>
+  <object id="20" name="Navigation System 1" type="system" x="480" y="32" width="16" height="16"/>
+  <object id="21" name="Engine 3 System 1" type="system" x="624" y="416" width="16" height="16"/>
+  <object id="22" name="Zone 2 System 1" type="system" x="624" y="560" width="16" height="16"/>
+  <object id="23" name="Zone 3 System 1" type="system" x="544" y="672" width="16" height="16"/>
+  <object id="24" name="Corridor System 1" type="system" x="576" y="224" width="16" height="16"/>
+  <object id="25" name="Laboratory System 1" type="system" x="48" y="704" width="16" height="16"/>
  </objectgroup>
 </map>

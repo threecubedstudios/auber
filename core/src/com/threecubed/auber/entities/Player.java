@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -33,8 +32,11 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
 public class Player extends GameEntity {
   private static Texture texture = new Texture("player.png");
 
-  private Timer teleporterRayTimer = new Timer();
+  public Timer playerTimer = new Timer();
   private Vector2 teleporterRayCoordinates = new Vector2();
+
+  /** Health of Auber - varies between 1 and 0. */
+  public float health = 1;
 
   public boolean confused = false;
 
@@ -51,6 +53,11 @@ public class Player extends GameEntity {
    * */
   @Override
   public void update(World world) {
+    // Increment Auber's health if in medbay
+    if (world.medbay.getRectangle().contains(position.x, position.y)) {
+      health += World.AUBER_HEAL_RATE;
+      health = Math.min(1f, health);
+    }
     // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged,
     // hence the * 2
     float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
@@ -82,19 +89,28 @@ public class Player extends GameEntity {
       if (world.auberTeleporterCharge > 0.95f) {
         world.auberTeleporterCharge = 0;
 
+        // Scare entities
         for (GameEntity entity : world.getEntities()) {
           float entityDistance = NavigationMesh.getEuclidianDistance(
               new float[] {position.x, position.y},
               new float[] {entity.position.x, entity.position.y}
               );
           if (entityDistance < World.NPC_EAR_STRENGTH && entity instanceof Npc) {
+            if (entity instanceof Infiltrator) {
+              Infiltrator infiltrator = (Infiltrator) entity;
+
+              // Exposed infiltrators shouldn't flee
+              if (infiltrator.exposed) {
+                continue;
+              }
+            }
             Npc npc = (Npc) entity;
             npc.navigateToNearestFleepoint(world);
           }
         }
 
-        teleporterRayCoordinates = getRayCollisionCoordinates(world);
-        teleporterRayTimer.scheduleTask(new Task() {
+        teleporterRayCoordinates = handleRayCollisions(world);
+        playerTimer.scheduleTask(new Task() {
           @Override
           public void run() {
             teleporterRayCoordinates.setZero();
@@ -130,6 +146,9 @@ public class Player extends GameEntity {
             break;
         }
       }
+    }
+    if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+      position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
     }
 
     Vector2 mousePosition = Utils.getMouseCoordinates(world.camera);
@@ -174,7 +193,13 @@ public class Player extends GameEntity {
     super.render(batch, camera);
   }
 
-  private Vector2 getRayCollisionCoordinates(World world) {
+  /**
+   * Handle teleporter ray collisions and return the coordinates of the object it collides with.
+   *
+   * @param world The game world
+   * @return The coordinates the ray hit
+   * */
+  private Vector2 handleRayCollisions(World world) {
     Vector2 output = new Vector2();
 
     Vector2 targetCoordinates = new Vector2(Utils.getMouseCoordinates(world.camera));
@@ -193,20 +218,9 @@ public class Player extends GameEntity {
         if (!(entity instanceof Player)) {
           if (entity.sprite.getBoundingRectangle().contains(output)) {
             rayIntersected = true;
-            if (entity instanceof Infiltrator) {
-              Infiltrator infiltrator = (Infiltrator) entity;
-
-              if (infiltrator.getState() == Npc.States.ATTACKING_SYSTEM) {
-                RectangleMapObject system = infiltrator.getNearbyObjects(World.map);
-                Rectangle boundingBox = system.getRectangle();
-
-                world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);
-              }
-              infiltrator.position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
-                  World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
-              infiltrator.position.y = Utils.randomFloatInRange(world.randomNumberGenerator,
-                  World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
-              infiltrator.aiEnabled = false;
+            if (entity instanceof Npc) {
+              Npc npc = (Npc) entity;
+              npc.handleTeleporterShot(world);
             }
             break;
           }

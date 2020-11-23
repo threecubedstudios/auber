@@ -44,16 +44,46 @@ public class GameScreen extends ScreenAdapter {
     world = new World(game);
 
     Player player = new Player(64f, 64f);
-    world.addEntity(player);
+    world.queueEntityAdd(player);
     world.player = player;
 
-    world.addEntity(new Civilian(64f, 64f, world));
-    world.addEntity(new Infiltrator(64f, 64f, world));
+    world.queueEntityAdd(new Infiltrator(world));
+    world.queueEntityAdd(new Infiltrator(world));
+    world.queueEntityAdd(new Infiltrator(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
+    world.queueEntityAdd(new Civilian(world));
     stars = new Texture("stars.png");
   }
 
   @Override
   public void render(float delta) {
+    // Add any queued entities
+    world.updateEntities();
+    world.checkForEndState();
+
+
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -70,6 +100,7 @@ public class GameScreen extends ScreenAdapter {
     Batch batch = renderer.getBatch();
     // Iterate over all entities. Perform movement logic and render them.
     batch.begin();
+    world.infiltratorCount = 0;
     for (GameEntity entity : world.getEntities()) {
       entity.update(world);
       entity.render(batch, world.camera);
@@ -77,6 +108,8 @@ public class GameScreen extends ScreenAdapter {
       if (entity instanceof Player) {
         world.camera.position.set(entity.position.x, entity.position.y, 0);
         world.camera.update();
+      } else if (entity instanceof Infiltrator) {
+        world.infiltratorCount += 1;
       }
     }
     batch.end();

@@ -10,7 +10,7 @@ import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Random;
 
 
 /**
@@ -28,6 +28,10 @@ public abstract class Npc extends GameEntity {
   private Vector2 targetDirection = new Vector2();
   private NavigationMesh navigationMesh;
 
+  protected float maxSpeed = 1.3f;
+
+  private static String[] textureNames = {"alienA.png", "alienB.png"};
+
   protected States state = States.IDLE;
 
   public enum States {
@@ -42,9 +46,43 @@ public abstract class Npc extends GameEntity {
   public boolean aiEnabled = true;
   protected Timer npcTimer = new Timer();
 
+  /**
+   * Initialise an NPC with a given texture.
+   *
+   * @param x The x coordinate to initialise the NPC at
+   * @param y The y coordinate to initialise the NPC at
+   * @param navigationMesh The navigation mesh.
+   * */
   public Npc(float x, float y, Texture texture, NavigationMesh navigationMesh) {
     super(x, y, texture);
+    Random rng = new Random(); // TODO: Switch to use the world RNG
+    maxSpeed *= Utils.randomFloatInRange(rng, World.NPC_SPEED_VARIANCE[0],
+        World.NPC_SPEED_VARIANCE[1]);
     this.navigationMesh = navigationMesh;
+  }
+
+  /**
+   * Initialise an NPC with a random NPC sprite.
+   *
+   * @param x The x coordinate to initialise the NPC at
+   * @param y The y coordinate to initialise the NPC at
+   * @param world The game world
+   * */
+  public Npc(float x, float y, World world) {
+    this(x, y,
+        new Texture(textureNames[Utils.randomIntInRange(world.randomNumberGenerator,
+                                                        0, textureNames.length - 1)]),
+        world.navigationMesh);
+  }
+
+  /**
+   * Initialise the NPC at a random location.
+   *
+   * @param world The game world
+   * */
+  public Npc(World world) {
+    this(0f, 0f, world);
+    moveToRandomLocation(world);
   }
 
   /**
@@ -62,13 +100,20 @@ public abstract class Npc extends GameEntity {
 
       boolean entityMoved = false;
       if (currentDirection.x == targetDirection.x && targetDirection.x != 0) {
-        // 0.7 makes the player slightly faster, allowing for them to catch up to infiltrators
-        position.x += Math.signum(targetCoordinates.x - position.x) * maxSpeed * 0.7;
+        float velocityX = Math.signum(targetCoordinates.x - position.x) * maxSpeed;
+        if (state == States.FLEEING) {
+          velocityX *= World.NPC_FLEE_MULTIPLIER;
+        }
+        position.x += velocityX;
         entityMoved = true;
       }
 
       if (currentDirection.y == targetDirection.y && targetDirection.y != 0) {
-        position.y += Math.signum(targetCoordinates.y - position.y) * maxSpeed * 0.7;
+        float velocityY = Math.signum(targetCoordinates.y - position.y) * maxSpeed;
+        if (state == States.FLEEING) {
+          velocityY *= World.NPC_FLEE_MULTIPLIER;
+        }
+        position.y += velocityY;
         entityMoved = true;
       }
 
@@ -124,25 +169,37 @@ public abstract class Npc extends GameEntity {
     targetDirection = getCurrentDirection();
   }
 
-  /** 
+  /**
    * Pick a random system in the game world and navigate towards it.
    *
    * @param world The game world
    * */
-  protected void navigateToRandomSystem(World world) {
-    state = States.NAVIGATING;
-    RectangleMapObject system = world.systems.get(
-        Utils.randomIntInRange(world.randomNumberGenerator,
-          0, world.systems.size() - 1));
 
-    updatePath(system.getRectangle().getX(), system.getRectangle().getY(), world);
+  protected void navigateToRandomSystem(World world) {
+    if (!world.systems.isEmpty()) {
+      state = States.NAVIGATING;
+      RectangleMapObject system = world.systems.get(
+          Utils.randomIntInRange(world.randomNumberGenerator,
+            0, world.systems.size() - 1));
+
+      updatePath(system.getRectangle().getX(), system.getRectangle().getY(), world);
+    }
   }
 
   /**
    * Handle the event of the NPC reaching its current destination. For {@link Infiltrator}s this
    * might be to sabotage a system and for {@link Civilian}s this might be to idle for a bit
+   *
+   * @param world The game world
    * */
   public abstract void handleDestinationReached(World world);
+
+  /**
+   * Handle the event of being shot with Auber's teleporting ray gun.
+   *
+   * @param world The game world
+   * */
+  public abstract void handleTeleporterShot(World world);
 
   /**
    * Return a {@link Vector2} representing the direction the NPC is currently heading in.
@@ -175,40 +232,67 @@ public abstract class Npc extends GameEntity {
    * */
   public void navigateToNearestFleepoint(final World world) {
     state = States.FLEEING;
-    float shortestDistance = Float.POSITIVE_INFINITY;
-    float[] closestFleePoint = world.fleePoints.get(0);
+
+    ArrayList<Float> distances = new ArrayList<>();
+    ArrayList<float[]> closestFleePoints = new ArrayList<>();
 
     Circle minimumFleeRange = new Circle(position, World.NPC_MIN_FLEE_DISTANCE);
 
     for (float[] fleePoint : world.fleePoints) {
-      float distance = NavigationMesh.getEuclidianDistance(fleePoint,
+      float newDistance = NavigationMesh.getEuclidianDistance(fleePoint,
                                                            new float[] {position.x, position.y});
 
-      // Update the closest fleepoint with the current one, so long as it isn't too close to the
-      // current position.
-      if (distance < shortestDistance && !minimumFleeRange.contains(fleePoint[0], fleePoint[1])) {
-        shortestDistance = distance;
-        closestFleePoint = fleePoint;
+      if (!minimumFleeRange.contains(fleePoint[0], fleePoint[1])) {
+        if (distances.size() < 2) {
+          distances.add(newDistance);
+          closestFleePoints.add(fleePoint);
+          continue;
+        }
+        for (int i = 0; i < distances.size(); i++) {
+          float distance = distances.get(i);
+          if (newDistance < distance) {
+            distances.set(i, distance);
+            closestFleePoints.set(i, fleePoint);
+            break;
+          }
+        }
       }
     }
+    System.out.println(distances.toString());
+    float[] chosenFleePoint = closestFleePoints.get(Utils.randomIntInRange(
+      world.randomNumberGenerator, 0, closestFleePoints.size() - 1)
+    );
 
     currentPath = navigationMesh.generateWorldPathToPoint(
         position,
-        new Vector2(closestFleePoint[0], closestFleePoint[1])
-    );
+        new Vector2(chosenFleePoint[0], chosenFleePoint[1])
+        );
 
     // Fleeing takes priority over all tasks
     npcTimer.clear();
     npcTimer.scheduleTask(new Task() {
       @Override
       public void run() {
-        state = States.NAVIGATING;
-        navigateToRandomSystem(world);
+        if (aiEnabled) {
+          state = States.NAVIGATING;
+          navigateToRandomSystem(world);
+        }
       }
     }, World.NPC_FLEE_TIME);
   }
 
   public States getState() {
     return state;
+  }
+
+  /**
+   * Move the entity to a random location within the world.
+   **/
+  public void moveToRandomLocation(World world) {
+    float[] location = world.spawnLocations.get(Utils.randomIntInRange(
+        world.randomNumberGenerator, 0,
+        world.spawnLocations.size() - 1));
+    position.x = location[0];
+    position.y = location[1];
   }
 }

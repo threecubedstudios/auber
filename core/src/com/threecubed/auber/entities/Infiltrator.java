@@ -26,13 +26,15 @@ public class Infiltrator extends Npc {
 
   @Override
   public void handleDestinationReached(World world) {
-    state = States.IDLE;
-    if (!playerNearby(world)
-        && Utils.randomFloatInRange(world.randomNumberGenerator, 0, 1)
-        > World.SYSTEM_SABOTAGE_CHANCE) {
-      attackNearbySystem(world);
-    } else {
-      idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 8f));
+    if (state == States.NAVIGATING) {
+      state = States.IDLE;
+      if (!playerNearby(world)
+          && Utils.randomFloatInRange(world.randomNumberGenerator, 0, 1)
+          > World.SYSTEM_SABOTAGE_CHANCE) {
+        attackNearbySystem(world);
+      } else {
+        idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 8f));
+      }  
     }
   }
 

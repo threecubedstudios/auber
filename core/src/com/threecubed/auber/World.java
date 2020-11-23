@@ -132,8 +132,12 @@ public class World {
   /** The distance the infiltrator can see. Default: 5 tiles */
   public static final float INFILTRATOR_SIGHT_RANGE = 80f;
 
+  /** The amount of variance there should be between the speeds of different NPCs. */
+  public static final float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
   /** The maximum amount of time (in seconds) an NPC should flee for. */
   public static final float NPC_FLEE_TIME = 10f;
+  /** The speed multiplier an NPC should receive when fleeing. */
+  public static final float NPC_FLEE_MULTIPLIER = 1.2f;
   /** The shortest distance an NPC should move from its current position when fleeing. */
   public static final float NPC_MIN_FLEE_DISTANCE = 80f;
   /** The distance an NPC can here the teleporter ray shoot from. */

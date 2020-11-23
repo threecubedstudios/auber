@@ -131,6 +131,9 @@ public class Player extends GameEntity {
         }
       }
     }
+    if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+      position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
+    }
 
     Vector2 mousePosition = Utils.getMouseCoordinates(world.camera);
 

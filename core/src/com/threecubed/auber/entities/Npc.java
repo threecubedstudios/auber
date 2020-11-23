@@ -10,7 +10,6 @@ import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 
@@ -31,6 +30,8 @@ public abstract class Npc extends GameEntity {
 
   protected float maxSpeed = 1.3f;
 
+  private static String[] textureNames = {"alienA.png", "alienB.png"};
+
   protected States state = States.IDLE;
 
   public enum States {
@@ -45,11 +46,43 @@ public abstract class Npc extends GameEntity {
   public boolean aiEnabled = true;
   protected Timer npcTimer = new Timer();
 
+  /**
+   * Initialise an NPC with a given texture.
+   *
+   * @param x The x coordinate to initialise the NPC at
+   * @param y The y coordinate to initialise the NPC at
+   * @param navigationMesh The navigation mesh.
+   * */
   public Npc(float x, float y, Texture texture, NavigationMesh navigationMesh) {
     super(x, y, texture);
     Random rng = new Random(); // TODO: Switch to use the world RNG
-    maxSpeed *= Utils.randomFloatInRange(rng, World.NPC_SPEED_VARIANCE[0], World.NPC_SPEED_VARIANCE[1]);
+    maxSpeed *= Utils.randomFloatInRange(rng, World.NPC_SPEED_VARIANCE[0],
+        World.NPC_SPEED_VARIANCE[1]);
     this.navigationMesh = navigationMesh;
+  }
+
+  /**
+   * Initialise an NPC with a random NPC sprite.
+   *
+   * @param x The x coordinate to initialise the NPC at
+   * @param y The y coordinate to initialise the NPC at
+   * @param world The game world
+   * */
+  public Npc(float x, float y, World world) {
+    this(x, y,
+        new Texture(textureNames[Utils.randomIntInRange(world.randomNumberGenerator,
+                                                        0, textureNames.length - 1)]),
+        world.navigationMesh);
+  }
+
+  /**
+   * Initialise the NPC at a random location.
+   *
+   * @param world The game world
+   * */
+  public Npc(World world) {
+    this(0f, 0f, world);
+    moveToRandomLocation(world);
   }
 
   /**
@@ -141,20 +174,32 @@ public abstract class Npc extends GameEntity {
    *
    * @param world The game world
    * */
-  protected void navigateToRandomSystem(World world) {
-    state = States.NAVIGATING;
-    RectangleMapObject system = world.systems.get(
-        Utils.randomIntInRange(world.randomNumberGenerator,
-          0, world.systems.size() - 1));
 
-    updatePath(system.getRectangle().getX(), system.getRectangle().getY(), world);
+  protected void navigateToRandomSystem(World world) {
+    if (!world.systems.isEmpty()) {
+      state = States.NAVIGATING;
+      RectangleMapObject system = world.systems.get(
+          Utils.randomIntInRange(world.randomNumberGenerator,
+            0, world.systems.size() - 1));
+
+      updatePath(system.getRectangle().getX(), system.getRectangle().getY(), world);
+    }
   }
 
   /**
    * Handle the event of the NPC reaching its current destination. For {@link Infiltrator}s this
    * might be to sabotage a system and for {@link Civilian}s this might be to idle for a bit
+   *
+   * @param world The game world
    * */
   public abstract void handleDestinationReached(World world);
+
+  /**
+   * Handle the event of being shot with Auber's teleporting ray gun.
+   *
+   * @param world The game world
+   * */
+  public abstract void handleTeleporterShot(World world);
 
   /**
    * Return a {@link Vector2} representing the direction the NPC is currently heading in.
@@ -238,5 +283,16 @@ public abstract class Npc extends GameEntity {
 
   public States getState() {
     return state;
+  }
+
+  /**
+   * Move the entity to a random location within the world.
+   **/
+  public void moveToRandomLocation(World world) {
+    float[] location = world.spawnLocations.get(Utils.randomIntInRange(
+        world.randomNumberGenerator, 0,
+        world.spawnLocations.size() - 1));
+    position.x = location[0];
+    position.y = location[1];
   }
 }

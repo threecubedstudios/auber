@@ -15,7 +15,11 @@ public class GameUi {
   private static final int CHARGE_METER_MAX_HEIGHT = 100;
   private static final Vector2 CHARGE_METER_POSITION = new Vector2(50f, 50f);
 
-  private static final Vector2 HEALTH_WARNINGS_POSITION = new Vector2(250f, 50f);
+  private static final Vector2 HEALTHBAR_POSITION = new Vector2(250f, 50f);
+  private static final int HEALTHBAR_WIDTH = 20;
+  private static final int HEALTHBAR_MAX_HEIGHT = 100;
+
+  private static final Vector2 HEALTH_WARNINGS_POSITION = new Vector2(350f, 70f);
 
   private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
 
@@ -29,18 +33,9 @@ public class GameUi {
    * */
   public void render(World world, SpriteBatch screenBatch) {
     drawChargeMeter(world, screenBatch);
+    drawHealthbar(world, screenBatch);
     drawHealthWarnings(world, screenBatch);
     drawSystemWarnings(world, screenBatch);
-  }
-
-  /**
-   * Return the height of the charge meter based upon Auber's current teleporter charge.
-   *
-   * @param teleporterCharge The current charge of the teleporter ray
-   * @return A float representing the height of the charge bar UI element
-   * */
-  private float calculateChargeMeterHeight(float teleporterCharge) {
-    return teleporterCharge * CHARGE_METER_MAX_HEIGHT;
   }
 
   /**
@@ -56,9 +51,42 @@ public class GameUi {
         CHARGE_METER_POSITION.y + (CHARGE_METER_MAX_HEIGHT / 2));
     screenBatch.end();
 
+    float chargeMeterHeight = world.auberTeleporterCharge * CHARGE_METER_MAX_HEIGHT;
+    
+    // Make the charge meter green if weapon is charged
+    if (chargeMeterHeight > CHARGE_METER_MAX_HEIGHT * 0.95f) {
+      shapeRenderer.setColor(Color.GREEN);
+    } else {
+      shapeRenderer.setColor(Color.RED);
+    }
+
     shapeRenderer.begin(ShapeType.Filled);
     shapeRenderer.rect(CHARGE_METER_POSITION.x + 160f, CHARGE_METER_POSITION.y, CHARGE_METER_WIDTH,
-        calculateChargeMeterHeight(world.auberTeleporterCharge));
+        chargeMeterHeight);
+    shapeRenderer.end();
+  }
+
+  private void drawHealthbar(World world, SpriteBatch screenBatch) {
+    screenBatch.begin();
+    uiFont.draw(screenBatch, "Health",
+        HEALTHBAR_POSITION.x,
+        HEALTHBAR_POSITION.y + (HEALTHBAR_MAX_HEIGHT / 2));
+    screenBatch.end();
+
+    float healthbarHeight = world.player.health * HEALTHBAR_MAX_HEIGHT;
+
+    // Set the healthbar colour based on amount of health
+    if (healthbarHeight > CHARGE_METER_MAX_HEIGHT * 0.8f) {
+      shapeRenderer.setColor(Color.GREEN);
+    } else if (healthbarHeight > CHARGE_METER_MAX_HEIGHT * 0.5) {
+      shapeRenderer.setColor(Color.ORANGE);
+    } else {
+      shapeRenderer.setColor(Color.RED);
+    }
+
+    shapeRenderer.begin(ShapeType.Filled);
+    shapeRenderer.rect(HEALTHBAR_POSITION.x + 60f, HEALTHBAR_POSITION.y, HEALTHBAR_WIDTH,
+        healthbarHeight);
     shapeRenderer.end();
   }
 

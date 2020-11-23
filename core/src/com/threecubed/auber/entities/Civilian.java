@@ -1,6 +1,5 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 
@@ -15,8 +14,6 @@ import com.threecubed.auber.World;
  * @since 1.0
  * */
 public class Civilian extends Npc {
-  private static String[] textureNames = {"alienA.png", "alienB.png"};
-
   /**
    * Construct a {@link Civilian} entity at given coordinates, with a randomly chosen texture
    * from the list of textureNames.
@@ -26,10 +23,12 @@ public class Civilian extends Npc {
    * @param world The game world
    * */
   public Civilian(float x, float y, World world) {
-    super(x, y,
-        new Texture(textureNames[Utils.randomIntInRange(world.randomNumberGenerator,
-                                                        0, textureNames.length - 1)]),
-        world.navigationMesh);
+    super(x, y, world);
+    navigateToRandomSystem(world);
+  }
+
+  public Civilian(World world) {
+    super(world);
     navigateToRandomSystem(world);
   }
 
@@ -38,4 +37,7 @@ public class Civilian extends Npc {
     state = States.IDLE;
     idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 10f));
   }
+
+  @Override
+  public void handleTeleporterShot(World world) {  }
 }

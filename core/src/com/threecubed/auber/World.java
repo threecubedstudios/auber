@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.screens.GameOverScreen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,9 +30,13 @@ import java.util.Random;
  * */
 public class World {
   private AuberGame game;
+
   public Player player;
+  public int infiltratorCount;
 
   private List<GameEntity> entities = new ArrayList<>();
+  public List<GameEntity> newEntities = new ArrayList<>();
+  public List<GameEntity> oldEntities = new ArrayList<>();
 
   public OrthographicCamera camera = new OrthographicCamera();
 
@@ -41,6 +46,7 @@ public class World {
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
 
   public ArrayList<RectangleMapObject> systems = new ArrayList<>();
+  public RectangleMapObject medbay;
   public ArrayList<float[]> spawnLocations = new ArrayList<>();
 
   public final Random randomNumberGenerator = new Random();
@@ -59,6 +65,8 @@ public class World {
   public float auberTeleporterCharge = 0f;
   public static final float AUBER_CHARGE_RATE = 0.05f;
   public static final float AUBER_RAY_TIME = 0.25f;
+  public static final float AUBER_DEBUFF_TIME = 5f;
+  public static final float AUBER_HEAL_RATE = 0.01f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
   public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
 
@@ -131,6 +139,8 @@ public class World {
   public static final float SYSTEM_SABOTAGE_CHANCE = 0.5f;
   /** The distance the infiltrator can see. Default: 5 tiles */
   public static final float INFILTRATOR_SIGHT_RANGE = 80f;
+  /** The speed at which infiltrator projectiles should travel. */
+  public static final float INFILTRATOR_PROJECTILE_SPEED = 16f;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
   public static final float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
@@ -169,6 +179,9 @@ public class World {
           case "system":
             systems.add(rectangularObject);
             break;
+          case "medbay":
+            medbay = rectangularObject;
+            break;
           default:
             break;
         }
@@ -195,16 +208,32 @@ public class World {
     return entities;
   }
 
-  public void addEntity(GameEntity entity) {
-    entities.add(entity);
+  /**
+   * Queue an entity to be added.
+   *
+   * @param entity The entity to queue
+   * */
+  public void queueEntityAdd(GameEntity entity) {
+    newEntities.add(entity);
   }
 
-  public void removeEntity(GameEntity entity) {
-    entities.remove(entity);
+  /**
+   * Queue an entity to be removed.
+   *
+   * @param entity The entity to queue
+   * */
+  public void queueEntityRemove(GameEntity entity) {
+    oldEntities.add(entity);
   }
 
-  public void removeEntities(List<GameEntity> entities) {
-    entities.removeAll(entities);
+  /**
+   * Apply any queued entity removals/additions to the world.
+   * */
+  public void updateEntities() {
+    entities.addAll(newEntities);
+    entities.removeAll(oldEntities);
+    newEntities.clear();
+    oldEntities.clear();
   }
 
   /**
@@ -322,7 +351,7 @@ public class World {
       case WALL_SYSTEM_DESTROYED:
       case STANDALONE_SYSTEM_DESTROYED:
         return SystemStates.DESTROYED;
-      
+
       default:
         throw new IllegalArgumentException("Use the coordinates of the System object on the"
                                            .concat("tilemap - not the system tile."));
@@ -334,14 +363,13 @@ public class World {
   }
 
   /**
-   * Move a given entity to a random location within the world.
-   *
-   * @param entity The entity to move.
-   **/
-  public void moveEntityToRandomLocation(GameEntity entity) {
-    float[] location = spawnLocations.get(Utils.randomIntInRange(randomNumberGenerator, 0,
-                                                                 spawnLocations.size() - 1));
-    entity.position.x = location[0];
-    entity.position.y = location[1];
+   * Check to see if any of the end conditions have been met, if so update the screen.
+   * */
+  public void checkForEndState() {
+    if (player.health <= 0 || systems.isEmpty()) {
+      game.setScreen(new GameOverScreen(game));
+    } else if (infiltratorCount <= 0) {
+      // game.setScreen(GameWinScreen);
+    }
   }
 }

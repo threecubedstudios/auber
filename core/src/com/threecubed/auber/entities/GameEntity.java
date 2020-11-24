@@ -1,7 +1,6 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
@@ -44,10 +43,10 @@ public abstract class GameEntity {
    *
    * @param x The x coordinate of the entity
    * @param y The y coordinate of the entity
-   * @param texture The texture of the entity sprite
+   * @param sprite The sprite the entity should use
    * */
-  public GameEntity(float x, float y, Texture texture) {
-    sprite = new Sprite(texture);
+  public GameEntity(float x, float y, Sprite sprite) {
+    this.sprite = sprite; 
     sprite.setOriginCenter();
 
     position = new Vector2(x, y);

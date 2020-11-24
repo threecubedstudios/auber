@@ -1,6 +1,5 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
@@ -12,15 +11,14 @@ public class Projectile extends GameEntity {
   CollisionActions collisionAction;
   GameEntity originEntity;
 
-  private static final Texture texture = new Texture("projectile.png");
-
   public static enum CollisionActions {
     CONFUSE,
+    SLOW
   }
 
   public Projectile(float x, float y, Vector2 velocity, GameEntity originEntity,
-      CollisionActions action) {
-    super(x, y, texture);
+      CollisionActions action, World world) {
+    super(x, y, world.atlas.createSprite("projectile"));
     collisionAction = action;
     this.originEntity = originEntity;
     this.velocity = velocity;
@@ -61,10 +59,13 @@ public class Projectile extends GameEntity {
       case CONFUSE:
         confusePlayer(world);
         break;
+      case SLOW:
+        slowPlayer(world);
+        break;
       default:
         break;
     }
-    world.player.health -= 0.5;
+    world.player.health -= 0.4f;
   }
 
   private void confusePlayer(final World world) {
@@ -73,6 +74,16 @@ public class Projectile extends GameEntity {
       @Override
       public void run() {
         world.player.confused = false;
+      }
+    }, World.AUBER_DEBUFF_TIME);
+  }
+
+  private void slowPlayer(final World world) {
+    world.player.slowed = true;
+    world.player.playerTimer.scheduleTask(new Task() {
+      @Override
+      public void run() {
+        world.player.slowed = false;
       }
     }, World.AUBER_DEBUFF_TIME);
   }

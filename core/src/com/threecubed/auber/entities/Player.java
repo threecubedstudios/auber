@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -30,8 +29,6 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
  * @since 1.0
  * */
 public class Player extends GameEntity {
-  private static Texture texture = new Texture("player.png");
-
   public Timer playerTimer = new Timer();
   private Vector2 teleporterRayCoordinates = new Vector2();
 
@@ -39,11 +36,12 @@ public class Player extends GameEntity {
   public float health = 1;
 
   public boolean confused = false;
+  public boolean slowed = false;
 
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
-  public Player(float x, float y) {
-    super(x, y, texture);
+  public Player(float x, float y, World world) {
+    super(x, y, world.atlas.createSprite("player"));
   }
 
   /**
@@ -53,119 +51,124 @@ public class Player extends GameEntity {
    * */
   @Override
   public void update(World world) {
-    // Increment Auber's health if in medbay
-    if (world.medbay.getRectangle().contains(position.x, position.y)) {
-      health += World.AUBER_HEAL_RATE;
-      health = Math.min(1f, health);
-    }
-    // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged,
-    // hence the * 2
-    float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
+    if (!world.demoMode) {
+      // Increment Auber's health if in medbay
+      if (world.medbay.getRectangle().contains(position.x, position.y)) {
+        health += World.AUBER_HEAL_RATE;
+        health = Math.min(1f, health);
+      }
+      // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged,
+      // hence the * 2
+      float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
+      if (slowed) {
+        velocity.scl(0.5f);
+      }
 
-    // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
-    // of flipped velocity will cancel out the first
-    if (confused) {
-      velocity.set(-velocity.x, -velocity.y);
-    }
+      // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
+      // of flipped velocity will cancel out the first
+      if (confused) {
+        velocity.set(-velocity.x, -velocity.y);
+      }
 
-    if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-      velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
-    }
-    if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-      velocity.x = Math.max(velocity.x - speed + speedModifier, -maxSpeed);
-    }
-    if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-      velocity.y = Math.max(velocity.y - speed + speedModifier, -maxSpeed);
-    }
-    if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-      velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
-    }
+      if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
+      }
+      if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        velocity.x = Math.max(velocity.x - speed + speedModifier, -maxSpeed);
+      }
+      if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        velocity.y = Math.max(velocity.y - speed + speedModifier, -maxSpeed);
+      }
+      if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
+      }
 
 
-    if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && teleporterRayCoordinates.isZero()) {
-      world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge + World.AUBER_CHARGE_RATE,
-                                             1f);
-    } else {
-      if (world.auberTeleporterCharge > 0.95f) {
-        world.auberTeleporterCharge = 0;
-
-        // Scare entities
-        for (GameEntity entity : world.getEntities()) {
-          float entityDistance = NavigationMesh.getEuclidianDistance(
-              new float[] {position.x, position.y},
-              new float[] {entity.position.x, entity.position.y}
-              );
-          if (entityDistance < World.NPC_EAR_STRENGTH && entity instanceof Npc) {
-            if (entity instanceof Infiltrator) {
-              Infiltrator infiltrator = (Infiltrator) entity;
-
-              // Exposed infiltrators shouldn't flee
-              if (infiltrator.exposed) {
-                continue;
-              }
-            }
-            Npc npc = (Npc) entity;
-            npc.navigateToNearestFleepoint(world);
-          }
-        }
-
-        teleporterRayCoordinates = handleRayCollisions(world);
-        playerTimer.scheduleTask(new Task() {
-          @Override
-          public void run() {
-            teleporterRayCoordinates.setZero();
-          }
-        }, World.AUBER_RAY_TIME);
+      if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && teleporterRayCoordinates.isZero()) {
+        world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge + World.AUBER_CHARGE_RATE,
+                                               1f);
       } else {
-        world.auberTeleporterCharge = Math.max(world.auberTeleporterCharge
-            - World.AUBER_CHARGE_RATE, 0f);
-      }
-    }
-    if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-      // Interact with an object
-      RectangleMapObject nearbyObject = getNearbyObjects(World.map);
+        if (world.auberTeleporterCharge > 0.95f) {
+          world.auberTeleporterCharge = 0;
 
-      if (nearbyObject != null) {
-        MapProperties properties = nearbyObject.getProperties();
-        String type = properties.get("type", String.class);
-
-        switch (type) {
-          case "teleporter":
-            MapObjects objects = World.map.getLayers().get("object_layer").getObjects();
-
-            String linkedTeleporterId = properties.get("linked_teleporter", String.class);
-            RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(
-                linkedTeleporterId
+          // Scare entities
+          for (GameEntity entity : world.getEntities()) {
+            float entityDistance = NavigationMesh.getEuclidianDistance(
+                new float[] {position.x, position.y},
+                new float[] {entity.position.x, entity.position.y}
                 );
-            velocity.setZero();
-            position.x = linkedTeleporter.getRectangle().getX();
-            position.y = linkedTeleporter.getRectangle().getY();
-            break;
+            if (entityDistance < World.NPC_EAR_STRENGTH && entity instanceof Npc) {
+              if (entity instanceof Infiltrator) {
+                Infiltrator infiltrator = (Infiltrator) entity;
 
-          default:
-            break;
+                // Exposed infiltrators shouldn't flee
+                if (infiltrator.exposed) {
+                  continue;
+                }
+              }
+              Npc npc = (Npc) entity;
+              npc.navigateToNearestFleepoint(world);
+            }
+          }
+
+          teleporterRayCoordinates = handleRayCollisions(world);
+          playerTimer.scheduleTask(new Task() {
+            @Override
+            public void run() {
+              teleporterRayCoordinates.setZero();
+            }
+          }, World.AUBER_RAY_TIME);
+        } else {
+          world.auberTeleporterCharge = Math.max(world.auberTeleporterCharge
+              - World.AUBER_CHARGE_RATE, 0f);
         }
       }
+      if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        // Interact with an object
+        RectangleMapObject nearbyObject = getNearbyObjects(World.map);
+
+        if (nearbyObject != null) {
+          MapProperties properties = nearbyObject.getProperties();
+          String type = properties.get("type", String.class);
+
+          switch (type) {
+            case "teleporter":
+              MapObjects objects = World.map.getLayers().get("object_layer").getObjects();
+
+              String linkedTeleporterId = properties.get("linked_teleporter", String.class);
+              RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(
+                  linkedTeleporterId
+                  );
+              velocity.setZero();
+              position.x = linkedTeleporter.getRectangle().getX();
+              position.y = linkedTeleporter.getRectangle().getY();
+              break;
+
+            default:
+              break;
+          }
+        }
+      }
+      if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+        position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
+      }
+
+      Vector2 mousePosition = Utils.getMouseCoordinates(world.camera);
+
+      // Set the rotation to the angle theta where theta is the angle between the mouse cursor and
+      // player position. Correct the player position to be measured from the centre of the sprite.
+      rotation = (float) (Math.toDegrees(Math.atan2(
+              (mousePosition.y - getCenterY()),
+              (mousePosition.x - getCenterX()))
+            ) - 90f);
+
+      // Handle the confused debuff
+      if (confused) {
+        velocity.set(-velocity.x, -velocity.y);
+      }
+
+      move(velocity, World.map);  
     }
-    if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-      position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
-    }
-
-    Vector2 mousePosition = Utils.getMouseCoordinates(world.camera);
-
-    // Set the rotation to the angle theta where theta is the angle between the mouse cursor and
-    // player position. Correct the player position to be measured from the centre of the sprite.
-    rotation = (float) (Math.toDegrees(Math.atan2(
-            (mousePosition.y - getCenterY()),
-            (mousePosition.x - getCenterX()))
-          ) - 90f);
-
-    // Handle the confused debuff
-    if (confused) {
-      velocity.set(-velocity.x, -velocity.y);
-    }
-
-    move(velocity, World.map);
   }
 
   /**

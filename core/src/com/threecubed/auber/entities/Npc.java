@@ -1,11 +1,13 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -30,7 +32,7 @@ public abstract class Npc extends GameEntity {
 
   protected float maxSpeed = 1.3f;
 
-  private static String[] textureNames = {"alienA.png", "alienB.png"};
+  private static String[] textureNames = {"alienA", "alienB"};
 
   protected States state = States.IDLE;
 
@@ -53,8 +55,8 @@ public abstract class Npc extends GameEntity {
    * @param y The y coordinate to initialise the NPC at
    * @param navigationMesh The navigation mesh.
    * */
-  public Npc(float x, float y, Texture texture, NavigationMesh navigationMesh) {
-    super(x, y, texture);
+  public Npc(float x, float y, Sprite sprite, NavigationMesh navigationMesh) {
+    super(x, y, sprite);
     Random rng = new Random(); // TODO: Switch to use the world RNG
     maxSpeed *= Utils.randomFloatInRange(rng, World.NPC_SPEED_VARIANCE[0],
         World.NPC_SPEED_VARIANCE[1]);
@@ -70,8 +72,9 @@ public abstract class Npc extends GameEntity {
    * */
   public Npc(float x, float y, World world) {
     this(x, y,
-        new Texture(textureNames[Utils.randomIntInRange(world.randomNumberGenerator,
-                                                        0, textureNames.length - 1)]),
+        world.atlas.createSprite(
+          textureNames[Utils.randomIntInRange(world.randomNumberGenerator, 0,
+            textureNames.length - 1)]),
         world.navigationMesh);
   }
 
@@ -258,7 +261,6 @@ public abstract class Npc extends GameEntity {
         }
       }
     }
-    System.out.println(distances.toString());
     float[] chosenFleePoint = closestFleePoints.get(Utils.randomIntInRange(
       world.randomNumberGenerator, 0, closestFleePoints.size() - 1)
     );

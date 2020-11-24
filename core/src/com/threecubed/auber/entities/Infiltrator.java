@@ -1,6 +1,5 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,7 +18,6 @@ import com.threecubed.auber.World;
  * @since 1.0
  * */
 public class Infiltrator extends Npc {
-  private static Texture exposedTexture = new Texture("infiltrator.png");
   public boolean exposed = false;
 
   public Infiltrator(float x, float y, World world) {
@@ -52,16 +50,17 @@ public class Infiltrator extends Npc {
   @Override
   public void handleTeleporterShot(World world) {
     if (state == States.ATTACKING_SYSTEM) {
-      RectangleMapObject system = getNearbyObjects(World.map);
-      Rectangle boundingBox = system.getRectangle();
-
-      world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);
+        RectangleMapObject system = getNearbyObjects(World.map);
+        if (system != null) {
+        Rectangle boundingBox = system.getRectangle();
+        world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);
+      }
     }
 
     if (!exposed) {
       exposed = true;
       fireProjectileAtPlayer(world);
-      sprite.setTexture(exposedTexture);
+      sprite = world.atlas.createSprite("infiltrator");
       state = States.ATTACKING_PLAYER;
     } else {
       position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
@@ -79,20 +78,21 @@ public class Infiltrator extends Npc {
     state = States.ATTACKING_SYSTEM;
 
     final RectangleMapObject system = getNearbyObjects(World.map);
+    if (system != null) {
+      world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
+          World.SystemStates.ATTACKED);
 
-    world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
-        World.SystemStates.ATTACKED);
-
-    npcTimer.scheduleTask(new Task() {
-      @Override
-      public void run() {
-        if (aiEnabled) {
-          world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
-              World.SystemStates.DESTROYED);
-          navigateToRandomSystem(world);
+      npcTimer.scheduleTask(new Task() {
+        @Override
+        public void run() {
+          if (aiEnabled) {
+            world.updateSystemState(system.getRectangle().getX(), system.getRectangle().getY(),
+                World.SystemStates.DESTROYED);
+            navigateToRandomSystem(world);
+          }
         }
-      }
-    }, World.SYSTEM_BREAK_TIME);
+      }, World.SYSTEM_BREAK_TIME);
+    }
   }
 
   @Override
@@ -106,6 +106,9 @@ public class Infiltrator extends Npc {
   }
 
   private boolean playerNearby(World world) {
+    if (world.demoMode) {
+      return false;
+    }
     Circle infiltratorSight = new Circle(position, World.INFILTRATOR_SIGHT_RANGE);
     if (infiltratorSight.contains(world.player.position)) {
       return true;
@@ -118,7 +121,7 @@ public class Infiltrator extends Npc {
                                              world.player.position.y - position.y);
     projectileVelocity.setLength(World.INFILTRATOR_PROJECTILE_SPEED);
     Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,
-        Projectile.CollisionActions.CONFUSE);
+        Projectile.CollisionActions.SLOW, world);
     world.queueEntityAdd(projectile);
   } 
 }

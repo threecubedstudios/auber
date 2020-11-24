@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
-import com.threecubed.auber.screens.GameScreen;
 
 
 /**
@@ -19,26 +18,27 @@ import com.threecubed.auber.screens.GameScreen;
  * @since 1.0
  * */
 public class Button {
-  Texture texture;
   Pixmap pixmap;
   Sprite sprite;
   AuberGame game;
   Vector2 position;
+  Runnable onClick;
 
   /**
    * Instantiate a button at a given position with a given scale and texture.
    * Pass the game object so that the button's action can be configured.
    *
-   * @param position The position to render the button at
+   * @param position The position to render the center of the button at
    * @param scale The scale to render the button with
-   * @param texture The texture of the button
    * @param game The game object
    * */
-  public Button(Vector2 position, float scale, String texture, AuberGame game) {
-    this.texture = new Texture(texture);
-    this.sprite = new Sprite(this.texture);
+  public Button(Vector2 position, float scale, Sprite sprite, AuberGame game, Runnable onClick) {
+    this.sprite = sprite;
+    this.onClick = onClick;
+
     sprite.setScale(scale);
     sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
+
     this.position = new Vector2(sprite.getX(), sprite.getY());
     this.game = game;
   }
@@ -54,7 +54,7 @@ public class Button {
     if (sprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
       sprite.setScale(1.05f);
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-        game.setScreen(new GameScreen(game));
+        onClick.run();
       }
     } else {
       sprite.setScale(1.0f);

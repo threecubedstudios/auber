@@ -2,6 +2,7 @@ package com.threecubed.auber;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -15,6 +16,8 @@ import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
+import com.threecubed.auber.screens.GameScreen;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -34,6 +37,8 @@ public class World {
   public Player player;
   public int infiltratorCount;
 
+  public boolean demoMode = false;
+
   private List<GameEntity> entities = new ArrayList<>();
   public List<GameEntity> newEntities = new ArrayList<>();
   public List<GameEntity> oldEntities = new ArrayList<>();
@@ -42,6 +47,7 @@ public class World {
 
   public static final TiledMap map = new TmxMapLoader().load("map.tmx");
   public static final TiledMapTileSet tileset = map.getTileSets().getTileSet(0);
+  public TextureAtlas atlas;
 
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
 
@@ -165,11 +171,16 @@ public class World {
    * @param game The game object.
    * */
   public World(AuberGame game) {
+    this.game = game;
+    atlas = game.atlas;
+
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
     camera.update();
 
-    this.game = game;
+    Player player = new Player(64f, 64f, this);
+    queueEntityAdd(player);
+    this.player = player;
 
     MapObjects objects = map.getLayers().get("object_layer").getObjects();
     for (MapObject object : objects) {
@@ -201,6 +212,26 @@ public class World {
           }
         }
       }
+    }
+  }
+
+  /**
+   * Initialise an instance of the world with the given game object.
+   * Demo mode locks the player to the center of the screen, makes them invisible and expands the
+   * camera to view the whole map.
+   *
+   * @param game The game object
+   * @param demoMode Whether to run the game in demo mode
+   * */
+  public World(AuberGame game, boolean demoMode) {
+    this(game);
+    this.demoMode = demoMode;
+    if (demoMode) {
+      camera.setToOrtho(false, 1920, 1080);
+      TiledMapTileLayer layer = ((TiledMapTileLayer) map.getLayers().get(2));
+      player.position.x = (layer.getWidth() * layer.getTileWidth()) / 2;
+      player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;
+      player.sprite.setColor(1f, 1f, 1f, 0f);
     }
   }
 
@@ -367,7 +398,11 @@ public class World {
    * */
   public void checkForEndState() {
     if (player.health <= 0 || systems.isEmpty()) {
-      game.setScreen(new GameOverScreen(game));
+      if (!demoMode) {
+        game.setScreen(new GameOverScreen(game));
+      } else {
+        game.setScreen(new GameScreen(game, true));
+      }
     } else if (infiltratorCount <= 0) {
       // game.setScreen(GameWinScreen);
     }

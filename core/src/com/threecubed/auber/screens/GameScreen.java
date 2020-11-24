@@ -5,6 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.AuberGame;
@@ -24,12 +25,12 @@ import com.threecubed.auber.ui.GameUi;
  * @since 1.0
  * */
 public class GameScreen extends ScreenAdapter {
-  World world;
-  AuberGame game;
-  Texture stars;
+  public World world;
+  public AuberGame game;
+  Sprite stars;
 
   SpriteBatch screenBatch = new SpriteBatch();
-  GameUi ui = new GameUi();
+  GameUi ui;
 
   int workingSystems = 0;
 
@@ -38,43 +39,16 @@ public class GameScreen extends ScreenAdapter {
    *
    * @param game The game object
    * */
-  public GameScreen(AuberGame game) {
+  public GameScreen(AuberGame game, boolean demoMode) {
     this.game = game;
+    ui = new GameUi(game);
 
-    world = new World(game);
-
-    Player player = new Player(64f, 64f);
-    world.queueEntityAdd(player);
-    world.player = player;
+    world = new World(game, demoMode);
 
     world.queueEntityAdd(new Infiltrator(world));
     world.queueEntityAdd(new Infiltrator(world));
     world.queueEntityAdd(new Infiltrator(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    stars = new Texture("stars.png");
+    stars = game.atlas.createSprite("stars");
   }
 
   @Override

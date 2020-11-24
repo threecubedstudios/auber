@@ -45,9 +45,14 @@ public class GameScreen extends ScreenAdapter {
 
     world = new World(game, demoMode);
 
-    world.queueEntityAdd(new Infiltrator(world));
-    world.queueEntityAdd(new Infiltrator(world));
-    world.queueEntityAdd(new Infiltrator(world));
+    for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
+      world.queueEntityAdd(new Infiltrator(world));
+      world.infiltratorsAddedCount++;
+    }
+    for (int i = 0; i < World.NPC_COUNT; i++) {
+      world.queueEntityAdd(new Civilian(world));
+    }
+
     stars = game.atlas.createSprite("stars");
   }
 
@@ -55,8 +60,6 @@ public class GameScreen extends ScreenAdapter {
   public void render(float delta) {
     // Add any queued entities
     world.updateEntities();
-    world.checkForEndState();
-
 
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -89,8 +92,14 @@ public class GameScreen extends ScreenAdapter {
     batch.end();
     renderer.render(world.foregroundLayersIds);
 
+    if (world.infiltratorCount < World.MAX_INFILTRATORS_IN_GAME
+        && world.infiltratorsAddedCount < World.MAX_INFILTRATORS) {
+      world.queueEntityAdd(new Infiltrator(world));
+    }
+
     // Draw the UI
     ui.render(world, screenBatch);
+    world.checkForEndState();
   }
 
   @Override

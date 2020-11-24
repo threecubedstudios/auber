@@ -1,6 +1,7 @@
 package com.threecubed.auber.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -29,10 +30,15 @@ public class GameOverScreen extends ScreenAdapter {
    *
    * @param game The game object. 
    * */
-  public GameOverScreen(AuberGame game) {
+  public GameOverScreen(AuberGame game, boolean userWon) {
     this.game = game;
     font.getData().setScale(2);
-    layout.setText(font, "GAME OVER");
+    String resultText = "LOSE";
+    if (userWon) {
+      resultText = "WIN!";
+    }
+    layout.setText(font, "GAME OVER, YOU "
+        .concat(resultText).concat(". PRESS ESCAPE TO RETURN TO THE MENU"));
   }
 
   @Override
@@ -40,6 +46,10 @@ public class GameOverScreen extends ScreenAdapter {
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+    if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+      game.setScreen(new MenuScreen(game));
+    }
 
     batch.begin();
     font.draw(batch, "GAME OVER", (Gdx.graphics.getWidth() - layout.width) / 2,

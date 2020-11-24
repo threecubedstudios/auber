@@ -13,7 +13,13 @@ public class Projectile extends GameEntity {
 
   public static enum CollisionActions {
     CONFUSE,
-    SLOW
+    SLOW,
+    BLIND;
+
+    public static CollisionActions randomAction() {
+      // Int rounds down so no need to sub 1 from length
+      return values()[(int) (Math.random() * values().length)];
+    }
   }
 
   public Projectile(float x, float y, Vector2 velocity, GameEntity originEntity,
@@ -62,10 +68,13 @@ public class Projectile extends GameEntity {
       case SLOW:
         slowPlayer(world);
         break;
+      case BLIND:
+        blindPlayer(world);
+        break;
       default:
         break;
     }
-    world.player.health -= 0.4f;
+    world.player.health -= 0.5f;
   }
 
   private void confusePlayer(final World world) {
@@ -86,5 +95,15 @@ public class Projectile extends GameEntity {
         world.player.slowed = false;
       }
     }, World.AUBER_DEBUFF_TIME);
+  }
+
+  private void blindPlayer(final World world) {
+    world.player.blinded = true;
+    world.player.playerTimer.scheduleTask(new Task() {
+      @Override
+      public void run() {
+        world.player.blinded = false;
+      }
+    }, World.AUBER_DEBUFF_TIME - 3f);
   }
 }

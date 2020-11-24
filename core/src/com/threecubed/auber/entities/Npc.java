@@ -42,7 +42,6 @@ public abstract class Npc extends GameEntity {
     REACHED_DESTINATION,
     FLEEING,
     ATTACKING_SYSTEM,
-    ATTACKING_PLAYER
   }
 
   public boolean aiEnabled = true;

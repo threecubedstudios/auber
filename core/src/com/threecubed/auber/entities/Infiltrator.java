@@ -1,5 +1,6 @@
 package com.threecubed.auber.entities;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,15 +20,27 @@ import com.threecubed.auber.World;
  * */
 public class Infiltrator extends Npc {
   public boolean exposed = false;
+  Sprite unexposedSprite;
 
   public Infiltrator(float x, float y, World world) {
     super(x, y, world);
     navigateToRandomSystem(world);
+
   }
 
   public Infiltrator(World world) {
     super(world);
     navigateToRandomSystem(world);
+    unexposedSprite = new Sprite(sprite);
+  }
+
+  @Override
+  public void update(World world) {
+    super.update(world);
+    if (exposed && !entityOnScreen(world)) {
+      exposed = false;
+      sprite = unexposedSprite;
+    }
   }
 
   @Override
@@ -50,8 +63,8 @@ public class Infiltrator extends Npc {
   @Override
   public void handleTeleporterShot(World world) {
     if (state == States.ATTACKING_SYSTEM) {
-        RectangleMapObject system = getNearbyObjects(World.map);
-        if (system != null) {
+      RectangleMapObject system = getNearbyObjects(World.map);
+      if (system != null) {
         Rectangle boundingBox = system.getRectangle();
         world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);
       }
@@ -61,7 +74,7 @@ public class Infiltrator extends Npc {
       exposed = true;
       fireProjectileAtPlayer(world);
       sprite = world.atlas.createSprite("infiltrator");
-      state = States.ATTACKING_PLAYER;
+      navigateToNearestFleepoint(world);
     } else {
       position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
           World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
@@ -99,8 +112,10 @@ public class Infiltrator extends Npc {
   public void navigateToNearestFleepoint(final World world) {
     if (state == States.ATTACKING_SYSTEM) {
       RectangleMapObject system = getNearbyObjects(World.map);
-      Rectangle boundingBox = system.getRectangle();
-      world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);
+      if (system != null) {
+        Rectangle boundingBox = system.getRectangle();
+        world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);  
+      }
     }
     super.navigateToNearestFleepoint(world);
   }
@@ -121,7 +136,7 @@ public class Infiltrator extends Npc {
                                              world.player.position.y - position.y);
     projectileVelocity.setLength(World.INFILTRATOR_PROJECTILE_SPEED);
     Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,
-        Projectile.CollisionActions.SLOW, world);
+        Projectile.CollisionActions.randomAction(), world);
     world.queueEntityAdd(projectile);
   } 
 }

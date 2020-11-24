@@ -39,6 +39,9 @@ public class World {
 
   public boolean demoMode = false;
 
+  /** Number of infiltrators added, including defeated ones. */
+  public int infiltratorsAddedCount = 0;
+
   private List<GameEntity> entities = new ArrayList<>();
   public List<GameEntity> newEntities = new ArrayList<>();
   public List<GameEntity> oldEntities = new ArrayList<>();
@@ -72,7 +75,7 @@ public class World {
   public static final float AUBER_CHARGE_RATE = 0.05f;
   public static final float AUBER_RAY_TIME = 0.25f;
   public static final float AUBER_DEBUFF_TIME = 5f;
-  public static final float AUBER_HEAL_RATE = 0.01f;
+  public static final float AUBER_HEAL_RATE = 0.005f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
   public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
 
@@ -142,11 +145,18 @@ public class World {
   /** The amount of time it takes for an infiltrator to sabotage a system. */
   public static final float SYSTEM_BREAK_TIME = 5f;
   /** The chance an infiltrator will sabotage after pathfinding to a system. */
-  public static final float SYSTEM_SABOTAGE_CHANCE = 0.5f;
+  public static final float SYSTEM_SABOTAGE_CHANCE = 0.6f;
   /** The distance the infiltrator can see. Default: 5 tiles */
   public static final float INFILTRATOR_SIGHT_RANGE = 80f;
   /** The speed at which infiltrator projectiles should travel. */
-  public static final float INFILTRATOR_PROJECTILE_SPEED = 16f;
+  public static final float INFILTRATOR_PROJECTILE_SPEED = 12f;
+  /** Maximum infiltrators in a full game of Auber (including defated ones). */
+  public static final int MAX_INFILTRATORS = 8;
+  /**
+   * Max infiltrators alive at a given point, Should always be greater or equal to
+   * {@link World#MAX_INFILTRATORS}.
+   * */
+  public static final int MAX_INFILTRATORS_IN_GAME = 3;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
   public static final float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
@@ -158,6 +168,8 @@ public class World {
   public static final float NPC_MIN_FLEE_DISTANCE = 80f;
   /** The distance an NPC can here the teleporter ray shoot from. */
   public static final float NPC_EAR_STRENGTH = 80f;
+  /** The number of NPCs in the game. */
+  public static final int NPC_COUNT = 24;
 
   public static enum SystemStates {
     WORKING,
@@ -233,6 +245,10 @@ public class World {
       player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;
       player.sprite.setColor(1f, 1f, 1f, 0f);
     }
+  }
+
+  public void addEntity(GameEntity entity) {
+    entities.add(entity);
   }
 
   public List<GameEntity> getEntities() {
@@ -397,14 +413,14 @@ public class World {
    * Check to see if any of the end conditions have been met, if so update the screen.
    * */
   public void checkForEndState() {
-    if (player.health <= 0 || systems.isEmpty()) {
+    if (systems.isEmpty()) {
       if (!demoMode) {
-        game.setScreen(new GameOverScreen(game));
+        game.setScreen(new GameOverScreen(game, false));
       } else {
         game.setScreen(new GameScreen(game, true));
       }
     } else if (infiltratorCount <= 0) {
-      // game.setScreen(GameWinScreen);
+      game.setScreen(new GameOverScreen(game, true));
     }
   }
 }

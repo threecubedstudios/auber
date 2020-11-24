@@ -1,5 +1,6 @@
 package com.threecubed.auber.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -29,6 +30,7 @@ public class GameUi {
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
   private Sprite arrowSprite;
+  private Color blindedColor = new Color(0f, 0f, 0f, 1f);
 
   private BitmapFont uiFont = new BitmapFont();
 
@@ -42,6 +44,14 @@ public class GameUi {
    * @param world The game world.
    * */
   public void render(World world, SpriteBatch screenBatch) {
+    if (world.player.blinded) {
+      shapeRenderer.begin(ShapeType.Filled);
+      shapeRenderer.setColor(blindedColor);
+      shapeRenderer.rect(0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      shapeRenderer.setColor(Color.WHITE);
+      shapeRenderer.end();
+    }
+
     drawChargeMeter(world, screenBatch);
     drawHealthbar(world, screenBatch);
     drawHealthWarnings(world, screenBatch);
@@ -113,7 +123,10 @@ public class GameUi {
       uiFont.draw(screenBatch, "CONFUSED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y);
     }
     if (world.player.slowed) {
-      uiFont.draw(screenBatch, "CONFUSED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y + 20f);
+      uiFont.draw(screenBatch, "SLOWED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y + 20f);
+    }
+    if (world.player.blinded) {
+      uiFont.draw(screenBatch, "BLINDED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y + 40f);
     }
     uiFont.setColor(Color.WHITE);
     screenBatch.end();

@@ -37,6 +37,7 @@ public class Player extends GameEntity {
 
   public boolean confused = false;
   public boolean slowed = false;
+  public boolean blinded = false;
 
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
@@ -52,6 +53,13 @@ public class Player extends GameEntity {
   @Override
   public void update(World world) {
     if (!world.demoMode) {
+      if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
+        position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
+        confused = false;
+        slowed = false;
+        teleporterRayCoordinates.setZero();
+      }
+
       // Increment Auber's health if in medbay
       if (world.medbay.getRectangle().contains(position.x, position.y)) {
         health += World.AUBER_HEAL_RATE;
@@ -148,9 +156,6 @@ public class Player extends GameEntity {
               break;
           }
         }
-      }
-      if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-        position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
       }
 
       Vector2 mousePosition = Utils.getMouseCoordinates(world.camera);

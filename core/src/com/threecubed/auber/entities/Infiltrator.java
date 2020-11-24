@@ -22,12 +22,24 @@ public class Infiltrator extends Npc {
   public boolean exposed = false;
   Sprite unexposedSprite;
 
+  /**
+   * Initialise an infiltrator at given coordinates.
+   *
+   * @param x The x position of the infiltrator
+   * @param y The y position of the infiltrator
+   * @param world The game world
+   * */
   public Infiltrator(float x, float y, World world) {
     super(x, y, world);
     navigateToRandomSystem(world);
 
   }
 
+  /**
+   * Initialise the infiltrator at a random position.
+   *
+   * @param world The game world
+   * */
   public Infiltrator(World world) {
     super(world);
     navigateToRandomSystem(world);
@@ -52,7 +64,7 @@ public class Infiltrator extends Npc {
     if (oldState != States.FLEEING) {
       if (!playerNearby(world)
           && Utils.randomFloatInRange(world.randomNumberGenerator, 0, 1)
-          > World.SYSTEM_SABOTAGE_CHANCE) {
+          < World.SYSTEM_SABOTAGE_CHANCE) {
         attackNearbySystem(world);
       } else {
         idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 8f));
@@ -61,7 +73,7 @@ public class Infiltrator extends Npc {
   }
 
   @Override
-  public void handleTeleporterShot(World world) {
+  public void handleTeleporterShot(final World world) {
     if (state == States.ATTACKING_SYSTEM) {
       RectangleMapObject system = getNearbyObjects(World.map);
       if (system != null) {
@@ -74,7 +86,18 @@ public class Infiltrator extends Npc {
       exposed = true;
       fireProjectileAtPlayer(world);
       sprite = world.atlas.createSprite("infiltrator");
-      navigateToNearestFleepoint(world);
+      state = States.FLEEING;
+      navigateToFurthestPointFromPlayer(world);
+      npcTimer.scheduleTask(new Task() {
+        @Override
+        public void run() {
+          if (exposed) {
+            fireProjectileAtPlayer(world);
+          } else {
+            cancel();
+          }
+        }
+      }, World.INFILTRATOR_FIRING_INTERVAL, World.INFILTRATOR_FIRING_INTERVAL);
     } else {
       position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
           World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);

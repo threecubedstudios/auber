@@ -66,7 +66,7 @@ public class MenuScreen extends ScreenAdapter {
 
     demoButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
-        1f, game.atlas.createSprite("playButton"), game, onDemoClick
+        1f, game.atlas.createSprite("demoButton"), game, onDemoClick
         );
   }
 

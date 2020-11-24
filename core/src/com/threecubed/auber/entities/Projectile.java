@@ -22,6 +22,14 @@ public class Projectile extends GameEntity {
     }
   }
 
+  /**
+   * Initialise a projectile.
+   *
+   * @param x The x coordinate to initialise at
+   * @param y The y coordinate to initialise at
+   * @param velocity A {@link Vector2} representing the velocity of the projectile
+   * @param originEntity The entity that the projectile originated from
+   * */
   public Projectile(float x, float y, Vector2 velocity, GameEntity originEntity,
       CollisionActions action, World world) {
     super(x, y, world.atlas.createSprite("projectile"));
@@ -74,7 +82,7 @@ public class Projectile extends GameEntity {
       default:
         break;
     }
-    world.player.health -= 0.5f;
+    world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE;
   }
 
   private void confusePlayer(final World world) {

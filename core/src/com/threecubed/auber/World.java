@@ -149,9 +149,13 @@ public class World {
   /** The distance the infiltrator can see. Default: 5 tiles */
   public static final float INFILTRATOR_SIGHT_RANGE = 80f;
   /** The speed at which infiltrator projectiles should travel. */
-  public static final float INFILTRATOR_PROJECTILE_SPEED = 12f;
+  public static final float INFILTRATOR_PROJECTILE_SPEED = 4f;
   /** Maximum infiltrators in a full game of Auber (including defated ones). */
   public static final int MAX_INFILTRATORS = 8;
+  /** The interval at which the infiltrator should attack the player when exposed */
+  public static final float INFILTRATOR_FIRING_INTERVAL = 5f;
+  /** The damage a projectile should do. */
+  public static final float INFILTRATOR_PROJECTILE_DAMAGE = 0.2f;
   /**
    * Max infiltrators alive at a given point, Should always be greater or equal to
    * {@link World#MAX_INFILTRATORS}.

@@ -93,16 +93,17 @@ public class Player extends GameEntity {
 
 
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && teleporterRayCoordinates.isZero()) {
-        world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge + World.AUBER_CHARGE_RATE,
-                                               1f);
+        world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge
+            + World.AUBER_CHARGE_RATE, 1f);
       } else {
         if (world.auberTeleporterCharge > 0.95f) {
           world.auberTeleporterCharge = 0;
 
           // Scare entities
+          teleporterRayCoordinates = handleRayCollisions(world);
           for (GameEntity entity : world.getEntities()) {
             float entityDistance = NavigationMesh.getEuclidianDistance(
-                new float[] {position.x, position.y},
+                new float[] {teleporterRayCoordinates.x, teleporterRayCoordinates.y},
                 new float[] {entity.position.x, entity.position.y}
                 );
             if (entityDistance < World.NPC_EAR_STRENGTH && entity instanceof Npc) {
@@ -119,7 +120,6 @@ public class Player extends GameEntity {
             }
           }
 
-          teleporterRayCoordinates = handleRayCollisions(world);
           playerTimer.scheduleTask(new Task() {
             @Override
             public void run() {

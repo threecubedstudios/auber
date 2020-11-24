@@ -86,7 +86,10 @@ public class GameScreen extends ScreenAdapter {
         world.camera.position.set(entity.position.x, entity.position.y, 0);
         world.camera.update();
       } else if (entity instanceof Infiltrator) {
-        world.infiltratorCount += 1;
+        Infiltrator infiltrator = (Infiltrator) entity;
+        if (infiltrator.aiEnabled) {
+          world.infiltratorCount += 1;
+        }
       }
     }
     batch.end();
@@ -94,7 +97,12 @@ public class GameScreen extends ScreenAdapter {
 
     if (world.infiltratorCount < World.MAX_INFILTRATORS_IN_GAME
         && world.infiltratorsAddedCount < World.MAX_INFILTRATORS) {
-      world.queueEntityAdd(new Infiltrator(world));
+      Infiltrator newInfiltrator = new Infiltrator(world);
+      while (newInfiltrator.entityOnScreen(world)) {
+        newInfiltrator.moveToRandomLocation(world);
+      }
+      world.queueEntityAdd(newInfiltrator);
+      world.infiltratorsAddedCount++;
     }
 
     // Draw the UI

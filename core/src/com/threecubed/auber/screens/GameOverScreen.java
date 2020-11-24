@@ -24,6 +24,7 @@ public class GameOverScreen extends ScreenAdapter {
   BitmapFont font = new BitmapFont();
   SpriteBatch batch = new SpriteBatch();
   GlyphLayout layout = new GlyphLayout();
+  String resultText;
 
   /**
    * Instantiate the screen with an {@link AuberGame} object.
@@ -33,12 +34,15 @@ public class GameOverScreen extends ScreenAdapter {
   public GameOverScreen(AuberGame game, boolean userWon) {
     this.game = game;
     font.getData().setScale(2);
-    String resultText = "LOSE";
+
+    resultText = "Game Over, you ";
     if (userWon) {
-      resultText = "WIN!";
+      resultText += "win!";
+    } else {
+      resultText += "lose.";
     }
-    layout.setText(font, "GAME OVER, YOU "
-        .concat(resultText).concat(". PRESS ESCAPE TO RETURN TO THE MENU"));
+    resultText += "\nPress \"Escape\" to return to the menu";
+    layout.setText(font, resultText);
   }
 
   @Override
@@ -52,7 +56,7 @@ public class GameOverScreen extends ScreenAdapter {
     }
 
     batch.begin();
-    font.draw(batch, "GAME OVER", (Gdx.graphics.getWidth() - layout.width) / 2,
+    font.draw(batch, resultText, (Gdx.graphics.getWidth() - layout.width) / 2,
         300 + (Gdx.graphics.getHeight() - layout.height) / 2);
     batch.end();
   }

@@ -1,13 +1,11 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
-import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -133,6 +131,16 @@ public abstract class Npc extends GameEntity {
   }
 
   /**
+   * Navigate to the furthest point from the player.
+   *
+   * @param world The game world
+   * */
+  public void navigateToFurthestPointFromPlayer(World world) {
+    Vector2 furthestPoint = navigationMesh.getFurthestPointFromEntity(world.player);
+    currentPath = navigationMesh.generateWorldPathToPoint(position, furthestPoint);
+  }
+
+  /**
    * Control the state the NPC is in and fire any necessary events when need be.
    *
    * @param world The game world
@@ -219,10 +227,12 @@ public abstract class Npc extends GameEntity {
     npcTimer.scheduleTask(new Task() {
       @Override
       public void run() {
-        state = States.NAVIGATING;
+        if (aiEnabled) {
+          state = States.NAVIGATING;
 
-        // Pick new system to navigate to
-        navigateToRandomSystem(world);
+          // Pick new system to navigate to
+          navigateToRandomSystem(world);
+        }
       }
     }, seconds);
   }

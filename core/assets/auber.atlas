@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 alienA
   rotate: false
-  xy: 304, 88
+  xy: 1161, 297
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -20,7 +20,7 @@ alienB
   index: -1
 arrow
   rotate: false
-  xy: 859, 295
+  xy: 1861, 940
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -39,9 +39,16 @@ auber_logo
   orig: 1000, 643
   offset: 0, 0
   index: -1
+demoButton
+  rotate: false
+  xy: 859, 211
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
 infiltrator
   rotate: false
-  xy: 1861, 942
+  xy: 859, 195
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -62,14 +69,14 @@ playButton
   index: -1
 player
   rotate: false
-  xy: 1942, 2024
+  xy: 304, 88
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 projectile
   rotate: false
-  xy: 859, 285
+  xy: 1942, 2030
   size: 8, 8
   orig: 8, 8
   offset: 0, 0

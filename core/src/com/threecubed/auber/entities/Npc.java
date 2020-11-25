@@ -30,7 +30,7 @@ public abstract class Npc extends GameEntity {
 
   protected float maxSpeed = 1.3f;
 
-  private static String[] textureNames = {"alienA", "alienB"};
+  private static String[] textureNames = {"alienA", "alienB", "alienC"};
 
   protected States state = States.IDLE;
 

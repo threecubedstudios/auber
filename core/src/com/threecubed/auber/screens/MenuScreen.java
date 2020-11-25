@@ -49,7 +49,7 @@ public class MenuScreen extends ScreenAdapter {
   public MenuScreen(final AuberGame game) {
     this.game = game;
 
-    viewport = new ScalingViewport(Scaling.fit, 1920f, 1080f, camera);
+    viewport = new ScalingViewport(Scaling.stretch, 1920f, 1080f, camera);
     spriteBatch = new SpriteBatch();
     camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
@@ -66,7 +66,7 @@ public class MenuScreen extends ScreenAdapter {
 
     playButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
-        1f, game.atlas.createSprite("playButton"), game, onPlayClick);
+        1f, game.atlas.createSprite("playButton"), game, onPlayClick, camera);
 
     Runnable onDemoClick = new Runnable() {
       @Override
@@ -77,8 +77,7 @@ public class MenuScreen extends ScreenAdapter {
 
     demoButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
-        1f, game.atlas.createSprite("demoButton"), game, onDemoClick
-        );
+        1f, game.atlas.createSprite("demoButton"), game, onDemoClick, camera);
   }
 
   @Override

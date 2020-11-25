@@ -1,6 +1,5 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
@@ -12,15 +11,30 @@ public class Projectile extends GameEntity {
   CollisionActions collisionAction;
   GameEntity originEntity;
 
-  private static final Texture texture = new Texture("projectile.png");
-
   public static enum CollisionActions {
     CONFUSE,
+    SLOW,
+    BLIND;
+
+    public static CollisionActions randomAction() {
+      // Int rounds down so no need to sub 1 from length
+      return values()[(int) (Math.random() * values().length)];
+    }
   }
 
+  /**
+   * Initialise a projectile.
+   *
+   * @param x The x coordinate to initialise at
+   * @param y The y coordinate to initialise at
+   * @param velocity A {@link Vector2} representing the velocity of the projectile
+   * @param originEntity The entity that the projectile originated from
+   * @param action The effect the projectile should have on the player
+   * @param world The game world
+   * */
   public Projectile(float x, float y, Vector2 velocity, GameEntity originEntity,
-      CollisionActions action) {
-    super(x, y, texture);
+      CollisionActions action, World world) {
+    super(x, y, world.atlas.createSprite("projectile"));
     collisionAction = action;
     this.originEntity = originEntity;
     this.velocity = velocity;
@@ -61,10 +75,16 @@ public class Projectile extends GameEntity {
       case CONFUSE:
         confusePlayer(world);
         break;
+      case SLOW:
+        slowPlayer(world);
+        break;
+      case BLIND:
+        blindPlayer(world);
+        break;
       default:
         break;
     }
-    world.player.health -= 0.5;
+    world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE;
   }
 
   private void confusePlayer(final World world) {
@@ -75,5 +95,25 @@ public class Projectile extends GameEntity {
         world.player.confused = false;
       }
     }, World.AUBER_DEBUFF_TIME);
+  }
+
+  private void slowPlayer(final World world) {
+    world.player.slowed = true;
+    world.player.playerTimer.scheduleTask(new Task() {
+      @Override
+      public void run() {
+        world.player.slowed = false;
+      }
+    }, World.AUBER_DEBUFF_TIME);
+  }
+
+  private void blindPlayer(final World world) {
+    world.player.blinded = true;
+    world.player.playerTimer.scheduleTask(new Task() {
+      @Override
+      public void run() {
+        world.player.blinded = false;
+      }
+    }, World.AUBER_DEBUFF_TIME - 3f);
   }
 }

@@ -1,12 +1,16 @@
 package com.threecubed.auber.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
 
 
@@ -24,14 +28,31 @@ public class GameUi {
   private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
 
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+  private Sprite arrowSprite;
+  private Color blindedColor = new Color(0f, 0f, 0f, 1f);
+
   private BitmapFont uiFont = new BitmapFont();
+
+  public GameUi(AuberGame game) {
+    arrowSprite = game.atlas.createSprite("arrow2");
+  }
 
   /**
    * Render the different elements of the UI to the screen.
    *
    * @param world The game world.
+   * @param screenBatch The batch to draw the UI to
    * */
   public void render(World world, SpriteBatch screenBatch) {
+    if (world.player.blinded) {
+      shapeRenderer.begin(ShapeType.Filled);
+      shapeRenderer.setColor(blindedColor);
+      shapeRenderer.rect(0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      shapeRenderer.setColor(Color.WHITE);
+      shapeRenderer.end();
+    }
+
     drawChargeMeter(world, screenBatch);
     drawHealthbar(world, screenBatch);
     drawHealthWarnings(world, screenBatch);
@@ -102,6 +123,14 @@ public class GameUi {
     if (world.player.confused) {
       uiFont.draw(screenBatch, "CONFUSED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y);
     }
+    if (world.player.slowed) {
+      uiFont.draw(screenBatch, "SLOWED", HEALTH_WARNINGS_POSITION.x,
+          HEALTH_WARNINGS_POSITION.y + 20f);
+    }
+    if (world.player.blinded) {
+      uiFont.draw(screenBatch, "BLINDED", HEALTH_WARNINGS_POSITION.x,
+          HEALTH_WARNINGS_POSITION.y + 40f);
+    }
     uiFont.setColor(Color.WHITE);
     screenBatch.end();
   }
@@ -116,26 +145,32 @@ public class GameUi {
     screenBatch.begin();
     int offset = 0;
     for (RectangleMapObject system : world.systems) {
-      if (system.getProperties().get("type").equals("system")) {
-        String systemName = system.getName();
+      Rectangle systemRectangle = system.getRectangle();
+      Vector2 systemAngleVector = new Vector2(systemRectangle.getX() - world.player.position.x,
+                                              systemRectangle.getY() - world.player.position.y);
 
-        // No need for DESTROYED case as when system destroyed, removed from systems list
-        switch (world.getSystemState(system)) {
-          case WORKING:
-            uiFont.setColor(Color.GREEN);
-            break;
-          case ATTACKED:
-            uiFont.setColor(Color.RED);
-            break;
-          default:
-            break;
-        }
+      arrowSprite.setPosition(SYSTEM_WARNINGS_POSITION.x - 20f, SYSTEM_WARNINGS_POSITION.y
+          + offset - 10f);
+      arrowSprite.setRotation(systemAngleVector.angleDeg() - 90f);
+      arrowSprite.draw(screenBatch);
 
-        uiFont.draw(screenBatch, systemName, SYSTEM_WARNINGS_POSITION.x,
-            SYSTEM_WARNINGS_POSITION.y + offset);
-        offset += 20f;
-
+      String systemName = system.getName();
+      // No need for DESTROYED case as when system destroyed, removed from systems list
+      switch (world.getSystemState(system)) {
+        case WORKING:
+          uiFont.setColor(Color.GREEN);
+          break;
+        case ATTACKED:
+          uiFont.setColor(Color.RED);
+          break;
+        default:
+          break;
       }
+
+      uiFont.draw(screenBatch, systemName, SYSTEM_WARNINGS_POSITION.x,
+          SYSTEM_WARNINGS_POSITION.y + offset);
+      offset += 25f;
+
     }
     uiFont.setColor(Color.WHITE);
     screenBatch.end();

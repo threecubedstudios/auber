@@ -1,6 +1,7 @@
 package com.threecubed.auber.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,16 +24,26 @@ public class GameOverScreen extends ScreenAdapter {
   BitmapFont font = new BitmapFont();
   SpriteBatch batch = new SpriteBatch();
   GlyphLayout layout = new GlyphLayout();
+  String resultText;
 
   /**
    * Instantiate the screen with an {@link AuberGame} object.
    *
    * @param game The game object. 
+   * @param userWon Whether the user won or lost
    * */
-  public GameOverScreen(AuberGame game) {
+  public GameOverScreen(AuberGame game, boolean userWon) {
     this.game = game;
     font.getData().setScale(2);
-    layout.setText(font, "GAME OVER");
+
+    resultText = "Game Over, you ";
+    if (userWon) {
+      resultText += "win!";
+    } else {
+      resultText += "lose.";
+    }
+    resultText += "\nPress \"Escape\" to return to the menu";
+    layout.setText(font, resultText);
   }
 
   @Override
@@ -41,8 +52,12 @@ public class GameOverScreen extends ScreenAdapter {
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+    if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+      game.setScreen(new MenuScreen(game));
+    }
+
     batch.begin();
-    font.draw(batch, "GAME OVER", (Gdx.graphics.getWidth() - layout.width) / 2,
+    font.draw(batch, resultText, (Gdx.graphics.getWidth() - layout.width) / 2,
         300 + (Gdx.graphics.getHeight() - layout.height) / 2);
     batch.end();
   }

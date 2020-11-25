@@ -3,8 +3,8 @@ package com.threecubed.auber.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.AuberGame;
@@ -24,12 +24,12 @@ import com.threecubed.auber.ui.GameUi;
  * @since 1.0
  * */
 public class GameScreen extends ScreenAdapter {
-  World world;
-  AuberGame game;
-  Texture stars;
+  public World world;
+  public AuberGame game;
+  Sprite stars;
 
   SpriteBatch screenBatch = new SpriteBatch();
-  GameUi ui = new GameUi();
+  GameUi ui;
 
   int workingSystems = 0;
 
@@ -37,52 +37,29 @@ public class GameScreen extends ScreenAdapter {
    * Initialise the game screen with the {@link AuberGame} object and add a few entities.
    *
    * @param game The game object
+   * @param demoMode Whether the game should run in demo mode
    * */
-  public GameScreen(AuberGame game) {
+  public GameScreen(AuberGame game, boolean demoMode) {
     this.game = game;
+    ui = new GameUi(game);
 
-    world = new World(game);
+    world = new World(game, demoMode);
 
-    Player player = new Player(64f, 64f);
-    world.queueEntityAdd(player);
-    world.player = player;
+    for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
+      world.queueEntityAdd(new Infiltrator(world));
+      world.infiltratorsAddedCount++;
+    }
+    for (int i = 0; i < World.NPC_COUNT; i++) {
+      world.queueEntityAdd(new Civilian(world));
+    }
 
-    world.queueEntityAdd(new Infiltrator(world));
-    world.queueEntityAdd(new Infiltrator(world));
-    world.queueEntityAdd(new Infiltrator(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    world.queueEntityAdd(new Civilian(world));
-    stars = new Texture("stars.png");
+    stars = game.atlas.createSprite("stars");
   }
 
   @Override
   public void render(float delta) {
     // Add any queued entities
     world.updateEntities();
-    world.checkForEndState();
-
 
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -109,14 +86,28 @@ public class GameScreen extends ScreenAdapter {
         world.camera.position.set(entity.position.x, entity.position.y, 0);
         world.camera.update();
       } else if (entity instanceof Infiltrator) {
-        world.infiltratorCount += 1;
+        Infiltrator infiltrator = (Infiltrator) entity;
+        if (infiltrator.aiEnabled) {
+          world.infiltratorCount += 1;
+        }
       }
     }
     batch.end();
     renderer.render(world.foregroundLayersIds);
 
+    if (world.infiltratorCount < World.MAX_INFILTRATORS_IN_GAME
+        && world.infiltratorsAddedCount < World.MAX_INFILTRATORS) {
+      Infiltrator newInfiltrator = new Infiltrator(world);
+      while (newInfiltrator.entityOnScreen(world)) {
+        newInfiltrator.moveToRandomLocation(world);
+      }
+      world.queueEntityAdd(newInfiltrator);
+      world.infiltratorsAddedCount++;
+    }
+
     // Draw the UI
     ui.render(world, screenBatch);
+    world.checkForEndState();
   }
 
   @Override

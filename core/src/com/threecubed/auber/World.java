@@ -2,6 +2,7 @@ package com.threecubed.auber;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -15,6 +16,7 @@ import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
+import com.threecubed.auber.screens.GameScreen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -34,6 +36,11 @@ public class World {
   public Player player;
   public int infiltratorCount;
 
+  public boolean demoMode = false;
+
+  /** Number of infiltrators added, including defeated ones. */
+  public int infiltratorsAddedCount = 0;
+
   private List<GameEntity> entities = new ArrayList<>();
   public List<GameEntity> newEntities = new ArrayList<>();
   public List<GameEntity> oldEntities = new ArrayList<>();
@@ -42,6 +49,7 @@ public class World {
 
   public static final TiledMap map = new TmxMapLoader().load("map.tmx");
   public static final TiledMapTileSet tileset = map.getTileSets().getTileSet(0);
+  public TextureAtlas atlas;
 
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
 
@@ -59,30 +67,36 @@ public class World {
 
   /** Coordinates for the bottom left and top right tiles of the brig. */
   public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};
+  /** Coordinates for the medbay teleporter. */
   public static final float[] MEDBAY_COORDINATES = {96f, 640f};
 
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
+  /** The rate at which the teleporter ray charges */
   public static final float AUBER_CHARGE_RATE = 0.05f;
+  /** The time the ray should visibly render for. */
   public static final float AUBER_RAY_TIME = 0.25f;
+  /** The time a debuff should last for (with the exception of blindness) */
   public static final float AUBER_DEBUFF_TIME = 5f;
-  public static final float AUBER_HEAL_RATE = 0.01f;
+  /** The rate at which auber should heal. */
+  public static final float AUBER_HEAL_RATE = 0.005f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
   public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
 
   // ------------------RENDERING-----------------
-  // IDs of layers that should be rendered behind entities
+  /** IDs of layers that should be rendered behind entities. */
   public final int[] backgroundLayersIds = {
     map.getLayers().getIndex("background_layer"),
     };
 
-  // IDs of layers that should be rendered infront of entities
+  /** IDs of layers that should be rendered infront of entities. */
   public final int[] foregroundLayersIds = {
     map.getLayers().getIndex("foreground_layer"),
     map.getLayers().getIndex("collision_layer")
     };
 
 
+  /** An enum containing information about all dynamic/frequently accessed tiles. */
   public static enum Tiles {
     WALL_SYSTEM(38),
     STANDALONE_SYSTEM(62),
@@ -109,6 +123,8 @@ public class World {
 
     /**
      * Return a cell object for a given tile type via its tileId.
+     *
+     * @return A cell object for the given tile ID
      * */
     public Cell getCell() {
       Cell output = new Cell();
@@ -136,11 +152,22 @@ public class World {
   /** The amount of time it takes for an infiltrator to sabotage a system. */
   public static final float SYSTEM_BREAK_TIME = 5f;
   /** The chance an infiltrator will sabotage after pathfinding to a system. */
-  public static final float SYSTEM_SABOTAGE_CHANCE = 0.5f;
+  public static final float SYSTEM_SABOTAGE_CHANCE = 0.6f;
   /** The distance the infiltrator can see. Default: 5 tiles */
   public static final float INFILTRATOR_SIGHT_RANGE = 80f;
   /** The speed at which infiltrator projectiles should travel. */
-  public static final float INFILTRATOR_PROJECTILE_SPEED = 16f;
+  public static final float INFILTRATOR_PROJECTILE_SPEED = 4f;
+  /** Maximum infiltrators in a full game of Auber (including defated ones). */
+  public static final int MAX_INFILTRATORS = 8;
+  /** The interval at which the infiltrator should attack the player when exposed. */
+  public static final float INFILTRATOR_FIRING_INTERVAL = 5f;
+  /** The damage a projectile should do. */
+  public static final float INFILTRATOR_PROJECTILE_DAMAGE = 0.2f;
+  /**
+   * Max infiltrators alive at a given point, Should always be greater or equal to
+   * {@link World#MAX_INFILTRATORS}.
+   * */
+  public static final int MAX_INFILTRATORS_IN_GAME = 3;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
   public static final float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
@@ -152,6 +179,8 @@ public class World {
   public static final float NPC_MIN_FLEE_DISTANCE = 80f;
   /** The distance an NPC can here the teleporter ray shoot from. */
   public static final float NPC_EAR_STRENGTH = 80f;
+  /** The number of NPCs in the game. */
+  public static final int NPC_COUNT = 24;
 
   public static enum SystemStates {
     WORKING,
@@ -165,11 +194,16 @@ public class World {
    * @param game The game object.
    * */
   public World(AuberGame game) {
+    this.game = game;
+    atlas = game.atlas;
+
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
     camera.update();
 
-    this.game = game;
+    Player player = new Player(64f, 64f, this);
+    queueEntityAdd(player);
+    this.player = player;
 
     MapObjects objects = map.getLayers().get("object_layer").getObjects();
     for (MapObject object : objects) {
@@ -202,6 +236,30 @@ public class World {
         }
       }
     }
+  }
+
+  /**
+   * Initialise an instance of the world with the given game object.
+   * Demo mode locks the player to the center of the screen, makes them invisible and expands the
+   * camera to view the whole map.
+   *
+   * @param game The game object
+   * @param demoMode Whether to run the game in demo mode
+   * */
+  public World(AuberGame game, boolean demoMode) {
+    this(game);
+    this.demoMode = demoMode;
+    if (demoMode) {
+      camera.setToOrtho(false, 1920, 1080);
+      TiledMapTileLayer layer = ((TiledMapTileLayer) map.getLayers().get(2));
+      player.position.x = (layer.getWidth() * layer.getTileWidth()) / 2;
+      player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;
+      player.sprite.setColor(1f, 1f, 1f, 0f);
+    }
+  }
+
+  public void addEntity(GameEntity entity) {
+    entities.add(entity);
   }
 
   public List<GameEntity> getEntities() {
@@ -366,10 +424,14 @@ public class World {
    * Check to see if any of the end conditions have been met, if so update the screen.
    * */
   public void checkForEndState() {
-    if (player.health <= 0 || systems.isEmpty()) {
-      game.setScreen(new GameOverScreen(game));
+    if (systems.isEmpty()) {
+      if (!demoMode) {
+        game.setScreen(new GameOverScreen(game, false));
+      } else {
+        game.setScreen(new GameScreen(game, true));
+      }
     } else if (infiltratorCount <= 0) {
-      // game.setScreen(GameWinScreen);
+      game.setScreen(new GameOverScreen(game, true));
     }
   }
 }

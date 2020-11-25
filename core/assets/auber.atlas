@@ -1,0 +1,90 @@
+
+auber.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+alienA
+  rotate: false
+  xy: 1161, 297
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+alienB
+  rotate: false
+  xy: 1924, 2006
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+arrow
+  rotate: false
+  xy: 1861, 940
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+arrow2
+  rotate: false
+  xy: 1924, 2022
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+auber_logo
+  rotate: false
+  xy: 859, 313
+  size: 1000, 643
+  orig: 1000, 643
+  offset: 0, 0
+  index: -1
+demoButton
+  rotate: false
+  xy: 859, 211
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
+infiltrator
+  rotate: false
+  xy: 859, 195
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+instructions
+  rotate: false
+  xy: 2, 104
+  size: 855, 852
+  orig: 855, 852
+  offset: 0, 0
+  index: -1
+playButton
+  rotate: false
+  xy: 2, 2
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
+player
+  rotate: false
+  xy: 304, 88
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+projectile
+  rotate: false
+  xy: 1942, 2030
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+stars
+  rotate: false
+  xy: 2, 958
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1

@@ -3,8 +3,7 @@ package com.threecubed.auber.pathfinding;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
-import com.threecubed.auber.World;
-
+import com.threecubed.auber.entities.GameEntity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -222,7 +221,32 @@ public class NavigationMesh {
   }
 
   /**
-   * Return the euclidian distance between 2 points.
+   * Get the coordinates of the furthest point from the given entity.
+   *
+   * @param entity The entity to find the furthest point from
+   * @return The world coordinates of the furthest point from this entity
+   * */
+  public Vector2 getFurthestPointFromEntity(GameEntity entity) {
+    int[] tileCoordinates = getTilemapCoordinates(entity.position.x, entity.position.y);
+    float longestDistance = 0;
+    int[] longestDistanceCoordinates = {0, 0};
+    for (int y = 0; y < mesh.length; y++) {
+      for (int x = 0; x < mesh[0].length; x++) {
+        if (cellAccessible(x, y)) {
+          int[] currentCellCoords = {x, y};
+          float distance = getEuclidianDistance(tileCoordinates, currentCellCoords);
+          if (distance > longestDistance) {
+            longestDistance = distance;
+            longestDistanceCoordinates = currentCellCoords;
+          }
+        }
+      }
+    }
+    return getWorldCoordinates(longestDistanceCoordinates[0], longestDistanceCoordinates[1]);
+  }
+
+  /**
+   * Return the euclidian distance between 2 float arrays (world coordinates).
    *
    * @param firstPoint The first point to test from
    * @param secondPoint The second point to test from
@@ -235,6 +259,14 @@ public class NavigationMesh {
     return (float) Math.sqrt(Math.pow(horizontalDistance, 2) + Math.pow(verticalDistance, 2));
   }
 
+  /**
+   * Return the euclidian distance between 2 integer arrays (tilemap coordinates).
+   *
+   * @param firstPoint The first point to test from
+   * @param secondPoint The second point to test from
+   *
+   * @return The euclidian distance between the 2 points
+   * */
   public static float getEuclidianDistance(int[] firstPoint, int[] secondPoint) {
     float[] convertedFirstPoint = {(float) firstPoint[0], (float) firstPoint[1]};
     float[] convertedSecondPoint = {(float) secondPoint[0], (float) secondPoint[1]};

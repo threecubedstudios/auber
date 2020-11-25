@@ -133,14 +133,16 @@ public class Infiltrator extends Npc {
 
   @Override
   public void navigateToNearestFleepoint(final World world) {
-    if (state == States.ATTACKING_SYSTEM) {
-      RectangleMapObject system = getNearbyObjects(World.map);
-      if (system != null) {
-        Rectangle boundingBox = system.getRectangle();
-        world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);  
+    if (aiEnabled) {
+      if (state == States.ATTACKING_SYSTEM) {
+        RectangleMapObject system = getNearbyObjects(World.map);
+        if (system != null) {
+          Rectangle boundingBox = system.getRectangle();
+          world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);  
+        }
       }
+      super.navigateToNearestFleepoint(world);
     }
-    super.navigateToNearestFleepoint(world);
   }
 
   private boolean playerNearby(World world) {

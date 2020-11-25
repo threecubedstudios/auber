@@ -4,11 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
 import com.threecubed.auber.ui.Button;
@@ -32,6 +36,9 @@ public class MenuScreen extends ScreenAdapter {
   Sprite background;
   Sprite instructions;
   Sprite title;
+  ScalingViewport viewport;
+  Camera camera = new OrthographicCamera(1920f, 1080f);
+  SpriteBatch spriteBatch;
 
   /**
    * Instantiate the screen with the {@link AuberGame} object. Set the title and button up to be
@@ -41,6 +48,10 @@ public class MenuScreen extends ScreenAdapter {
    * */
   public MenuScreen(final AuberGame game) {
     this.game = game;
+
+    viewport = new ScalingViewport(Scaling.fit, 1920f, 1080f, camera);
+    spriteBatch = new SpriteBatch();
+    camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
     background = game.atlas.createSprite("stars");
     instructions = game.atlas.createSprite("instructions");
@@ -71,6 +82,11 @@ public class MenuScreen extends ScreenAdapter {
   }
 
   @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height);
+  }
+
+  @Override
   public void render(float deltaTime) {
     if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
       DisplayMode currentDisplayMode = Gdx.graphics.getDisplayMode();
@@ -79,12 +95,12 @@ public class MenuScreen extends ScreenAdapter {
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
       game.setScreen(new GameScreen(game, true));
     }
-    
+
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    SpriteBatch spriteBatch = new SpriteBatch();
+    spriteBatch.setProjectionMatrix(camera.combined);
     spriteBatch.begin();
 
     background.setPosition(0f, 0f);
@@ -94,8 +110,7 @@ public class MenuScreen extends ScreenAdapter {
     instructions.draw(spriteBatch);
 
     title.setScale(0.5f);
-    title.setPosition(Gdx.graphics.getWidth() / 4 - (title.getWidth() / 2),
-        Gdx.graphics.getHeight() - 600);
+    title.setPosition(0f, 550f);
     title.draw(spriteBatch);
 
     playButton.render(spriteBatch);

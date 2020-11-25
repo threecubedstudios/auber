@@ -8,9 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
 import com.threecubed.auber.entities.Civilian;
@@ -31,7 +28,6 @@ public class GameScreen extends ScreenAdapter {
   public World world;
   public AuberGame game;
   Sprite stars;
-  Viewport viewport;
 
   SpriteBatch screenBatch = new SpriteBatch();
   GameUi ui;
@@ -49,7 +45,6 @@ public class GameScreen extends ScreenAdapter {
     ui = new GameUi(game);
 
     world = new World(game, demoMode);
-    viewport = new ScalingViewport(Scaling.fit, 480f, 270f, world.camera);
 
     for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
       world.queueEntityAdd(new Infiltrator(world));
@@ -60,11 +55,6 @@ public class GameScreen extends ScreenAdapter {
     }
 
     stars = game.atlas.createSprite("stars");
-  }
-
-  @Override
-  public void resize(int width, int height) {
-    viewport.update(width, height);
   }
 
   @Override

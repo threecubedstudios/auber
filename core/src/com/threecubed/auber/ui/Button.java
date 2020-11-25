@@ -2,13 +2,11 @@ package com.threecubed.auber.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
-import com.threecubed.auber.Utils;
 
 
 /**
@@ -24,7 +22,6 @@ public class Button {
   AuberGame game;
   Vector2 position;
   Runnable onClick;
-  Camera camera;
 
   /**
    * Instantiate a button at a given position with a given scale and texture.
@@ -36,10 +33,9 @@ public class Button {
    * @param game The game object
    * @param onClick The code to execute when the button is pressed wrapped in a {@link Runnable}
    * */
-  public Button(Vector2 position, float scale, Sprite sprite, AuberGame game, Runnable onClick, Camera camera) {
+  public Button(Vector2 position, float scale, Sprite sprite, AuberGame game, Runnable onClick) {
     this.sprite = sprite;
     this.onClick = onClick;
-    this.camera = camera;
 
     sprite.setScale(scale);
     sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
@@ -55,9 +51,9 @@ public class Button {
    * */
   public void render(SpriteBatch spriteBatch) {
     sprite.draw(spriteBatch);
-    Vector2 mouseCoords = Utils.getMouseCoordinates(camera);
 
-    if (sprite.getBoundingRectangle().contains(mouseCoords.x, mouseCoords.y)) {
+    if (sprite.getBoundingRectangle().contains(Gdx.input.getX(),
+          Gdx.graphics.getHeight() - Gdx.input.getY())) {
       sprite.setScale(1.05f);
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
         onClick.run();

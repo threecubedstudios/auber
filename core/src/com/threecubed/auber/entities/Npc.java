@@ -50,6 +50,7 @@ public abstract class Npc extends GameEntity {
    *
    * @param x The x coordinate to initialise the NPC at
    * @param y The y coordinate to initialise the NPC at
+   * @param sprite The NPC sprite
    * @param navigationMesh The navigation mesh.
    * */
   public Npc(float x, float y, Sprite sprite, NavigationMesh navigationMesh) {
@@ -298,6 +299,8 @@ public abstract class Npc extends GameEntity {
 
   /**
    * Move the entity to a random location within the world.
+   *
+   * @param world The game world
    **/
   public void moveToRandomLocation(World world) {
     float[] location = world.spawnLocations.get(Utils.randomIntInRange(

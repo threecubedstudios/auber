@@ -3,7 +3,6 @@ package com.threecubed.auber.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -30,7 +29,9 @@ public class Button {
    *
    * @param position The position to render the center of the button at
    * @param scale The scale to render the button with
+   * @param sprite The sprite of the button
    * @param game The game object
+   * @param onClick The code to execute when the button is pressed wrapped in a {@link Runnable}
    * */
   public Button(Vector2 position, float scale, Sprite sprite, AuberGame game, Runnable onClick) {
     this.sprite = sprite;
@@ -51,7 +52,8 @@ public class Button {
   public void render(SpriteBatch spriteBatch) {
     sprite.draw(spriteBatch);
 
-    if (sprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+    if (sprite.getBoundingRectangle().contains(Gdx.input.getX(),
+          Gdx.graphics.getHeight() - Gdx.input.getY())) {
       sprite.setScale(1.05f);
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
         onClick.run();

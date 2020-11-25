@@ -3,7 +3,6 @@ package com.threecubed.auber.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -38,6 +37,7 @@ public class GameScreen extends ScreenAdapter {
    * Initialise the game screen with the {@link AuberGame} object and add a few entities.
    *
    * @param game The game object
+   * @param demoMode Whether the game should run in demo mode
    * */
   public GameScreen(AuberGame game, boolean demoMode) {
     this.game = game;

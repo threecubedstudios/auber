@@ -37,7 +37,8 @@ public final class Utils {
    *
    * @return A randomly generated integer between the 2 bounds
    * */
-  public static float randomFloatInRange(Random randomNumberGenerator, float lowerBound, float upperBound) {
+  public static float randomFloatInRange(Random randomNumberGenerator, float lowerBound,
+      float upperBound) {
     return (randomNumberGenerator.nextFloat() * (upperBound - lowerBound)) + lowerBound;
   }
 

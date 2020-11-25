@@ -30,6 +30,7 @@ public class GameOverScreen extends ScreenAdapter {
    * Instantiate the screen with an {@link AuberGame} object.
    *
    * @param game The game object. 
+   * @param userWon Whether the user won or lost
    * */
   public GameOverScreen(AuberGame game, boolean userWon) {
     this.game = game;

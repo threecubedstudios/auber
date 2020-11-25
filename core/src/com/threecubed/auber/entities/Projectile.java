@@ -29,6 +29,8 @@ public class Projectile extends GameEntity {
    * @param y The y coordinate to initialise at
    * @param velocity A {@link Vector2} representing the velocity of the projectile
    * @param originEntity The entity that the projectile originated from
+   * @param action The effect the projectile should have on the player
+   * @param world The game world
    * */
   public Projectile(float x, float y, Vector2 velocity, GameEntity originEntity,
       CollisionActions action, World world) {

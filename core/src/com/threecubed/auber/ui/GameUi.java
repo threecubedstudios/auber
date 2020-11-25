@@ -42,6 +42,7 @@ public class GameUi {
    * Render the different elements of the UI to the screen.
    *
    * @param world The game world.
+   * @param screenBatch The batch to draw the UI to
    * */
   public void render(World world, SpriteBatch screenBatch) {
     if (world.player.blinded) {
@@ -123,10 +124,12 @@ public class GameUi {
       uiFont.draw(screenBatch, "CONFUSED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y);
     }
     if (world.player.slowed) {
-      uiFont.draw(screenBatch, "SLOWED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y + 20f);
+      uiFont.draw(screenBatch, "SLOWED", HEALTH_WARNINGS_POSITION.x,
+          HEALTH_WARNINGS_POSITION.y + 20f);
     }
     if (world.player.blinded) {
-      uiFont.draw(screenBatch, "BLINDED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y + 40f);
+      uiFont.draw(screenBatch, "BLINDED", HEALTH_WARNINGS_POSITION.x,
+          HEALTH_WARNINGS_POSITION.y + 40f);
     }
     uiFont.setColor(Color.WHITE);
     screenBatch.end();

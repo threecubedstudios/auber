@@ -17,7 +17,6 @@ import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import com.threecubed.auber.screens.GameScreen;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -68,30 +67,36 @@ public class World {
 
   /** Coordinates for the bottom left and top right tiles of the brig. */
   public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};
+  /** Coordinates for the medbay teleporter. */
   public static final float[] MEDBAY_COORDINATES = {96f, 640f};
 
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
+  /** The rate at which the teleporter ray charges */
   public static final float AUBER_CHARGE_RATE = 0.05f;
+  /** The time the ray should visibly render for. */
   public static final float AUBER_RAY_TIME = 0.25f;
+  /** The time a debuff should last for (with the exception of blindness) */
   public static final float AUBER_DEBUFF_TIME = 5f;
+  /** The rate at which auber should heal. */
   public static final float AUBER_HEAL_RATE = 0.005f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
   public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
 
   // ------------------RENDERING-----------------
-  // IDs of layers that should be rendered behind entities
+  /** IDs of layers that should be rendered behind entities. */
   public final int[] backgroundLayersIds = {
     map.getLayers().getIndex("background_layer"),
     };
 
-  // IDs of layers that should be rendered infront of entities
+  /** IDs of layers that should be rendered infront of entities. */
   public final int[] foregroundLayersIds = {
     map.getLayers().getIndex("foreground_layer"),
     map.getLayers().getIndex("collision_layer")
     };
 
 
+  /** An enum containing information about all dynamic/frequently accessed tiles. */
   public static enum Tiles {
     WALL_SYSTEM(38),
     STANDALONE_SYSTEM(62),
@@ -118,6 +123,8 @@ public class World {
 
     /**
      * Return a cell object for a given tile type via its tileId.
+     *
+     * @return A cell object for the given tile ID
      * */
     public Cell getCell() {
       Cell output = new Cell();
@@ -152,7 +159,7 @@ public class World {
   public static final float INFILTRATOR_PROJECTILE_SPEED = 4f;
   /** Maximum infiltrators in a full game of Auber (including defated ones). */
   public static final int MAX_INFILTRATORS = 8;
-  /** The interval at which the infiltrator should attack the player when exposed */
+  /** The interval at which the infiltrator should attack the player when exposed. */
   public static final float INFILTRATOR_FIRING_INTERVAL = 5f;
   /** The damage a projectile should do. */
   public static final float INFILTRATOR_PROJECTILE_DAMAGE = 0.2f;

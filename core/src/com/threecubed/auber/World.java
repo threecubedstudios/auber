@@ -72,11 +72,11 @@ public class World {
 
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
-  /** The rate at which the teleporter ray charges */
+  /** The rate at which the teleporter ray charges. */
   public static final float AUBER_CHARGE_RATE = 0.05f;
   /** The time the ray should visibly render for. */
   public static final float AUBER_RAY_TIME = 0.25f;
-  /** The time a debuff should last for (with the exception of blindness) */
+  /** The time a debuff should last for (with the exception of blindness). */
   public static final float AUBER_DEBUFF_TIME = 5f;
   /** The rate at which auber should heal. */
   public static final float AUBER_HEAL_RATE = 0.005f;

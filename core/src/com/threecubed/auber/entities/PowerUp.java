@@ -45,7 +45,7 @@ public class PowerUp extends GameEntity {
    * @param effect The effect the powerUp should have on the player
    * */
   private static String spriteName(PowerUpEffect effect){
-    switch (effect) {//TODO make (individual)sprites
+    switch (effect) {//TODO put sprites on sprite atlas/map
       case SHIELD:
         return "powerUpShield";
       case HEAL:

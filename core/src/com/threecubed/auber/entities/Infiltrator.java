@@ -99,6 +99,7 @@ public class Infiltrator extends Npc {
         }
       }, World.INFILTRATOR_FIRING_INTERVAL, World.INFILTRATOR_FIRING_INTERVAL);
     } else {
+      world.queueEntityAdd(new PowerUp(position.x,position.y,PowerUp.PowerUpEffect.randomEffect(),world));
       position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
           World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
       position.y = Utils.randomFloatInRange(world.randomNumberGenerator,

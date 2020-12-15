@@ -34,10 +34,14 @@ public class Player extends GameEntity {
 
   /** Health of Auber - varies between 1 and 0. */
   public float health = 1;
+  /** protects from that many hits */
+  public int shield = 0;
 
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
+  public boolean invinc = false;
+  public boolean speeded = false;
 
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
@@ -53,13 +57,24 @@ public class Player extends GameEntity {
   @Override
   public void update(World world) {
     if (!world.demoMode) {
+      //check for power-ups
+      for (GameEntity entity : world.getEntities()) {
+        if (Intersector.overlaps(entity.sprite.getBoundingRectangle(),
+              sprite.getBoundingRectangle())
+             && entity != this) {
+          if (entity instanceof PowerUp) {
+            PowerUp pUp = (PowerUp) entity;
+            pUp.handleCollisionWithPlayer(world);
+          } 
+        }
+      }
+      //tp to medbay
       if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
         position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
         confused = false;
         slowed = false;
         teleporterRayCoordinates.setZero();
       }
-
       // Increment Auber's health if in medbay
       if (world.medbay.getRectangle().contains(position.x, position.y)) {
         health += World.AUBER_HEAL_RATE;
@@ -69,7 +84,10 @@ public class Player extends GameEntity {
       // hence the * 2
       float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
       if (slowed) {
-        velocity.scl(0.5f);
+        velocity.scl(world.PROJECTILE_SLOW_MULT);
+      }
+      if (speeded){
+        velocity.scl(world.POWERUP_SPEED_MULT);
       }
 
       // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
@@ -248,5 +266,19 @@ public class Player extends GameEntity {
       alpha += 0.1f;
     }
     return output;
+  }
+  /** 
+   * attempt to damage the player
+   * 
+   * @param amount the amount to damage the player by if successful
+   * */
+  public damage(float amount){
+    if (!invinc){
+      if (shield > 0){
+        shield -= 1;
+      }else{
+        health -= amount;
+      }
+    }
   }
 }

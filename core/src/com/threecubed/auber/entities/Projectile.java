@@ -84,10 +84,11 @@ public class Projectile extends GameEntity {
       default:
         break;
     }
-    world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE;
+    world.player.damage(World.INFILTRATOR_PROJECTILE_DAMAGE);
   }
 
   private void confusePlayer(final World world) {
+    if (world.player.invinc) {return;}
     world.player.confused = true;
     world.player.playerTimer.scheduleTask(new Task() {
       @Override
@@ -98,6 +99,7 @@ public class Projectile extends GameEntity {
   }
 
   private void slowPlayer(final World world) {
+    if (world.player.invinc) {return;}
     world.player.slowed = true;
     world.player.playerTimer.scheduleTask(new Task() {
       @Override
@@ -108,6 +110,7 @@ public class Projectile extends GameEntity {
   }
 
   private void blindPlayer(final World world) {
+    if (world.player.invinc) {return;}
     world.player.blinded = true;
     world.player.playerTimer.scheduleTask(new Task() {
       @Override

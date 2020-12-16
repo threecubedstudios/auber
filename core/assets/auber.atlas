@@ -6,21 +6,21 @@ filter: Nearest,Nearest
 repeat: none
 alienA
   rotate: false
-  xy: 866, 202
+  xy: 1942, 2031
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 alienB
   rotate: false
-  xy: 1168, 304
+  xy: 1868, 931
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 alienC
   rotate: false
-  xy: 1924, 2013
+  xy: 1886, 949
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -55,7 +55,7 @@ demoButton
   index: -1
 infiltrator
   rotate: false
-  xy: 304, 88
+  xy: 1924, 2013
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
@@ -76,14 +76,56 @@ playButton
   index: -1
 player
   rotate: false
-  xy: 1942, 2031
+  xy: 304, 72
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+powerUp
+  rotate: false
+  xy: 304, 88
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+powerUpBoom
+  rotate: false
+  xy: 1168, 304
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+powerUpHeal
+  rotate: false
+  xy: 866, 202
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+powerUpInvinc
+  rotate: false
+  xy: 866, 186
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+powerUpShield
+  rotate: false
+  xy: 882, 202
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+powerUpSpeed
+  rotate: false
+  xy: 320, 88
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 projectile
   rotate: false
-  xy: 1868, 937
+  xy: 1168, 294
   size: 8, 8
   orig: 8, 8
   offset: 0, 0

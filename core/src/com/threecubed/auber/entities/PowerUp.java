@@ -1,10 +1,8 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
+import com.threecubed.auber.pathfinding.NavigationMesh;
 
 /**
  * The Power up which can be picked up by the player.
@@ -68,10 +66,10 @@ public class PowerUp extends GameEntity {
   public void handleCollisionWithPlayer(World world) {
     switch (powerUpEffect) {//TODO
       case SHIELD:
-        shieldPlayer(world.POWERUP_SHIELD_AMOUNT);
+        shieldPlayer(world,world.POWERUP_SHIELD_AMOUNT);
         break;
       case HEAL:
-        healPlayer(World.POWERUP_HEALTH_AMOUNT);
+        healPlayer(world,World.POWERUP_HEALTH_AMOUNT);
         break;
       case SPEED:
         speedPlayer(world);
@@ -87,11 +85,11 @@ public class PowerUp extends GameEntity {
     }
     world.queueEntityRemove(this);
   }
-  private void shieldPlayer(int amount){
+  private void shieldPlayer(final World world,int amount){
     world.player.shield += amount;
   }
-  private void healPlayer(float amount){
-    world.player.health = min(1f, world.player.health + amount);
+  private void healPlayer(final World world,float amount){
+    world.player.health = Math.min(1f, world.player.health + amount);
   }
   private void speedPlayer(final World world) {
     world.player.speeded = true;
@@ -131,4 +129,7 @@ public class PowerUp extends GameEntity {
       }
     }, World.AUBER_BUFF_TIME);
   }
+
+  @Override
+  public void update(World world) {}
 }

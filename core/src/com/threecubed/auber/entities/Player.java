@@ -12,6 +12,9 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+//<changed>
+import com.badlogic.gdx.math.Intersector;
+//</changed>
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -275,7 +278,7 @@ public class Player extends GameEntity {
    * 
    * @param amount the amount to damage the player by if successful
    * */
-  public damage(float amount){
+  public void damage(float amount){
     if (!invinc){
       if (shield > 0){
         shield -= 1;

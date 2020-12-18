@@ -14,8 +14,8 @@ import com.threecubed.auber.World;
  * The infiltrator is the enemy of the game, it will navigate from system to system and sabotage
  * them until caught by the {@link Player}.
  *
- * @author Daniel O'Brien
- * @version 1.0
+ * @author Daniel O'Brien, Adam
+ * @version 2.0
  * @since 1.0
  * */
 public class Infiltrator extends Npc {
@@ -99,7 +99,9 @@ public class Infiltrator extends Npc {
         }
       }, World.INFILTRATOR_FIRING_INTERVAL, World.INFILTRATOR_FIRING_INTERVAL);
     } else {
+      //<changed>
       world.queueEntityAdd(new PowerUp(position.x,position.y,PowerUp.PowerUpEffect.randomEffect(),world));
+      //</changed>
       position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
           World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
       position.y = Utils.randomFloatInRange(world.randomNumberGenerator,

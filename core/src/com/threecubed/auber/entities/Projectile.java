@@ -84,7 +84,9 @@ public class Projectile extends GameEntity {
       default:
         break;
     }
+    //<changed>
     world.player.damage(World.INFILTRATOR_PROJECTILE_DAMAGE);
+    //</changed>
   }
 
   private void confusePlayer(final World world) {

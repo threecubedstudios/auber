@@ -24,8 +24,8 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
  * The player entity that the user controls. Handles keyboard input, and interaction with other
  * entities and tiles in the game world.
  *
- * @author Daniel O'Brien
- * @version 1.0
+ * @author Daniel O'Brien, Adam Wiegand
+ * @version 2.0
  * @since 1.0
  * */
 public class Player extends GameEntity {
@@ -34,15 +34,16 @@ public class Player extends GameEntity {
 
   /** Health of Auber - varies between 1 and 0. */
   public float health = 1;
-  /** protects from that many hits */
+  /** <changed> protects from that many hits */
   public int shield = 0;
-
+  //</changed>
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
+  //<changed>
   public boolean invinc = false;
   public boolean speeded = false;
-
+  //</changed>
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
   public Player(float x, float y, World world) {
@@ -57,7 +58,7 @@ public class Player extends GameEntity {
   @Override
   public void update(World world) {
     if (!world.demoMode) {
-      //check for power-ups
+      //<changed>check for power-ups
       for (GameEntity entity : world.getEntities()) {
         if (Intersector.overlaps(entity.sprite.getBoundingRectangle(),
               sprite.getBoundingRectangle())
@@ -68,6 +69,7 @@ public class Player extends GameEntity {
           } 
         }
       }
+      //</changed>
       //tp to medbay
       if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
         position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
@@ -86,10 +88,11 @@ public class Player extends GameEntity {
       if (slowed) {
         velocity.scl(world.PROJECTILE_SLOW_MULT);
       }
+      //<changed>
       if (speeded){
         velocity.scl(world.POWERUP_SPEED_MULT);
       }
-
+      //</changed>
       // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
       // of flipped velocity will cancel out the first
       if (confused) {
@@ -267,7 +270,7 @@ public class Player extends GameEntity {
     }
     return output;
   }
-  /** 
+  /** <changed>
    * attempt to damage the player
    * 
    * @param amount the amount to damage the player by if successful
@@ -281,4 +284,5 @@ public class Player extends GameEntity {
       }
     }
   }
+  //</changed>
 }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
+import com.threecubed.auber.entities.GameEntity;
 
 
 public class GameUi {
@@ -119,18 +120,41 @@ public class GameUi {
    * */
   private void drawHealthWarnings(World world, SpriteBatch screenBatch) {
     screenBatch.begin();
+    //<changed, changed so position scales with amount of warnings via slots>
+    int slots = 1;
     uiFont.setColor(Color.RED);
     if (world.player.confused) {
       uiFont.draw(screenBatch, "CONFUSED", HEALTH_WARNINGS_POSITION.x, HEALTH_WARNINGS_POSITION.y);
     }
     if (world.player.slowed) {
       uiFont.draw(screenBatch, "SLOWED", HEALTH_WARNINGS_POSITION.x,
-          HEALTH_WARNINGS_POSITION.y + 20f);
+          HEALTH_WARNINGS_POSITION.y + slots * 20f);
+      slots ++;
     }
     if (world.player.blinded) {
       uiFont.draw(screenBatch, "BLINDED", HEALTH_WARNINGS_POSITION.x,
-          HEALTH_WARNINGS_POSITION.y + 40f);
+          HEALTH_WARNINGS_POSITION.y + slots * 20f);
+          slots ++;
     }
+    //</changed>
+    //<changed, added>
+    uiFont.setColor(Color.GREEN);
+    if (world.player.invinc) {
+      uiFont.draw(screenBatch, "INVINCIBLE", HEALTH_WARNINGS_POSITION.x,
+          HEALTH_WARNINGS_POSITION.y + slots * 20f);
+          slots ++;
+    }
+    if (world.player.maxSpeed > 2f) {
+      uiFont.draw(screenBatch, "SPEED", HEALTH_WARNINGS_POSITION.x,
+          HEALTH_WARNINGS_POSITION.y + slots * 20f);
+          slots ++;
+    }
+    if (world.player.shield > 0) {
+      uiFont.draw(screenBatch, "SHIELD: " + Integer.toString(world.player.shield), HEALTH_WARNINGS_POSITION.x,
+          HEALTH_WARNINGS_POSITION.y + slots * 20f);
+          slots ++;
+    }
+    //</changed>
     uiFont.setColor(Color.WHITE);
     screenBatch.end();
   }

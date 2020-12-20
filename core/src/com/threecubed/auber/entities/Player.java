@@ -45,7 +45,6 @@ public class Player extends GameEntity {
   public boolean blinded = false;
   //<changed>
   public boolean invinc = false;
-  public boolean speeded = false;
   //</changed>
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
@@ -91,11 +90,6 @@ public class Player extends GameEntity {
       if (slowed) {
         velocity.scl(world.PROJECTILE_SLOW_MULT);
       }
-      //<changed>
-      if (speeded){
-        velocity.scl(world.POWERUP_SPEED_MULT);
-      }
-      //</changed>
       // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
       // of flipped velocity will cancel out the first
       if (confused) {

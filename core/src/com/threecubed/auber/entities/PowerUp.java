@@ -1,5 +1,7 @@
 package com.threecubed.auber.entities;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -18,15 +20,17 @@ public class PowerUp extends GameEntity {
     HEAL,
     SPEED,
     BOOM,
-    INVINC;
+    INVINC,
+    DUD;//for it to do nothing
   
     public static PowerUpEffect randomEffect() {
       // Int rounds down so no need to sub 1 from length
-        return values()[(int) (Math.random() * values().length)];
+        return values()[(int) (Math.random() * (values().length - 1))];
       }
     }
+  private int boomDelay = 0;
   /**
-   * Initialise a projectile.
+   * Initialise a PowerUp.
    *
    * @param x The x coordinate to initialise at
    * @param y The y coordinate to initialise at
@@ -67,15 +71,19 @@ public class PowerUp extends GameEntity {
     switch (powerUpEffect) {//TODO
       case SHIELD:
         shieldPlayer(world,world.POWERUP_SHIELD_AMOUNT);
+        world.queueEntityRemove(this);
         break;
       case HEAL:
         healPlayer(world,World.POWERUP_HEALTH_AMOUNT);
+        world.queueEntityRemove(this);
         break;
       case SPEED:
         speedPlayer(world);
+        world.queueEntityRemove(this);
         break;
       case INVINC:
         invincPlayer(world);
+        world.queueEntityRemove(this);
         break;
       case BOOM:
         boom(world);
@@ -83,7 +91,7 @@ public class PowerUp extends GameEntity {
       default:
         break;
     }
-    world.queueEntityRemove(this);
+    //world.queueEntityRemove(this); removed to handle boom
   }
   private void shieldPlayer(final World world,int amount){
     world.player.shield += amount;
@@ -101,12 +109,21 @@ public class PowerUp extends GameEntity {
     }, World.AUBER_BUFF_TIME);
   }
   private void boom(final World world) {
+    //sprite positioning stuff
+    position.x += sprite.getWidth()/2;
+    position.y += sprite.getHeight()/2;
+    sprite = world.atlas.createSprite("telesplosion");
+    sprite.setScale(World.POWERUP_BOOM_RANGE/sprite.getWidth());//scaleable telesplosion
+    position.x -= sprite.getWidth()/2;
+    position.y -= sprite.getHeight()/2;
+    boomDelay = 6;
+    powerUpEffect = PowerUpEffect.DUD;//so no benefit is gained
     for (GameEntity entity : world.getEntities()) {
       float entityDistance = NavigationMesh.getEuclidianDistance(
         new float[] {position.x, position.y},
         new float[] {entity.position.x, entity.position.y}
         );
-      if (entityDistance < World.POWERUP_BOOM_RANGE+ World.NPC_EAR_STRENGTH && entity instanceof Npc) {
+      if (entityDistance < World.POWERUP_BOOM_RANGE + World.NPC_EAR_STRENGTH && entity instanceof Npc) {
         Npc npc = (Npc) entity;
         if (entityDistance < World.POWERUP_BOOM_RANGE){
           npc.handleTeleporterShot(world);
@@ -131,5 +148,13 @@ public class PowerUp extends GameEntity {
   }
 
   @Override
-  public void update(World world) {}
+  public void update(World world) {
+
+    if (boomDelay >= 1){
+      boomDelay--;
+      if (boomDelay == 0){
+        world.queueEntityRemove(this);
+      }
+    }
+  }
 }

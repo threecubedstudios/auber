@@ -194,7 +194,7 @@ public class World {
   /** The speed multiplier from a speed powerup */
   public static final float POWERUP_SPEED_MULT = 2f;
   /** */
-  public static final float POWERUP_BOOM_RANGE = 80f;
+  public static final float POWERUP_BOOM_RANGE = 160f;
 
   public static enum SystemStates {
     WORKING,

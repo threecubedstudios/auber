@@ -1,11 +1,11 @@
-name: Build JAR and test
+name: Build JAR
 
 on:
   push:
+    branches: [ master ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -23,13 +23,3 @@ jobs:
       with:
         name: "Game Build"
         path: desktop/build/libs/desktop-1.0.jar
-    - name: Run tests
-      run: ./gradlew core:test core:jacocoTestReport coveralls
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-    - name: Publish test results
-      uses: EnricoMi/publish-unit-test-result-action@v1.6
-      if: always()
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        files: core/build/test-results/**/*.xml

@@ -26,7 +26,7 @@ import java.util.Random;
  * The world class stores information related to what is happening within the game world.
  * It should only be used within the GameScreen screen.
  *
- * @author Daniel O'Brien
+ * @author Daniel O'Brien, Adam Wiegand
  * @version 1.0
  * @since 1.0
  * */
@@ -78,6 +78,10 @@ public class World {
   public static final float AUBER_RAY_TIME = 0.25f;
   /** The time a debuff should last for (with the exception of blindness). */
   public static final float AUBER_DEBUFF_TIME = 5f;
+  //<changed>
+  /** The time a buff should last for (with the exception of shield and health). */
+  public static final float AUBER_BUFF_TIME = 10f;
+  //</changed>
   /** The rate at which auber should heal. */
   public static final float AUBER_HEAL_RATE = 0.005f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
@@ -182,6 +186,20 @@ public class World {
   /** The number of NPCs in the game. */
   public static final int NPC_COUNT = 24;
 
+  /** the speed multiplier from being slowed */
+  public static final float PROJECTILE_SLOW_MULT = 0.5f;
+
+  //<changed>
+  /** The health gain from a health powerup */
+  public static final float POWERUP_HEALTH_AMOUNT = 0.5f;
+  /** The shield gain from a shield powerup */
+  public static final int POWERUP_SHIELD_AMOUNT = 1;
+  /** The speed multiplier from a speed powerup */
+  public static final float POWERUP_SPEED_MULT = 2f;
+  /** */
+  public static final float POWERUP_BOOM_RANGE = 160f;
+  //</changed>
+  
   public static enum SystemStates {
     WORKING,
     ATTACKED,

@@ -12,6 +12,9 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+//<changed>
+import com.badlogic.gdx.math.Intersector;
+//</changed>
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
@@ -24,8 +27,8 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
  * The player entity that the user controls. Handles keyboard input, and interaction with other
  * entities and tiles in the game world.
  *
- * @author Daniel O'Brien
- * @version 1.0
+ * @author Daniel O'Brien, Adam Wiegand
+ * @version 2.0
  * @since 1.0
  * */
 public class Player extends GameEntity {
@@ -34,11 +37,15 @@ public class Player extends GameEntity {
 
   /** Health of Auber - varies between 1 and 0. */
   public float health = 1;
-
+  /** <changed> protects from that many hits */
+  public int shield = 0;
+  //</changed>
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
-
+  //<changed>
+  public boolean invinc = false;
+  //</changed>
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
   public Player(float x, float y, World world) {
@@ -53,13 +60,25 @@ public class Player extends GameEntity {
   @Override
   public void update(World world) {
     if (!world.demoMode) {
+      //<changed>check for power-ups
+      for (GameEntity entity : world.getEntities()) {
+        if (Intersector.overlaps(entity.sprite.getBoundingRectangle(),
+              sprite.getBoundingRectangle())
+             && entity != this) {
+          if (entity instanceof PowerUp) {
+            PowerUp pUp = (PowerUp) entity;
+            pUp.handleCollisionWithPlayer(world);
+          } 
+        }
+      }
+      //</changed>
+      //tp to medbay
       if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
         position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
         confused = false;
         slowed = false;
         teleporterRayCoordinates.setZero();
       }
-
       // Increment Auber's health if in medbay
       if (world.medbay.getRectangle().contains(position.x, position.y)) {
         health += World.AUBER_HEAL_RATE;
@@ -69,9 +88,8 @@ public class Player extends GameEntity {
       // hence the * 2
       float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
       if (slowed) {
-        velocity.scl(0.5f);
+        velocity.scl(world.PROJECTILE_SLOW_MULT);
       }
-
       // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
       // of flipped velocity will cancel out the first
       if (confused) {
@@ -249,4 +267,19 @@ public class Player extends GameEntity {
     }
     return output;
   }
+  /** <changed>
+   * attempt to damage the player
+   * 
+   * @param amount the amount to damage the player by if successful
+   * */
+  public void damage(float amount){
+    if (!invinc){
+      if (shield > 0){
+        shield -= 1;
+      }else{
+        health -= amount;
+      }
+    }
+  }
+  //</changed>
 }

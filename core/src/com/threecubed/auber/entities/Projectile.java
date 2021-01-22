@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.World;
 
 
@@ -84,7 +85,7 @@ public class Projectile extends GameEntity {
       default:
         break;
     }
-    world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE;
+    world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE * Difficulty.damageMultiplier;
   }
 
   private void confusePlayer(final World world) {

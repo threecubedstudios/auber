@@ -19,8 +19,10 @@ import com.threecubed.auber.World;
  * @since 1.0
  * */
 public class Infiltrator extends Npc {
+  public static boolean canSabotage = true;  
   public boolean exposed = false;
   Sprite unexposedSprite;
+  Sprite exposedSprite;
 
   /**
    * Initialise an infiltrator at given coordinates.
@@ -44,6 +46,7 @@ public class Infiltrator extends Npc {
     super(world);
     navigateToRandomSystem(world);
     unexposedSprite = new Sprite(sprite);
+    exposedSprite = world.atlas.createSprite("infiltrator");
   }
 
   @Override
@@ -64,7 +67,7 @@ public class Infiltrator extends Npc {
     if (oldState != States.FLEEING) {
       if (!playerNearby(world)
           && Utils.randomFloatInRange(world.randomNumberGenerator, 0, 1)
-          < World.SYSTEM_SABOTAGE_CHANCE) {
+          < World.SYSTEM_SABOTAGE_CHANCE && canSabotage) {
         attackNearbySystem(world);
       } else {
         idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 8f));
@@ -85,9 +88,9 @@ public class Infiltrator extends Npc {
     if (!exposed) {
       exposed = true;
       fireProjectileAtPlayer(world);
-      sprite = world.atlas.createSprite("infiltrator");
+      expose(world);   
       state = States.FLEEING;
-      navigateToFurthestPointFromPlayer(world);
+      navigateToFurthestPointFromPlayer(world);   
       npcTimer.scheduleTask(new Task() {
         @Override
         public void run() {
@@ -105,6 +108,15 @@ public class Infiltrator extends Npc {
           World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
       aiEnabled = false;    
     }
+  }
+
+  public void expose(World world) {
+    sprite = exposedSprite;
+    
+  }
+
+  public void unexpose(World world) {
+    sprite = unexposedSprite;
   }
 
   /**

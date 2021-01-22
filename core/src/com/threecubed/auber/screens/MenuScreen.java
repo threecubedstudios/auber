@@ -12,7 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
 import com.threecubed.auber.ui.Button;
-
+//<changed>
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+//</changed>
 
 /**
  * The menu screen is the first screen that shows in the game and is responsible for controlling
@@ -33,7 +36,12 @@ public class MenuScreen extends ScreenAdapter {
   Sprite instructions;
   Sprite title;
   SpriteBatch spriteBatch;
-
+  
+  //<changed>
+  public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("core/assets/audio/menuMusic.mp3"));
+  private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/menuSelect.ogg"));
+  //</changed>
+  
   /**
    * Instantiate the screen with the {@link AuberGame} object. Set the title and button up to be
    * rendered.
@@ -45,6 +53,12 @@ public class MenuScreen extends ScreenAdapter {
 
     spriteBatch = new SpriteBatch();
 
+    //<changed>
+    menuMusic.play();
+    menuMusic.setVolume(0.1f);
+    menuMusic.setLooping(true);
+    //</changed>
+
     background = game.atlas.createSprite("stars");
     instructions = game.atlas.createSprite("instructions");
     title = game.atlas.createSprite("auber_logo");
@@ -52,6 +66,10 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onPlayClick = new Runnable() {
       @Override
       public void run() {
+        //<changed>
+        menuMusic.stop();
+        menuSelect.play(0.2f);
+        //</changed>
         game.setScreen(new GameScreen(game, false));
       }
     };
@@ -63,6 +81,10 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
+        //<changed>
+        menuMusic.stop();
+        menuSelect.play(0.2f);
+        //</changed>
         game.setScreen(new GameScreen(game, true));
       }
     };

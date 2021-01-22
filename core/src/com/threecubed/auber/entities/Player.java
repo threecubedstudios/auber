@@ -118,7 +118,7 @@ public class Player extends GameEntity {
       
       //<changed>
       //See if the player has moved
-      if (Math.abs(velocity.x) >= 0.2 || Math.abs(velocity.y) >= 0.2) {
+      if (Math.abs(velocity.x) >= 0.7 || Math.abs(velocity.y) >= 0.7) {
         if (slowed) {
           //Sets the footstep sound effect to play at 0.64 sec intervals when the player is moving with slowed modifier
           velocity.scl(world.PROJECTILE_SLOW_MULT);

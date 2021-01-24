@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
+import com.threecubed.auber.files.FileHandler;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 
 /**
@@ -42,6 +43,7 @@ public class Player extends GameEntity {
 
 	public Player(float x, float y, World world) {
 		super(x, y, world.atlas.createSprite("player"));
+		FileHandler.addSaveable(this);
 	}
 
 	/**

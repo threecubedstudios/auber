@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
+import com.threecubed.auber.files.FileHandler;
 
 
 /**
@@ -44,6 +45,7 @@ public class Infiltrator extends Npc {
     super(world);
     navigateToRandomSystem(world);
     unexposedSprite = new Sprite(sprite);
+	FileHandler.addSaveable(this);
   }
 
   @Override

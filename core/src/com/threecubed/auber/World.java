@@ -19,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
+import com.threecubed.auber.files.FileHandler;
 import com.threecubed.auber.files.Saveable;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
@@ -46,7 +47,7 @@ public class World implements Saveable {
 	private List<GameEntity> entities = new ArrayList<>();
 	public List<GameEntity> newEntities = new ArrayList<>();
 	public List<GameEntity> oldEntities = new ArrayList<>();
-	
+
 	public OrthographicCamera camera = new OrthographicCamera();
 
 	public static final TiledMap map = new TmxMapLoader().load("map.tmx");
@@ -233,6 +234,8 @@ public class World implements Saveable {
 				}
 			}
 		}
+
+		FileHandler.addSaveable(this);
 	}
 
 	/**
@@ -360,9 +363,9 @@ public class World implements Saveable {
 			for (RectangleMapObject system : systems) {
 				if (system.getRectangle().getX() == x && system.getRectangle().getY() == y) {
 					systems.remove(system);
-					
+
 					destroyedSystems.add(new Vector2(x, y));
-					
+
 					break;
 				}
 			}
@@ -439,24 +442,26 @@ public class World implements Saveable {
 	@Override
 	public String getSaveData() {
 		String data = "";
-		
+
 		for (Vector2 pos : destroyedSystems) {
 			data += pos.x + "," + pos.y + ",";
 		}
-		data = data.substring(0, data.length() - 1);
-		
-		
+
+		if (data.length() > 0) {
+			data = data.substring(0, data.length() - 1);
+		}
+
 		return data;
 	}
 
 	@Override
 	public void loadSaveData(String data) {
 		String[] atomicData = data.split(",");
-		
+
 		for (int i = 0; i < atomicData.length; i += 2) {
 			float x = Float.parseFloat(atomicData[i]);
 			float y = Float.parseFloat(atomicData[i + 1]);
-			
+
 			updateSystemState(x, y, SystemStates.DESTROYED);
 		}
 	}

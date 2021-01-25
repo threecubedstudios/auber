@@ -53,6 +53,9 @@ public class Player extends GameEntity {
   
   //<changed>
   private Sound step = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/footstep.mp3"));
+  private Sound teleporter = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/teleporter.mp3"));
+  private Sound laserCharge = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/laserCharge.mp3"));
+  private Sound laserShot = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/laserShot.mp3"));
   private long audioStartTimer = 0;
   //</changed>
 
@@ -198,6 +201,7 @@ public class Player extends GameEntity {
                   linkedTeleporterId
                   );
               velocity.setZero();
+              teleporter.play(0.3f);
               position.x = linkedTeleporter.getRectangle().getX();
               position.y = linkedTeleporter.getRectangle().getY();
               break;

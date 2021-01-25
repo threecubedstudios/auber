@@ -52,10 +52,10 @@ public class Player extends GameEntity {
   private ShapeRenderer rayRenderer = new ShapeRenderer();
   
   //<changed>
-  private Sound step = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/footstep.mp3"));
-  private Sound teleporter = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/teleporter.mp3"));
-  private Sound laserCharge = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/laserCharge.mp3"));
-  private Sound laserShot = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/laserShot.mp3"));
+  private Sound step = Gdx.audio.newSound(Gdx.files.internal("audio/footstep.mp3"));
+  private Sound teleporter = Gdx.audio.newSound(Gdx.files.internal("audio/teleporter.mp3"));
+  private Sound laserCharge = Gdx.audio.newSound(Gdx.files.internal("audio/laserCharge.mp3"));
+  private Sound laserShot = Gdx.audio.newSound(Gdx.files.internal("audio/laserShot.mp3"));
   private long audioStartTimer = 0;
   //</changed>
 

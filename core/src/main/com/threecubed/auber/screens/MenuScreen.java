@@ -46,8 +46,8 @@ public class MenuScreen extends ScreenAdapter {
   SpriteBatch spriteBatch;
   
   //<changed>
-  public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("core/assets/audio/menuMusic.mp3"));
-  private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/menuSelect.ogg"));
+  public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/menuMusic.mp3"));
+  private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
   //</changed>
   
   /**

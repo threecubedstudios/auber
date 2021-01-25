@@ -33,7 +33,7 @@ public class GameScreen extends ScreenAdapter {
   Sprite stars;
   
   //<changed>
-  private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("core/assets/audio/ambience.mp3"));
+  private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("audio/ambience.mp3"));
   //</changed>
 
   SpriteBatch screenBatch = new SpriteBatch();

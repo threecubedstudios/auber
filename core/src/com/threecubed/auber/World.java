@@ -1,5 +1,4 @@
 package com.threecubed.auber;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -20,8 +19,11 @@ import com.threecubed.auber.screens.GameScreen;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-
+//<changed>
+import com.badlogic.gdx.Gdx;
+import org.json.*;
+import java.math.BigDecimal;
+//</changed>
 /**
  * The world class stores information related to what is happening within the game world.
  * It should only be used within the GameScreen screen.
@@ -37,7 +39,49 @@ public class World {
   public int infiltratorCount;
 
   public boolean demoMode = false;
-
+//<changed>
+  private static JSONObject gameData;
+  private static JSONObject difficultyData;
+  public static void load_data() {
+    gameData = new JSONObject(Gdx.files.internal("difficulty.json").readString());
+  }
+  public static void changeDifficulty(String difficulty){
+    if (gameData == null){load_data();}
+    difficultyData = (JSONObject) gameData.get(difficulty);
+    setValues();
+  }
+  private static float getFloat(JSONObject obj,String key){
+    return BigDecimal.valueOf(obj.getDouble(key)).floatValue();
+  }
+  private static void setValues(){
+    AUBER_CHARGE_RATE = getFloat(difficultyData,"AUBER_CHARGE_RATE");
+    AUBER_DEBUFF_TIME = getFloat(difficultyData,"AUBER_DEBUFF_TIME");
+    AUBER_BUFF_TIME = getFloat(difficultyData,"AUBER_BUFF_TIME");
+    AUBER_HEAL_RATE = getFloat(difficultyData,"AUBER_HEAL_RATE");
+    SYSTEM_BREAK_TIME = getFloat(difficultyData,"SYSTEM_BREAK_TIME");
+    SYSTEM_SABOTAGE_CHANCE = getFloat(difficultyData,"SYSTEM_SABOTAGE_CHANCE");
+    INFILTRATOR_SIGHT_RANGE = getFloat(difficultyData,"INFILTRATOR_SIGHT_RANGE");
+    INFILTRATOR_PROJECTILE_SPEED = getFloat(difficultyData,"INFILTRATOR_PROJECTILE_SPEED");
+    MAX_INFILTRATORS = difficultyData.getInt("MAX_INFILTRATORS");
+    INFILTRATOR_FIRING_INTERVAL = getFloat(difficultyData,"INFILTRATOR_FIRING_INTERVAL");
+    INFILTRATOR_PROJECTILE_DAMAGE = getFloat(difficultyData,"INFILTRATOR_PROJECTILE_DAMAGE");
+    MAX_INFILTRATORS_IN_GAME = difficultyData.getInt("MAX_INFILTRATORS_IN_GAME");
+    JSONArray temp = (JSONArray) difficultyData.get("NPC_SPEED_VARIANCE");
+    for (int i=0; i < temp.length(); i++) {
+      NPC_SPEED_VARIANCE[i] = (float) temp.getDouble(i);
+    }
+    NPC_FLEE_TIME = getFloat(difficultyData,"NPC_FLEE_TIME");
+    NPC_FLEE_MULTIPLIER = getFloat(difficultyData,"NPC_FLEE_MULTIPLIER");
+    NPC_MIN_FLEE_DISTANCE = getFloat(difficultyData,"NPC_MIN_FLEE_DISTANCE");
+    NPC_EAR_STRENGTH = getFloat(difficultyData,"NPC_EAR_STRENGTH");
+    NPC_COUNT = difficultyData.getInt("NPC_COUNT");
+    PROJECTILE_SLOW_MULT = getFloat(difficultyData,"PROJECTILE_SLOW_MULT");
+    POWERUP_HEALTH_AMOUNT = getFloat(difficultyData,"POWERUP_HEALTH_AMOUNT");
+    POWERUP_SHIELD_AMOUNT = difficultyData.getInt("POWERUP_SHIELD_AMOUNT");
+    POWERUP_SPEED_MULT = getFloat(difficultyData,"POWERUP_SPEED_MULT");
+    POWERUP_BOOM_RANGE = getFloat(difficultyData,"POWERUP_BOOM_RANGE");
+  }
+//</changed>
   /** Number of infiltrators added, including defeated ones. */
   public int infiltratorsAddedCount = 0;
 
@@ -73,17 +117,19 @@ public class World {
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
   /** The rate at which the teleporter ray charges. */
-  public static final float AUBER_CHARGE_RATE = 0.05f;
+  //<changed removed "final" from difficulty effected values>
+  public static float AUBER_CHARGE_RATE = 0.05f;
   /** The time the ray should visibly render for. */
   public static final float AUBER_RAY_TIME = 0.25f;
   /** The time a debuff should last for (with the exception of blindness). */
-  public static final float AUBER_DEBUFF_TIME = 5f;
-  //<changed>
+  public static float AUBER_DEBUFF_TIME = 5f;
+  //<changed added>
   /** The time a buff should last for (with the exception of shield and health). */
-  public static final float AUBER_BUFF_TIME = 10f;
+  public static float AUBER_BUFF_TIME = 10f;
   //</changed>
   /** The rate at which auber should heal. */
-  public static final float AUBER_HEAL_RATE = 0.005f;
+  public static float AUBER_HEAL_RATE = 0.005f;
+  //</changed>
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
   public static final Color rayColorB = new Color(0.212f, 1f, 1f, 0.7f);
 
@@ -152,54 +198,54 @@ public class World {
       throw new IllegalArgumentException("Tile of given ID not found.");
     }
   }
-
+//<changed removed "final" from difficulty effected values>
   /** The amount of time it takes for an infiltrator to sabotage a system. */
-  public static final float SYSTEM_BREAK_TIME = 5f;
+  public static float SYSTEM_BREAK_TIME = 5f;
   /** The chance an infiltrator will sabotage after pathfinding to a system. */
-  public static final float SYSTEM_SABOTAGE_CHANCE = 0.6f;
+  public static float SYSTEM_SABOTAGE_CHANCE = 0.6f;
   /** The distance the infiltrator can see. Default: 5 tiles */
-  public static final float INFILTRATOR_SIGHT_RANGE = 80f;
+  public static float INFILTRATOR_SIGHT_RANGE = 80f;
   /** The speed at which infiltrator projectiles should travel. */
-  public static final float INFILTRATOR_PROJECTILE_SPEED = 4f;
+  public static float INFILTRATOR_PROJECTILE_SPEED = 4f;
   /** Maximum infiltrators in a full game of Auber (including defated ones). */
-  public static final int MAX_INFILTRATORS = 8;
+  public static int MAX_INFILTRATORS = 8;
   /** The interval at which the infiltrator should attack the player when exposed. */
-  public static final float INFILTRATOR_FIRING_INTERVAL = 5f;
+  public static float INFILTRATOR_FIRING_INTERVAL = 5f;
   /** The damage a projectile should do. */
-  public static final float INFILTRATOR_PROJECTILE_DAMAGE = 0.2f;
+  public static float INFILTRATOR_PROJECTILE_DAMAGE = 0.2f;
   /**
    * Max infiltrators alive at a given point, Should always be greater or equal to
    * {@link World#MAX_INFILTRATORS}.
    * */
-  public static final int MAX_INFILTRATORS_IN_GAME = 3;
+  public static int MAX_INFILTRATORS_IN_GAME = 3;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
-  public static final float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
+  public static float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
   /** The maximum amount of time (in seconds) an NPC should flee for. */
-  public static final float NPC_FLEE_TIME = 10f;
+  public static float NPC_FLEE_TIME = 10f;
   /** The speed multiplier an NPC should receive when fleeing. */
-  public static final float NPC_FLEE_MULTIPLIER = 1.2f;
+  public static float NPC_FLEE_MULTIPLIER = 1.2f;
   /** The shortest distance an NPC should move from its current position when fleeing. */
-  public static final float NPC_MIN_FLEE_DISTANCE = 80f;
+  public static float NPC_MIN_FLEE_DISTANCE = 80f;
   /** The distance an NPC can here the teleporter ray shoot from. */
-  public static final float NPC_EAR_STRENGTH = 80f;
+  public static float NPC_EAR_STRENGTH = 80f;
   /** The number of NPCs in the game. */
-  public static final int NPC_COUNT = 24;
+  public static int NPC_COUNT = 24;
 
   /** the speed multiplier from being slowed */
-  public static final float PROJECTILE_SLOW_MULT = 0.5f;
+  public static float PROJECTILE_SLOW_MULT = 0.5f;
 
   //<changed>
   /** The health gain from a health powerup */
-  public static final float POWERUP_HEALTH_AMOUNT = 0.5f;
+  public static float POWERUP_HEALTH_AMOUNT = 0.5f;
   /** The shield gain from a shield powerup */
-  public static final int POWERUP_SHIELD_AMOUNT = 1;
+  public static int POWERUP_SHIELD_AMOUNT = 1;
   /** The speed multiplier from a speed powerup */
-  public static final float POWERUP_SPEED_MULT = 2f;
+  public static float POWERUP_SPEED_MULT = 2f;
   /** */
-  public static final float POWERUP_BOOM_RANGE = 160f;
+  public static float POWERUP_BOOM_RANGE = 160f;
   //</changed>
-  
+  //</changed>
   public static enum SystemStates {
     WORKING,
     ATTACKED,

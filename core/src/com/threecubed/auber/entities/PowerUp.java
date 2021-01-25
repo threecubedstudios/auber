@@ -98,11 +98,13 @@ public class PowerUp extends GameEntity {
     world.player.health = Math.min(1f, world.player.health + amount);
   }
   private void speedPlayer(final World world) {
+    world.player.fast = true;
     world.player.maxSpeed *= world.POWERUP_SPEED_MULT;
     world.player.playerTimer.scheduleTask(new Task() {
       @Override
       public void run() {
         world.player.maxSpeed /= world.POWERUP_SPEED_MULT;
+        world.player.fast = false;
       }
     }, World.AUBER_BUFF_TIME);
   }

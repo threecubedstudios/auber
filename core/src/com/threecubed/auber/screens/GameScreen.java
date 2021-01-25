@@ -15,6 +15,9 @@ import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.ui.GameUi;
+//<changed>
+import com.badlogic.gdx.audio.Music;
+//</changed>
 
 
 /**
@@ -28,6 +31,10 @@ public class GameScreen extends ScreenAdapter {
   public World world;
   public AuberGame game;
   Sprite stars;
+  
+  //<changed>
+  private Music ambience = Gdx.audio.newMusic(Gdx.files.internal("core/assets/audio/ambience.mp3"));
+  //</changed>
 
   SpriteBatch screenBatch = new SpriteBatch();
   GameUi ui;
@@ -46,6 +53,12 @@ public class GameScreen extends ScreenAdapter {
 
     world = new World(game, demoMode);
 
+    //<changed>
+    ambience.play();
+    ambience.setLooping(true);
+    ambience.setVolume(0.7f);
+    //</changed>
+
     for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
       world.queueEntityAdd(new Infiltrator(world));
       world.infiltratorsAddedCount++;
@@ -60,8 +73,12 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+      //<changed>
+      ambience.stop();
+      //</changed>
       game.setScreen(new MenuScreen(game));
     }
+
     // Add any queued entities
     world.updateEntities();
 
@@ -76,7 +93,6 @@ public class GameScreen extends ScreenAdapter {
     OrthogonalTiledMapRenderer renderer = world.renderer;
     renderer.setView(world.camera);
     renderer.render(world.backgroundLayersIds);
-
 
     Batch batch = renderer.getBatch();
     // Iterate over all entities. Perform movement logic and render them.
@@ -117,5 +133,6 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void dispose() {
     world.renderer.dispose();
+    ambience.dispose();
   }
 }

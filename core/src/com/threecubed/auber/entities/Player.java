@@ -14,6 +14,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 //<changed>
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.utils.TimeUtils;
 //</changed>
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
@@ -44,9 +46,18 @@ public class Player extends GameEntity {
   public boolean slowed = false;
   public boolean blinded = false;
   //<changed>
+  public boolean fast = false;
   public boolean invinc = false;
   //</changed>
   private ShapeRenderer rayRenderer = new ShapeRenderer();
+  
+  //<changed>
+  private Sound step = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/footstep.mp3"));
+  private Sound teleporter = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/teleporter.mp3"));
+  private Sound laserCharge = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/laserCharge.mp3"));
+  private Sound laserShot = Gdx.audio.newSound(Gdx.files.internal("core/assets/audio/laserShot.mp3"));
+  private long audioStartTimer = 0;
+  //</changed>
 
   public Player(float x, float y, World world) {
     super(x, y, world.atlas.createSprite("player"));
@@ -72,6 +83,7 @@ public class Player extends GameEntity {
         }
       }
       //</changed>
+
       //tp to medbay
       if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
         position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
@@ -87,9 +99,7 @@ public class Player extends GameEntity {
       // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged,
       // hence the * 2
       float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
-      if (slowed) {
-        velocity.scl(world.PROJECTILE_SLOW_MULT);
-      }
+
       // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
       // of flipped velocity will cancel out the first
       if (confused) {
@@ -108,7 +118,32 @@ public class Player extends GameEntity {
       if (Gdx.input.isKeyPressed(Input.Keys.D)) {
         velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
       }
-
+      
+      //<changed>
+      //See if the player has moved
+      if (Math.abs(velocity.x) >= 0.7 || Math.abs(velocity.y) >= 0.7) {
+        if (slowed) {
+          //Sets the footstep sound effect to play at 0.64 sec intervals when the player is moving with slowed modifier
+          velocity.scl(world.PROJECTILE_SLOW_MULT);
+          if (TimeUtils.timeSinceNanos(audioStartTimer) > 640000000) {
+            step.play(0.3f);
+            audioStartTimer = TimeUtils.nanoTime();
+          }
+        } else if (fast) {
+          //Sets the footstep sound effect to play at 0.20 sec intervals when the player is moving with speed modifier
+          if (TimeUtils.timeSinceNanos(audioStartTimer) > 200000000) {
+            step.play(0.3f);
+            audioStartTimer = TimeUtils.nanoTime();
+          }
+        } else {
+          //Sets the footstep sound effect to play at 0.32 sec intervals when the player is moving with no modifiers
+          if (TimeUtils.timeSinceNanos(audioStartTimer) > 320000000) {
+            step.play(0.3f);
+            audioStartTimer = TimeUtils.nanoTime();
+          }
+        }
+      }
+      //</changed>
 
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && teleporterRayCoordinates.isZero()) {
         world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge
@@ -166,6 +201,7 @@ public class Player extends GameEntity {
                   linkedTeleporterId
                   );
               velocity.setZero();
+              teleporter.play(0.3f);
               position.x = linkedTeleporter.getRectangle().getX();
               position.y = linkedTeleporter.getRectangle().getY();
               break;

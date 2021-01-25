@@ -27,6 +27,14 @@ public class MenuScreen extends ScreenAdapter {
   AuberGame game;
 
   Button playButton;
+  //<changed>
+  Button difficultyButton;
+  String difficulty = "normal";
+  Sprite diffEasy;
+  Sprite diffNormal;
+  Sprite diffHard;
+  int delay = 0;
+  //</changed>
   Button demoButton;
   OrthogonalTiledMapRenderer renderer;
   Sprite background;
@@ -48,6 +56,9 @@ public class MenuScreen extends ScreenAdapter {
     background = game.atlas.createSprite("stars");
     instructions = game.atlas.createSprite("instructions");
     title = game.atlas.createSprite("auber_logo");
+    diffEasy = game.atlas.createSprite("diffEasyButton");
+    diffNormal = game.atlas.createSprite("diffNormalButton");
+    diffHard= game.atlas.createSprite("diffHardButton");
 
     Runnable onPlayClick = new Runnable() {
       @Override
@@ -57,9 +68,38 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     playButton = new Button(
-        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 + 50),
         1f, game.atlas.createSprite("playButton"), game, onPlayClick);
+    
+    Runnable onDifficultyClick = new Runnable() {
+      @Override
+      public void run() {
+        if (delay > 0) {return;}
+        switch (difficulty) {
+          case "normal":
+            difficulty = "hard";
+            difficultyButton.setSprite(diffHard);
+            break;
+          case "hard":
+            difficulty = "easy";
+            difficultyButton.setSprite(diffEasy);
+            break;
+          case "easy":
+            difficulty = "normal";
+            difficultyButton.setSprite(diffNormal);
+            break;
+          default:
+            difficulty = "normal";
+        }
+        delay = 20;
+        world.changeDifficulty(difficulty);
+      }
+    };
 
+    difficultyButton = new Button(
+      new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 65f),
+      1f, game.atlas.createSprite("diffNormalButton"), game, onDifficultyClick);
+    
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
@@ -68,7 +108,7 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     demoButton = new Button(
-        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 180f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
   }
 
@@ -81,7 +121,8 @@ public class MenuScreen extends ScreenAdapter {
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
       game.setScreen(new GameScreen(game, true));
     }
-
+    //<changed>
+    if (delay > 0){delay -= 1;}
     // Set the background color
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -99,6 +140,7 @@ public class MenuScreen extends ScreenAdapter {
     title.draw(spriteBatch);
 
     playButton.render(spriteBatch);
+    difficultyButton.render(spriteBatch);
     demoButton.render(spriteBatch);
 
     spriteBatch.end();

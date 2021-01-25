@@ -1,7 +1,5 @@
 package com.threecubed.auber.entities;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -38,7 +36,7 @@ public class PowerUp extends GameEntity {
    * @param world The game world
    * */
   public PowerUp(float x, float y, PowerUpEffect effect, World world) { 
-    super(x, y, world.atlas.createSprite(spriteName(effect)));//TODO make sprites
+    super(x, y, world.atlas.createSprite(spriteName(effect)));
     powerUpEffect = effect;
   }
   /**
@@ -47,7 +45,7 @@ public class PowerUp extends GameEntity {
    * @param effect The effect the powerUp should have on the player
    * */
   private static String spriteName(PowerUpEffect effect){
-    switch (effect) {//TODO put sprites on sprite atlas/map
+    switch (effect) {
       case SHIELD:
         return "powerUpShield";
       case HEAL:
@@ -68,7 +66,7 @@ public class PowerUp extends GameEntity {
    * @param world The world in which the player exists
    * */
   public void handleCollisionWithPlayer(World world) {
-    switch (powerUpEffect) {//TODO
+    switch (powerUpEffect) {
       case SHIELD:
         shieldPlayer(world,world.POWERUP_SHIELD_AMOUNT);
         world.queueEntityRemove(this);

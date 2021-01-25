@@ -19,6 +19,10 @@ import com.threecubed.auber.AuberGame;
 public class Button {
   Pixmap pixmap;
   Sprite sprite;
+  //<changed>
+  float scale;
+  Vector2 pos;
+  //</changed>
   AuberGame game;
   Vector2 position;
   Runnable onClick;
@@ -34,13 +38,12 @@ public class Button {
    * @param onClick The code to execute when the button is pressed wrapped in a {@link Runnable}
    * */
   public Button(Vector2 position, float scale, Sprite sprite, AuberGame game, Runnable onClick) {
-    this.sprite = sprite;
     this.onClick = onClick;
-
-    sprite.setScale(scale);
-    sprite.setPosition(position.x - (sprite.getWidth() / 2), position.y - (sprite.getHeight() / 2));
-
-    this.position = new Vector2(sprite.getX(), sprite.getY());
+    //<changed>
+    this.scale = scale;
+    this.pos = position;
+    setSprite(sprite);
+    //<changed>
     this.game = game;
   }
 
@@ -62,4 +65,12 @@ public class Button {
       sprite.setScale(1.0f);
     }
   }
+  //<changed>
+  public void setSprite(Sprite sprite){
+    sprite.setScale(scale);
+    sprite.setPosition(pos.x - (sprite.getWidth() / 2), pos.y - (sprite.getHeight() / 2));
+    this.position = new Vector2(sprite.getX(), sprite.getY());
+    this.sprite = sprite;
+  }
+  //</changed>
 }

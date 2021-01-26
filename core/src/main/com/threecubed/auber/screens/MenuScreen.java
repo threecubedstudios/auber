@@ -136,10 +136,11 @@ public class MenuScreen extends ScreenAdapter {
 
   @Override
   public void render(float deltaTime) {
-    if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
-      DisplayMode currentDisplayMode = Gdx.graphics.getDisplayMode();
-      Gdx.graphics.setFullscreenMode(currentDisplayMode);
+    //<changed>
+    if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+      Gdx.app.exit();
     }
+    //</changed>
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
       game.setScreen(new GameScreen(game, true));
     }

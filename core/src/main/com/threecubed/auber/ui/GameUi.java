@@ -18,15 +18,15 @@ import com.threecubed.auber.entities.GameEntity;
 public class GameUi {
   private static final int CHARGE_METER_WIDTH = 20;
   private static final int CHARGE_METER_MAX_HEIGHT = 100;
-  private static final Vector2 CHARGE_METER_POSITION = new Vector2(50f, 50f);
+  private static final Vector2 CHARGE_METER_POSITION = new Vector2(50f, 30f);
 
-  private static final Vector2 HEALTHBAR_POSITION = new Vector2(250f, 50f);
+  private static final Vector2 HEALTHBAR_POSITION = new Vector2(250f, 30f);
   private static final int HEALTHBAR_WIDTH = 20;
   private static final int HEALTHBAR_MAX_HEIGHT = 100;
 
-  private static final Vector2 HEALTH_WARNINGS_POSITION = new Vector2(350f, 70f);
+  private static final Vector2 HEALTH_WARNINGS_POSITION = new Vector2(350f, 30f);
 
-  private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
+  private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 30f);
 
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
 

@@ -28,6 +28,7 @@ public class MenuScreen extends ScreenAdapter {
 
   Button playButton;
   Button demoButton;
+  Button continueButton;
   OrthogonalTiledMapRenderer renderer;
   Sprite background;
   Sprite instructions;

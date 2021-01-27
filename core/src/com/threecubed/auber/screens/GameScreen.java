@@ -2,13 +2,16 @@ package com.threecubed.auber.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.threecubed.auber.AuberGame;
+import com.threecubed.auber.DataManager;
 import com.threecubed.auber.World;
 import com.threecubed.auber.entities.Civilian;
 import com.threecubed.auber.entities.GameEntity;
@@ -16,17 +19,23 @@ import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.ui.GameUi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 /**
  * The main screen of the game, responsible for rendering entities and executing their functions.
  *
- * @author Daniel O'Brien
- * @version 1.0
+ * @author Daniel O'Brien haopeng
+ * @version 1.1
  * @since 1.0
  * */
 public class GameScreen extends ScreenAdapter {
   public World world;
   public AuberGame game;
+  public DataManager dataManager;
+  public static HashMap<Infiltrator, Integer> enemyTrack;
+
   Sprite stars;
 
   SpriteBatch screenBatch = new SpriteBatch();
@@ -45,12 +54,18 @@ public class GameScreen extends ScreenAdapter {
     ui = new GameUi(game);
 
     world = new World(game, demoMode);
+    dataManager = new DataManager("aubergame");
+    enemyTrack = new HashMap<>();
 
     for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
-      world.queueEntityAdd(new Infiltrator(world));
+      Infiltrator enemy = dataManager.loadInfiltratorData(world,i);
+      //world.queueEntityAdd(new Infiltrator(world));
+      world.queueEntityAdd(enemy);
+      enemyTrack.put(enemy,i);
       world.infiltratorsAddedCount++;
     }
     for (int i = 0; i < World.NPC_COUNT; i++) {
+      // TO DO: load civilian data
       world.queueEntityAdd(new Civilian(world));
     }
 

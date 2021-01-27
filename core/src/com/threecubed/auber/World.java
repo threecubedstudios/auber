@@ -26,12 +26,14 @@ import java.util.Random;
  * The world class stores information related to what is happening within the game world.
  * It should only be used within the GameScreen screen.
  *
- * @author Daniel O'Brien
- * @version 1.0
+ * @author Daniel O'Brien haopeng
+ * @version 1.1
  * @since 1.0
  * */
 public class World {
   private AuberGame game;
+
+  public DataManager dataManager;
 
   public Player player;
   public int infiltratorCount;
@@ -195,13 +197,16 @@ public class World {
    * */
   public World(AuberGame game) {
     this.game = game;
+    this.dataManager = new DataManager("aubergame");
     atlas = game.atlas;
 
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
     camera.update();
 
-    Player player = new Player(64f, 64f, this);
+    //Player player = new Player(64f, 64f, this);
+    Player player = dataManager.loadPlayerData(this);
+
     queueEntityAdd(player);
     this.player = player;
 
@@ -252,8 +257,8 @@ public class World {
     if (demoMode) {
       camera.setToOrtho(false, 1920, 1080);
       TiledMapTileLayer layer = ((TiledMapTileLayer) map.getLayers().get(2));
-      player.position.x = (layer.getWidth() * layer.getTileWidth()) / 2;
-      player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;
+      player.position.x = (layer.getWidth() * layer.getTileWidth()) / 2f;
+      player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2f;
       player.sprite.setColor(1f, 1f, 1f, 0f);
     }
   }

@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.files.FileHandler;
+import com.threecubed.auber.files.SaveCategory;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 
 /**
@@ -268,12 +269,12 @@ public class Player extends GameEntity {
 		this.confused = confused;
 		this.slowed = slowed;
 		this.blinded = blinded;
-
+		
 	}
 
 	@Override
-	public String getCategory() {
-		return "player";
+	public SaveCategory getCategory() {
+		return SaveCategory.PLAYER;
 	}
 
 }

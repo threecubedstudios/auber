@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.files.FileHandler;
+import com.threecubed.auber.files.SaveCategory;
 import com.threecubed.auber.files.Saveable;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
@@ -435,8 +436,8 @@ public class World implements Saveable {
 	}
 
 	@Override
-	public String getCategory() {
-		return "systems";
+	public SaveCategory getCategory() {
+		return SaveCategory.WORLD;
 	}
 
 	@Override
@@ -456,8 +457,12 @@ public class World implements Saveable {
 
 	@Override
 	public void loadSaveData(String data) {
+		if (data.equalsIgnoreCase("")) {
+			return;
+		}
+		
 		String[] atomicData = data.split(",");
-
+		
 		for (int i = 0; i < atomicData.length; i += 2) {
 			float x = Float.parseFloat(atomicData[i]);
 			float y = Float.parseFloat(atomicData[i + 1]);

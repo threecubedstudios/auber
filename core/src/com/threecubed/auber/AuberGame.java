@@ -1,8 +1,11 @@
 package com.threecubed.auber;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.threecubed.auber.files.FileHandler;
 import com.threecubed.auber.screens.MenuScreen;
 
 public class AuberGame extends Game {
@@ -18,5 +21,10 @@ public class AuberGame extends Game {
 	@Override
 	public void dispose() {
 		atlas.dispose();
+		try {
+			FileHandler.save("s" + System.currentTimeMillis());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

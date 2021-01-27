@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.files.FileHandler;
+import com.threecubed.auber.files.SaveCategory;
 
 
 /**
@@ -185,8 +186,8 @@ public class Infiltrator extends Npc {
 	}
 
 	@Override
-	public String getCategory() {
-		return "infiltrator";
+	public SaveCategory getCategory() {
+		return SaveCategory.INFILTRATOR;
 	}
   
 }

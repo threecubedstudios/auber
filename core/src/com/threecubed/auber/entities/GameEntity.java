@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
+import com.threecubed.auber.files.SaveCategory;
 import com.threecubed.auber.files.Saveable;
 
 /**
@@ -191,8 +192,8 @@ public abstract class GameEntity implements Saveable {
 	}
 
 	@Override
-	public String getCategory() {
-		return "entity";
+	public SaveCategory getCategory() {
+		return SaveCategory.ENTITY;
 	}
 
 	@Override

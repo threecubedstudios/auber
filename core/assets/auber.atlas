@@ -74,6 +74,13 @@ playButton
   orig: 300, 100
   offset: 0, 0
   index: -1
+loadButton
+  rotate: false
+  xy: 350, 0
+  size: 300, 100
+  orig: 300, 100
+  offset: 0, 0
+  index: -1
 player
   rotate: false
   xy: 1942, 2031

@@ -2,7 +2,7 @@ package com.threecubed.auber.files;
 
 public interface Saveable {
 
-	public String getCategory();
+	public SaveCategory getCategory();
 	
 	public String getSaveData();
 	

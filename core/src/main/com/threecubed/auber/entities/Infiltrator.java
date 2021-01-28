@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 
@@ -139,7 +140,7 @@ public class Infiltrator extends Npc {
             navigateToRandomSystem(world);
           }
         }
-      }, World.SYSTEM_BREAK_TIME);
+      }, World.SYSTEM_BREAK_TIME / Difficulty.sabotageMultiplier);
     }
   }
 

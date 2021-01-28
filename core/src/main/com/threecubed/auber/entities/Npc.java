@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
@@ -28,7 +29,7 @@ public abstract class Npc extends GameEntity {
   private Vector2 targetDirection = new Vector2();
   private NavigationMesh navigationMesh;
 
-  protected float maxSpeed = 1.3f;
+  protected float maxSpeed;
 
   private static String[] textureNames = {"alienA", "alienB", "alienC"};
 
@@ -55,6 +56,7 @@ public abstract class Npc extends GameEntity {
    * */
   public Npc(float x, float y, Sprite sprite, NavigationMesh navigationMesh) {
     super(x, y, sprite);
+    maxSpeed = 1.3f * Difficulty.speedMultiplier;
     Random rng = new Random(); // TODO: Switch to use the world RNG
     maxSpeed *= Utils.randomFloatInRange(rng, World.NPC_SPEED_VARIANCE[0],
         World.NPC_SPEED_VARIANCE[1]);

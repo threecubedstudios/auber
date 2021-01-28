@@ -85,7 +85,9 @@ public class Projectile extends GameEntity {
       default:
         break;
     }
-    world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE * Difficulty.damageMultiplier;
+    if (!world.player.immune) {
+      world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE * Difficulty.damageMultiplier;
+    }
   }
 
   private void confusePlayer(final World world) {

@@ -23,7 +23,7 @@ public final class Utils {
    * @return The X and Y position of the mouse in the game world in the form of a Vector2
    * */
   public static Vector2 getMouseCoordinates(Camera camera) {
-    Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+    Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
     camera.unproject(mousePosition);
     return new Vector2(mousePosition.x, mousePosition.y);
   }

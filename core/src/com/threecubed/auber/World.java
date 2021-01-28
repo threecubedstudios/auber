@@ -428,7 +428,7 @@ public class World {
       if (!demoMode) {
         game.setScreen(new GameOverScreen(game, false));
       } else {
-        game.setScreen(new GameScreen(game, true));
+        game.setScreen(new GameScreen(game, true, Difficulty.difficultyMode));
       }
     } else if (infiltratorCount <= 0) {
       game.setScreen(new GameOverScreen(game, true));

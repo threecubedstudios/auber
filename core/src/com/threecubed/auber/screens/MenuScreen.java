@@ -1,5 +1,6 @@
 package com.threecubed.auber.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input;
@@ -34,6 +35,7 @@ public class MenuScreen extends ScreenAdapter {
   Sprite instructions;
   Sprite title;
   SpriteBatch spriteBatch;
+  public static boolean continueGame = false;
 
   /**
    * Instantiate the screen with the {@link AuberGame} object. Set the title and button up to be
@@ -53,6 +55,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onPlayClick = new Runnable() {
       @Override
       public void run() {
+        continueGame = false;
         game.setScreen(new GameScreen(game, false));
       }
     };
@@ -69,8 +72,21 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     demoButton = new Button(
-        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
+
+    Runnable onContinueClick = new Runnable() {
+      @Override
+      public void run() {
+        continueGame = true;
+        game.setScreen(new GameScreen(game, false));
+      }
+    };
+
+    continueButton = new Button(
+            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() /2 - 2*150f),
+            1f,game.atlas.createSprite("playButton"), game, onContinueClick);
+
   }
 
   @Override
@@ -101,6 +117,7 @@ public class MenuScreen extends ScreenAdapter {
 
     playButton.render(spriteBatch);
     demoButton.render(spriteBatch);
+    continueButton.render(spriteBatch);
 
     spriteBatch.end();
   }

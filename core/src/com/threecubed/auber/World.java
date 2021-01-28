@@ -12,12 +12,16 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.Json;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import com.threecubed.auber.screens.GameScreen;
+import com.threecubed.auber.screens.MenuScreen;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -26,7 +30,7 @@ import java.util.Random;
  * The world class stores information related to what is happening within the game world.
  * It should only be used within the GameScreen screen.
  *
- * @author Daniel O'Brien haopeng
+ * @author Daniel O'Brien
  * @version 1.1
  * @since 1.0
  * */
@@ -55,9 +59,10 @@ public class World {
 
   public OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map);
 
-  public ArrayList<RectangleMapObject> systems = new ArrayList<>();
+  public static ArrayList<RectangleMapObject> systems = new ArrayList<>();
   public RectangleMapObject medbay;
   public ArrayList<float[]> spawnLocations = new ArrayList<>();
+  public  static HashMap<String,Enum<SystemStates>> systemStatesMap;
 
   public final Random randomNumberGenerator = new Random();
 
@@ -198,17 +203,22 @@ public class World {
   public World(AuberGame game) {
     this.game = game;
     this.dataManager = new DataManager("aubergame");
+    systemStatesMap = new HashMap<>();
     atlas = game.atlas;
 
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
     camera.update();
 
-    //Player player = new Player(64f, 64f, this);
-    Player player = dataManager.loadPlayerData(this);
-
-    queueEntityAdd(player);
-    this.player = player;
+    if (MenuScreen.continueGame){
+      Player player = dataManager.loadPlayerData(this);
+      queueEntityAdd(player);
+      this.player = player;
+    } else {
+      Player player = new Player(64f, 64f, this);
+      queueEntityAdd(player);
+      this.player = player;
+    }
 
     MapObjects objects = map.getLayers().get("object_layer").getObjects();
     for (MapObject object : objects) {
@@ -216,7 +226,21 @@ public class World {
         RectangleMapObject rectangularObject = (RectangleMapObject) object;
         switch (rectangularObject.getProperties().get("type", String.class)) {
           case "system":
-            systems.add(rectangularObject);
+            String x = String.valueOf(rectangularObject.getRectangle().x);
+            String y = String.valueOf(rectangularObject.getRectangle().y);
+            if (MenuScreen.continueGame) {
+              SystemStates loadingState = dataManager.loadingSystemData(rectangularObject.getRectangle().x,
+                      rectangularObject.getRectangle().y);
+              if (loadingState != SystemStates.DESTROYED){
+                systems.add(rectangularObject);
+                systemStatesMap.put(x + "/" + y, loadingState);
+                updateSystemState(Float.parseFloat(x),Float.parseFloat(y),loadingState);
+              }
+
+            } else {
+              systems.add(rectangularObject);
+              systemStatesMap.put(x + "/" + y, SystemStates.WORKING);
+            }
             break;
           case "medbay":
             medbay = rectangularObject;
@@ -371,6 +395,9 @@ public class World {
       for (RectangleMapObject system : systems) {
         if (system.getRectangle().getX() == x
             && system.getRectangle().getY() == y) {
+          String positionx = String.valueOf(system.getRectangle().getX());
+          String positiony = String.valueOf(system.getRectangle().getY());
+          systemStatesMap.put(positionx + "/" + positiony,SystemStates.DESTROYED);
           systems.remove(system);
           break;
         }
@@ -429,7 +456,7 @@ public class World {
    * Check to see if any of the end conditions have been met, if so update the screen.
    * */
   public void checkForEndState() {
-    if (systems.isEmpty()) {
+    if (systems.isEmpty() && !systemStatesMap.isEmpty()) {
       if (!demoMode) {
         game.setScreen(new GameOverScreen(game, false));
       } else {

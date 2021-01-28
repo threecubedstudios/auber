@@ -32,7 +32,7 @@ public abstract class Npc extends GameEntity {
 
   private static String[] textureNames = {"alienA", "alienB", "alienC"};
 
-  protected States state = States.IDLE;
+  public States state = States.IDLE;
 
   public enum States {
     IDLE,
@@ -93,6 +93,9 @@ public abstract class Npc extends GameEntity {
    * */
   protected void stepTowardsTarget(World world) {
     if (aiEnabled) {
+      if (currentPath.size() == 0){
+        return;
+      }
       Vector2 targetCoordinates = currentPath.get(0);
       Vector2 currentDirection = getCurrentDirection();
 

@@ -26,7 +26,7 @@ import java.util.HashMap;
 /**
  * The main screen of the game, responsible for rendering entities and executing their functions.
  *
- * @author Daniel O'Brien haopeng
+ * @author Daniel O'Brien
  * @version 1.1
  * @since 1.0
  * */
@@ -35,6 +35,7 @@ public class GameScreen extends ScreenAdapter {
   public AuberGame game;
   public DataManager dataManager;
   public static HashMap<Infiltrator, Integer> enemyTrack;
+  public static HashMap<Infiltrator, Boolean> enemyExposed;
 
   Sprite stars;
 
@@ -56,14 +57,20 @@ public class GameScreen extends ScreenAdapter {
     world = new World(game, demoMode);
     dataManager = new DataManager("aubergame");
     enemyTrack = new HashMap<>();
+    enemyExposed = new HashMap<>();
 
     for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
-      Infiltrator enemy = dataManager.loadInfiltratorData(world,i);
-      //world.queueEntityAdd(new Infiltrator(world));
-      world.queueEntityAdd(enemy);
-      enemyTrack.put(enemy,i);
+      if (MenuScreen.continueGame){
+        Infiltrator enemy = dataManager.loadInfiltratorData(world,i);
+        world.queueEntityAdd(enemy);
+        enemyTrack.put(enemy,i);
+        enemyExposed.put(enemy,false);
+      } else {
+        world.queueEntityAdd(new Infiltrator(world));
+      }
       world.infiltratorsAddedCount++;
     }
+
     for (int i = 0; i < World.NPC_COUNT; i++) {
       // TO DO: load civilian data
       world.queueEntityAdd(new Civilian(world));
@@ -74,6 +81,20 @@ public class GameScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
+
+    if (Gdx.input.isKeyPressed(Input.Keys.Y)) {
+      dataManager.saveInfiltratorData();
+      dataManager.savePlayerData(world);
+      dataManager.saveSystemData();
+      MenuScreen.continueGame = false;
+      World.systemStatesMap.clear();
+      World.systems.clear();
+      world.infiltratorCount = 0;
+      world.infiltratorsAddedCount = 0;
+      game.setScreen(new MenuScreen(game));
+
+    }
+
     if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
       game.setScreen(new MenuScreen(game));
     }
@@ -117,6 +138,7 @@ public class GameScreen extends ScreenAdapter {
     if (world.infiltratorCount < World.MAX_INFILTRATORS_IN_GAME
         && world.infiltratorsAddedCount < World.MAX_INFILTRATORS) {
       Infiltrator newInfiltrator = new Infiltrator(world);
+      enemyTrack.put(newInfiltrator, world.infiltratorsAddedCount);
       while (newInfiltrator.entityOnScreen(world)) {
         newInfiltrator.moveToRandomLocation(world);
       }

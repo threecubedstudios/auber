@@ -1,7 +1,10 @@
 package com.threecubed.auber;
 
+import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
+import com.threecubed.auber.entities.Player;
+
 
 /**
  * power ups which change aspects of the game for a period of time 
@@ -12,7 +15,7 @@ import com.threecubed.auber.entities.Infiltrator;
  * @version 1.1
  * @since 1.1
  * */
-public class PowerUp {
+public class PowerUp extends GameEntity {
     public static enum Type {
         IMMUNITY,
         INVISIBILITY,
@@ -25,7 +28,8 @@ public class PowerUp {
     private float timer;
     private boolean active;
     
-    public PowerUp(Type powerType) {
+    public PowerUp(float x, float y, World world, Type powerType) {
+        super(x, y, world.atlas.createSprite("projectile"));
         this.powerType = powerType;
         duration = 10f;
         active = false;
@@ -57,9 +61,24 @@ public class PowerUp {
         }
     }
 
-    public void update(float timeStep, World world) {
+    @Override
+    public void update(World world) {
+        // Assuming timeStep is 1/60 (FPS)
         if (active) {
-            timer -= timeStep;
+            timer -= (1/60);
+
+        } else {
+
+            Vector2 playerPosition = world.player.position; // (x,y) component
+
+            int[] tileMapCoords = world.navigationMesh.getTilemapCoordinates(position.x, position.y);
+            int[] playerCoords = world.navigationMesh.getTilemapCoordinates(playerPosition.x, playerPosition.y);
+
+            if (tileMapCoords[0] == playerCoords[0] && tileMapCoords[1] == playerCoords[1]) {
+                activate(world);
+
+            }
+
         }
         if (timer <= 0) {
             deactivate(world);

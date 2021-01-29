@@ -172,7 +172,7 @@ public class Infiltrator extends Npc {
     }
     Circle infiltratorSight = new Circle(position, World.INFILTRATOR_SIGHT_RANGE);
     if (infiltratorSight.contains(world.player.position)) {
-      return true;
+      return true && !world.player.invisible;
     }
     return false;
   }

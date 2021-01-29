@@ -187,6 +187,9 @@ public class World {
   /** The number of NPCs in the game. */
   public static final int NPC_COUNT = 24;
 
+  /**
+   * Identifies the state of the system.
+   */
   public static enum SystemStates {
     WORKING,
     ATTACKED,
@@ -218,6 +221,12 @@ public class World {
       this.player = player;
     }
 
+    // {
+    //   PowerUp p = new PowerUp(64f, 64f*3, this, PowerUp.Type.DETECT);
+    //   queueEntityAdd(p);
+    // }
+
+
     MapObjects objects = map.getLayers().get("object_layer").getObjects();
     for (MapObject object : objects) {
       if (object instanceof RectangleMapObject) {
@@ -246,6 +255,17 @@ public class World {
           default:
             break;
         }
+      }
+    }
+    MapObjects positionObjects = map.getLayers().get("power_ups").getObjects();
+    for (MapObject object : positionObjects) {
+      if (object instanceof RectangleMapObject) {
+        RectangleMapObject rectangularObject = (RectangleMapObject) object;
+        float x = rectangularObject.getRectangle().x;
+        float y = rectangularObject.getRectangle().y;
+        int type = rectangularObject.getProperties().get("type", int.class);
+        PowerUp p = new PowerUp(x, y, this, PowerUp.Type.values()[type]);
+        queueEntityAdd(p);
       }
     }
 

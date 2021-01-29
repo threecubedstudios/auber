@@ -1,6 +1,5 @@
 package com.threecubed.auber;
 
-import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
 
@@ -22,7 +21,6 @@ public class PowerUp {
         DETECT,
     }
     private Type powerType;
-    private Vector2 location;
     private float duration;
     private float timer;
     private boolean active;

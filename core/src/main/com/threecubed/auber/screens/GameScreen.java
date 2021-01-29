@@ -2,14 +2,12 @@ package com.threecubed.auber.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.DataManager;
 import com.threecubed.auber.Difficulty;
@@ -19,8 +17,6 @@ import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.ui.GameUi;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 

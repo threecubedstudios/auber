@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
-import com.threecubed.auber.screens.GameScreen;
 import com.threecubed.auber.screens.MenuScreen;
 
 

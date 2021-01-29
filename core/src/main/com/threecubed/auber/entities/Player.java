@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.screens.GameScreen;
 
 
 /**
@@ -113,7 +114,9 @@ public class Player extends GameEntity {
                 Infiltrator infiltrator = (Infiltrator) entity;
 
                 // Exposed infiltrators shouldn't flee
+                // remove the infiltrator from enemyTrack
                 if (infiltrator.exposed) {
+                  GameScreen.enemyTrack.remove(infiltrator);
                   continue;
                 }
               }

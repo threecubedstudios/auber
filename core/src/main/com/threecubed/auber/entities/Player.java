@@ -41,6 +41,8 @@ public class Player extends GameEntity {
   public boolean slowed = false;
   public boolean blinded = false;
 
+  public Boolean immune = false;
+
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 
   public Player(float x, float y, World world) {

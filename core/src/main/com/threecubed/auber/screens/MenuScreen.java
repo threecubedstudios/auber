@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
+import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.World;
 import com.threecubed.auber.ui.Button;
 
@@ -30,12 +31,15 @@ public class MenuScreen extends ScreenAdapter {
   Button playButton;
   Button demoButton;
   Button continueButton;
+  Button difficultyButton;
   OrthogonalTiledMapRenderer renderer;
   Sprite background;
   Sprite instructions;
   Sprite title;
   SpriteBatch spriteBatch;
   public static boolean continueGame = false;
+  Difficulty.Mode difficulty; 
+  Boolean isDifficultyButtonTouched = false; 
 
   /**
    * Instantiate the screen with the {@link AuberGame} object. Set the title and button up to be
@@ -45,6 +49,7 @@ public class MenuScreen extends ScreenAdapter {
    * */
   public MenuScreen(final AuberGame game) {
     this.game = game;
+    difficulty = Difficulty.Mode.EASY;
 
     spriteBatch = new SpriteBatch();
 
@@ -56,18 +61,18 @@ public class MenuScreen extends ScreenAdapter {
       @Override
       public void run() {
         continueGame = false;
-        game.setScreen(new GameScreen(game, false));
+        game.setScreen(new GameScreen(game, false, difficulty));
       }
     };
 
     playButton = new Button(
-        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150),
         1f, game.atlas.createSprite("playButton"), game, onPlayClick);
 
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, true));
+        game.setScreen(new GameScreen(game, true, difficulty));
       }
     };
 
@@ -87,6 +92,19 @@ public class MenuScreen extends ScreenAdapter {
             new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() /2 - 2*150f),
             1f,game.atlas.createSprite("playButton"), game, onContinueClick);
 
+    Runnable onDifficultyClick = new Runnable() {
+      @Override
+      public void run() {        
+        if (!isDifficultyButtonTouched) {
+          isDifficultyButtonTouched = true;
+          difficulty = difficulty.next();
+        }       
+      }
+    };
+
+    difficultyButton = new Button(
+      new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+      1f, game.atlas.createSprite("playButton"), game, onDifficultyClick);
   }
 
   @Override
@@ -96,7 +114,10 @@ public class MenuScreen extends ScreenAdapter {
       Gdx.graphics.setFullscreenMode(currentDisplayMode);
     }
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-      game.setScreen(new GameScreen(game, true));
+      game.setScreen(new GameScreen(game, true, difficulty));
+    }
+    if (!Gdx.input.isTouched()) {
+      isDifficultyButtonTouched = false;
     }
 
     // Set the background color
@@ -118,6 +139,7 @@ public class MenuScreen extends ScreenAdapter {
     playButton.render(spriteBatch);
     demoButton.render(spriteBatch);
     continueButton.render(spriteBatch);
+    difficultyButton.render(spriteBatch);
 
     spriteBatch.end();
   }

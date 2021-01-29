@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.screens.GameScreen;
@@ -21,8 +22,10 @@ import com.threecubed.auber.screens.MenuScreen;
  * @since 1.0
  * */
 public class Infiltrator extends Npc {
+  public static boolean canSabotage = true;  
   public boolean exposed = false;
   Sprite unexposedSprite;
+  Sprite exposedSprite;
 
   /**
    * Initialise an infiltrator at given coordinates.
@@ -49,6 +52,7 @@ public class Infiltrator extends Npc {
     super(world);
     navigateToRandomSystem(world);
     unexposedSprite = new Sprite(sprite);
+    exposedSprite = world.atlas.createSprite("infiltrator");
   }
 
   @Override
@@ -69,7 +73,7 @@ public class Infiltrator extends Npc {
     if (oldState != States.FLEEING) {
       if (!playerNearby(world)
           && Utils.randomFloatInRange(world.randomNumberGenerator, 0, 1)
-          < World.SYSTEM_SABOTAGE_CHANCE) {
+          < World.SYSTEM_SABOTAGE_CHANCE && canSabotage) {
         attackNearbySystem(world);
       } else {
         idleForGivenTime(world, Utils.randomFloatInRange(world.randomNumberGenerator, 5f, 8f));
@@ -92,9 +96,9 @@ public class Infiltrator extends Npc {
     if (!exposed) {
       exposed = true;
       fireProjectileAtPlayer(world);
-      sprite = world.atlas.createSprite("infiltrator");
+      expose(world);   
       state = States.FLEEING;
-      navigateToFurthestPointFromPlayer(world);
+      navigateToFurthestPointFromPlayer(world);   
       npcTimer.scheduleTask(new Task() {
         @Override
         public void run() {
@@ -112,6 +116,15 @@ public class Infiltrator extends Npc {
           World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
       aiEnabled = false;    
     }
+  }
+
+  public void expose(World world) {
+    sprite = exposedSprite;
+    
+  }
+
+  public void unexpose(World world) {
+    sprite = unexposedSprite;
   }
 
   /**
@@ -136,7 +149,7 @@ public class Infiltrator extends Npc {
             navigateToRandomSystem(world);
           }
         }
-      }, World.SYSTEM_BREAK_TIME);
+      }, World.SYSTEM_BREAK_TIME / Difficulty.sabotageMultiplier);
     }
   }
 

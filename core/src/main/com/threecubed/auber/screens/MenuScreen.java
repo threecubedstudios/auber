@@ -76,7 +76,7 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     demoButton = new Button(
-        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 2*150),
+        new Vector2(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 2f - 2 * 150f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
 
     Runnable onContinueClick = new Runnable() {
@@ -88,8 +88,8 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     continueButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() /2 - 3*150f),
-            1f,game.atlas.createSprite("playButton"), game, onContinueClick);
+            new Vector2(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 2f - 3 * 150f),
+            1f, game.atlas.createSprite("playButton"), game, onContinueClick);
 
     Runnable onDifficultyClick = new Runnable() {
       @Override
@@ -102,7 +102,7 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     difficultyButton = new Button(
-      new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+      new Vector2(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 2f),
       1f, game.atlas.createSprite("playButton"), game, onDifficultyClick);
   }
 

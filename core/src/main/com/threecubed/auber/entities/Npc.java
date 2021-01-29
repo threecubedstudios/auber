@@ -95,7 +95,7 @@ public abstract class Npc extends GameEntity {
    * */
   protected void stepTowardsTarget(World world) {
     if (aiEnabled) {
-      if (currentPath.size() == 0){
+      if (currentPath.size() == 0) {
         return;
       }
       Vector2 targetCoordinates = currentPath.get(0);

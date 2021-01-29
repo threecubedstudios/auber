@@ -35,7 +35,7 @@ public class Infiltrator extends Npc {
    * */
   public Infiltrator(float x, float y, World world) {
     super(x, y, world);
-    if (!MenuScreen.continueGame){
+    if (!MenuScreen.continueGame) {
       navigateToRandomSystem(world);
     }
 
@@ -88,7 +88,7 @@ public class Infiltrator extends Npc {
         Rectangle boundingBox = system.getRectangle();
         world.updateSystemState(boundingBox.x, boundingBox.y, World.SystemStates.WORKING);
         String systemPosition = String.valueOf(boundingBox.x) + "/" + String.valueOf(boundingBox.y);
-        World.systemStatesMap.put(systemPosition,World.SystemStates.WORKING);
+        World.systemStatesMap.put(systemPosition, World.SystemStates.WORKING);
       }
     }
 

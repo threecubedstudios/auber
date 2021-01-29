@@ -18,7 +18,6 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import com.threecubed.auber.screens.GameScreen;
 import com.threecubed.auber.screens.MenuScreen;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +60,7 @@ public class World {
   public static ArrayList<RectangleMapObject> systems = new ArrayList<>();
   public RectangleMapObject medbay;
   public ArrayList<float[]> spawnLocations = new ArrayList<>();
-  public  static HashMap<String,Enum<SystemStates>> systemStatesMap;
+  public  static HashMap<String, Enum<SystemStates>> systemStatesMap;
 
   public final Random randomNumberGenerator = new Random();
 
@@ -209,7 +208,7 @@ public class World {
     camera.setToOrtho(false, 480, 270);
     camera.update();
 
-    if (MenuScreen.continueGame){
+    if (MenuScreen.continueGame) {
       Player player = dataManager.loadPlayerData(this);
       queueEntityAdd(player);
       this.player = player;
@@ -228,12 +227,12 @@ public class World {
             String x = String.valueOf(rectangularObject.getRectangle().x);
             String y = String.valueOf(rectangularObject.getRectangle().y);
             if (MenuScreen.continueGame) {
-              SystemStates loadingState = dataManager.loadingSystemData(rectangularObject.getRectangle().x,
-                      rectangularObject.getRectangle().y);
-              if (loadingState != SystemStates.DESTROYED){
+              SystemStates loadingState = dataManager.loadingSystemData(
+                      rectangularObject.getRectangle().x, rectangularObject.getRectangle().y);
+              if (loadingState != SystemStates.DESTROYED) {
                 systems.add(rectangularObject);
                 systemStatesMap.put(x + "/" + y, loadingState);
-                updateSystemState(Float.parseFloat(x),Float.parseFloat(y),loadingState);
+                updateSystemState(Float.parseFloat(x), Float.parseFloat(y), loadingState);
               }
 
             } else {
@@ -396,7 +395,7 @@ public class World {
             && system.getRectangle().getY() == y) {
           String positionx = String.valueOf(system.getRectangle().getX());
           String positiony = String.valueOf(system.getRectangle().getY());
-          systemStatesMap.put(positionx + "/" + positiony,SystemStates.DESTROYED);
+          systemStatesMap.put(positionx + "/" + positiony, SystemStates.DESTROYED);
           systems.remove(system);
           break;
         }

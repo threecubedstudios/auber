@@ -58,11 +58,11 @@ public class GameScreen extends ScreenAdapter {
     enemyExposed = new HashMap<>();
 
     for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
-      if (MenuScreen.continueGame){
-        Infiltrator enemy = dataManager.loadInfiltratorData(world,i);
+      if (MenuScreen.continueGame) {
+        Infiltrator enemy = dataManager.loadInfiltratorData(world, i);
         world.queueEntityAdd(enemy);
-        enemyTrack.put(enemy,i);
-        enemyExposed.put(enemy,false);
+        enemyTrack.put(enemy, i);
+        enemyExposed.put(enemy, false);
       } else {
         world.queueEntityAdd(new Infiltrator(world));
       }

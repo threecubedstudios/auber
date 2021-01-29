@@ -77,19 +77,19 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     demoButton = new Button(
-        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150),
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 2*150),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
 
     Runnable onContinueClick = new Runnable() {
       @Override
       public void run() {
         continueGame = true;
-        game.setScreen(new GameScreen(game, false));
+        game.setScreen(new GameScreen(game, false, difficulty));
       }
     };
 
     continueButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() /2 - 2*150f),
+            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() /2 - 3*150f),
             1f,game.atlas.createSprite("playButton"), game, onContinueClick);
 
     Runnable onDifficultyClick = new Runnable() {

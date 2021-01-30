@@ -13,11 +13,36 @@ import com.threecubed.auber.World;
  * */
 public class PowerUp extends GameEntity{
 
+    private boolean used;
     private float playerDetectRadius = 10f;
-    public PowerUp(float x, float y, World world) {
-        super(x, y, world.atlas.createSprite("projectile"));
+    public PowerUpType type;
+
+    public enum PowerUpType{
+        SPEED_BOOST,
+        REDUCE_CHARGE_TIME,
+        STRONGER_RAY,
+        REDUCE_DAMAGE,
+        ESCAPE_CONFUSION,
     }
 
+    /**
+     * Initialise the power up item, which will pick a random type.
+     *
+     *    @param x The x position of the power up
+     *    @param y The y position of the power up
+     *    @param world The game world
+     */
+    public PowerUp(float x, float y, World world) {
+        super(x, y, world.atlas.createSprite("projectile"));
+        this.used = false;
+        this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(5)];
+    }
+
+    /**
+     * Get absolute distance between this power up and player
+     * @param world The game world
+     * @return The absolute distance between this power up and the player.
+     */
     private float getPlayerDistance(World world){
         Vector2 playerPos = world.player.position;
         Vector2 thisPos = this.position;
@@ -28,8 +53,9 @@ public class PowerUp extends GameEntity{
 
     @Override
     public void update(World world) {
-
-        if (getPlayerDistance(world) < playerDetectRadius){
+        if (!used && getPlayerDistance(world) < playerDetectRadius){
+            used = true;
+//            world.player.receivePowerUp(type);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.threecubed.auber.entities;
 
+import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
 
 /**

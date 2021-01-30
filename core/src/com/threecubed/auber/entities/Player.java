@@ -249,4 +249,12 @@ public class Player extends GameEntity {
     }
     return output;
   }
+
+  /**
+   * Causes the player to recieve the benefit of a specific power up.
+   * @param powerUpType The type of power up to be given to the player.
+   */
+  public void receivePowerUp(PowerUp.PowerUpType powerUpType){
+
+  }
 }

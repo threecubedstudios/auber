@@ -1,6 +1,7 @@
 package com.threecubed.auber.entities;
 
 import com.badlogic.gdx.math.Vector2;
+import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 
 /**
@@ -38,6 +39,11 @@ public class PowerUp extends GameEntity{
         this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(5)];
     }
 
+    public PowerUp(World world){
+        this(0, 0, world);
+        moveToRandomLocation(world);
+    }
+
     /**
      * Get absolute distance between this power up and player
      * @param world The game world
@@ -57,5 +63,18 @@ public class PowerUp extends GameEntity{
             used = true;
 //            world.player.receivePowerUp(type);
         }
+    }
+
+    /**
+     * Move the entity to a random location within the world.
+     *
+     * @param world The game world
+     **/
+    public void moveToRandomLocation(World world) {
+        float[] location = world.spawnLocations.get(Utils.randomIntInRange(
+                world.randomNumberGenerator, 0,
+                world.spawnLocations.size() - 1));
+        position.x = location[0];
+        position.y = location[1];
     }
 }

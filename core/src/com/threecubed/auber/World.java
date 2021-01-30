@@ -177,10 +177,13 @@ public class World {
   public static final float NPC_FLEE_MULTIPLIER = 1.2f;
   /** The shortest distance an NPC should move from its current position when fleeing. */
   public static final float NPC_MIN_FLEE_DISTANCE = 80f;
-  /** The distance an NPC can here the teleporter ray shoot from. */
+  /** The distance an NPC can hear the teleporter ray shoot from. */
   public static final float NPC_EAR_STRENGTH = 80f;
   /** The number of NPCs in the game. */
   public static final int NPC_COUNT = 24;
+
+  /** The number or power ups in the game. */
+  public static final int POWER_UP_COUNT = 10;
 
   public static enum SystemStates {
     WORKING,

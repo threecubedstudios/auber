@@ -51,6 +51,11 @@ public class GameScreen extends ScreenAdapter {
       world.queueEntityAdd(new Civilian(world));
     }
 
+    for (int i = 0; i < World.POWER_UP_COUNT; i++) {
+      world.queueEntityAdd(new PowerUp(world));
+    }
+
+
     stars = game.atlas.createSprite("stars");
   }
 

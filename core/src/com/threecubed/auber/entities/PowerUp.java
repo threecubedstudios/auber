@@ -63,7 +63,7 @@ public class PowerUp extends GameEntity{
     public void update(World world) {
         if (!used && getPlayerDistance(world) < playerDetectRadius){
             used = true;
-//            world.player.receivePowerUp(type);
+            world.player.receivePowerUp(type);
         }
     }
 

@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
-import com.threecubed.auber.entities.Civilian;
-import com.threecubed.auber.entities.GameEntity;
-import com.threecubed.auber.entities.Infiltrator;
-import com.threecubed.auber.entities.Player;
+import com.threecubed.auber.entities.*;
 import com.threecubed.auber.ui.GameUi;
 
 

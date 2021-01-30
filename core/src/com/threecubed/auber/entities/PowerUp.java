@@ -1,5 +1,7 @@
 package com.threecubed.auber.entities;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
@@ -62,6 +64,13 @@ public class PowerUp extends GameEntity{
         if (!used && getPlayerDistance(world) < playerDetectRadius){
             used = true;
 //            world.player.receivePowerUp(type);
+        }
+    }
+
+    @Override
+    public void render(Batch batch, Camera camera) {
+        if(!used){
+            super.render(batch, camera);
         }
     }
 

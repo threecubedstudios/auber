@@ -14,17 +14,39 @@ import javax.swing.JFileChooser;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.screens.GameScreen;
 
+/**
+ * The FileHandler class contains attributes and methods
+ * required for storing, retrieving and categorising game
+ * save data.
+ * 
+ * @author Joshua Cottrell
+ * @version 1.0
+ * @since 1.0
+ */
+
 public class FileHandler {
 
 	private static final List<Saveable> saveables = new ArrayList<Saveable>();
-
+	
+	// directory in which save files are located
 	private static final String path = "saves/";
-
+	
+	/**
+	 * add elements to the saveables list
+	 */
 	public static void addSaveable(Saveable saveable) {
 		saveables.add(saveable);
 	}
-
+    
+	/**
+	 * Writes game save data to file.
+	 * 
+	 * @param savename Name of file to save
+	 * @throws IOException Throws if I/O error occurred while writing data
+	 */
 	public static void save(String savename) throws IOException {
+		
+		// create save directory if it doesn't already exist
 		if (!new File(path).exists()) {
 			new File(path).mkdir();
 		}
@@ -42,7 +64,13 @@ public class FileHandler {
 		writer.close();
 
 	}
-
+	
+	/**
+	 * Loads game save data using JFileChooser. 
+	 * 
+	 * @param game Game object
+	 * @throws IOException Throws if I/O error occurred while reading file
+	 */
 	public static void load(final AuberGame game) throws IOException {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir") + "/" + path));
@@ -51,7 +79,14 @@ public class FileHandler {
 		game.setScreen(new GameScreen(game, false));
 		FileHandler.load(fileChooser.getSelectedFile());
 	}
-
+	
+	/**
+	 * Load game save data into saveables.
+	 * 
+	 * @param saveFile File object containing game save
+	 * @return saveables Saved attributes
+	 * @throws IOException Throws if I/O error occured while reading file
+	 */
 	private static List<Saveable> load(File saveFile) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(saveFile));
 		String line = reader.readLine();

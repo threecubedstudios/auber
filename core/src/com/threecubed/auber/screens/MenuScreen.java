@@ -21,10 +21,11 @@ import com.threecubed.auber.ui.Button;
 
 /**
  * The menu screen is the first screen that shows in the game and is responsible
- * for controlling when the game begins.
+ * for controlling when the game begins, or reloading saved game data.
  *
  * @author Joseph Krystek-Walton
- * @version 1.0
+ * @author Joshua Cottrell
+ * @version 2.0
  * @since 1.0
  */
 public class MenuScreen extends ScreenAdapter {

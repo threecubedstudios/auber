@@ -26,7 +26,8 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
  * interaction with other entities and tiles in the game world.
  *
  * @author Daniel O'Brien
- * @version 1.0
+ * @author Joshua Cottrell
+ * @version 2.0
  * @since 1.0
  */
 public class Player extends GameEntity {

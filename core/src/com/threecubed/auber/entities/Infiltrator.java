@@ -17,7 +17,8 @@ import com.threecubed.auber.files.SaveCategory;
  * them until caught by the {@link Player}.
  *
  * @author Daniel O'Brien
- * @version 1.0
+ * @author Joshua Cottrell
+ * @version 2.0
  * @since 1.0
  * */
 public class Infiltrator extends Npc {

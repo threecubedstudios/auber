@@ -31,7 +31,8 @@ import com.threecubed.auber.screens.GameScreen;
  * game world. It should only be used within the GameScreen screen.
  *
  * @author Daniel O'Brien
- * @version 1.0
+ * @author Joshua Cottrell
+ * @version 2.0
  * @since 1.0
  */
 public class World implements Saveable {
@@ -235,13 +236,13 @@ public class World implements Saveable {
 				}
 			}
 		}
-
+	 
 		FileHandler.addSaveable(this);
 	}
 
 	/**
 	 * Initialise an instance of the world with the given game object. Demo mode
-	 * locks the player to the center of the screen, makes them invisible and
+	 * locks the player to the centre of the screen, makes them invisible and
 	 * expands the camera to view the whole map.
 	 *
 	 * @param game     The game object

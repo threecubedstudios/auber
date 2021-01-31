@@ -24,7 +24,8 @@ import com.threecubed.auber.files.Saveable;
  * and velocity and collision handlers.
  *
  * @author Daniel O'Brien
- * @version 1.0
+ * @author Joshua Cottrell
+ * @version 2.0
  * @since 1.0
  */
 public abstract class GameEntity implements Saveable {

@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.ui.GameUi;
 
 
 /**
@@ -41,6 +42,7 @@ public class Player extends GameEntity {
   public boolean blinded = false;
 
   private ShapeRenderer rayRenderer = new ShapeRenderer();
+  private World world;
 
   public Player(float x, float y, World world) {
     super(x, y, world.atlas.createSprite("player"));
@@ -53,6 +55,7 @@ public class Player extends GameEntity {
    * */
   @Override
   public void update(World world) {
+    this.world = world;
     if (!world.demoMode) {
       if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
         position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
@@ -263,6 +266,9 @@ public class Player extends GameEntity {
    */
   public void receivePowerUp(PowerUp.PowerUpType powerUpType){
     if(powerUpType == PowerUp.PowerUpType.ESCAPE_CONFUSION){
+      if(!escapeConfusion){
+        GameUi.queueMessage("Escape Confusion acquired", 3);
+      }
       escapeConfusion = true;
     }
   }

@@ -38,7 +38,7 @@ public class PowerUp extends GameEntity{
     public PowerUp(float x, float y, World world) {
         super(x, y, world.atlas.createSprite("projectile"));
         this.used = false;
-        this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(5)];
+        this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(PowerUpType.values().length)];
     }
 
     public PowerUp(World world){

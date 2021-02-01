@@ -35,6 +35,7 @@ public class Player extends GameEntity {
   /** Health of Auber - varies between 1 and 0. */
   public float health = 1;
 
+  public boolean escapeConfusion = false;
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
@@ -70,6 +71,12 @@ public class Player extends GameEntity {
       float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
       if (slowed) {
         velocity.scl(0.5f);
+      }
+
+      //If the player has the escape confusion power-up and is confused, set confusion back to false.
+      if (confused && escapeConfusion){
+        confused = false;
+        escapeConfusion = false;
       }
 
       // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
@@ -255,6 +262,8 @@ public class Player extends GameEntity {
    * @param powerUpType The type of power up to be given to the player.
    */
   public void receivePowerUp(PowerUp.PowerUpType powerUpType){
-
+    if(powerUpType == PowerUp.PowerUpType.ESCAPE_CONFUSION){
+      escapeConfusion = true;
+    }
   }
 }

@@ -30,7 +30,7 @@ public class GameUi {
   private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
 
   private static final Vector2 MESSAGES_POSITION = new Vector2(Gdx.graphics.getWidth()/2, 50f);
-  private static final float MESSAGE_DURATION = 3;
+  private static final int MESSAGE_DURATION = 200;  //Measured in calls of update, not seconds.
 
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -186,10 +186,10 @@ public class GameUi {
 
   private class Message {
     String text;
-    float timeToDisplay;
-    float remainingTime;
+    int timeToDisplay;
+    int remainingTime;
 
-    public Message(String text, float timeToDisplay){
+    public Message(String text, int timeToDisplay){
       this.text = text;
       this.timeToDisplay = timeToDisplay;
       this.remainingTime = timeToDisplay;
@@ -200,15 +200,25 @@ public class GameUi {
     screenBatch.begin();
     uiFont.setColor(Color.WHITE);
     int offset = 0;
-    for (Message message : messages){
-      uiFont.draw(screenBatch, message.text, MESSAGES_POSITION.x,
-              MESSAGES_POSITION.y + offset);
-      offset += 25f;
+
+    int i = 0;
+    while (i < messages.size()){
+      Message message = messages.get(i);
+      if (message.remainingTime < 0){
+        messages.remove(i);
+      } else {
+        message.remainingTime -= 1;
+        uiFont.draw(screenBatch, message.text, MESSAGES_POSITION.x,
+                MESSAGES_POSITION.y + offset);
+        offset += 25f;
+        i++;
+      }
     }
     screenBatch.end();
   }
 
   public void queueMessage(String text){
     Message message = new Message(text, MESSAGE_DURATION);
+    messages.add(message);
   }
 }

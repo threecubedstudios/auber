@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
-import com.threecubed.auber.ui.GameUi;
 
 
 /**
@@ -80,6 +79,7 @@ public class Player extends GameEntity {
       if (confused && escapeConfusion){
         confused = false;
         escapeConfusion = false;
+        world.ui.queueMessage("Escape confusion used");
       }
 
       // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
@@ -267,7 +267,9 @@ public class Player extends GameEntity {
   public void receivePowerUp(PowerUp.PowerUpType powerUpType){
     if(powerUpType == PowerUp.PowerUpType.ESCAPE_CONFUSION){
       if(!escapeConfusion){
-        GameUi.queueMessage("Escape Confusion acquired", 3);
+        world.ui.queueMessage("Escape Confusion acquired");
+      }else{
+        world.ui.queueMessage("Escape Confusion already acquired");
       }
       escapeConfusion = true;
     }

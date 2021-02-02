@@ -21,10 +21,10 @@ public class PowerUp extends GameEntity{
     public PowerUpType type;
 
     public enum PowerUpType{
-        SPEED_BOOST,
-        REDUCE_CHARGE_TIME,
-        STRONGER_RAY,
-        REDUCE_DAMAGE,
+//        SPEED_BOOST,
+//        REDUCE_CHARGE_TIME,
+//        STRONGER_RAY,
+//        REDUCE_DAMAGE,
         ESCAPE_CONFUSION,
     }
 
@@ -38,7 +38,7 @@ public class PowerUp extends GameEntity{
     public PowerUp(float x, float y, World world) {
         super(x, y, world.atlas.createSprite("projectile"));
         this.used = false;
-        this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(5)];
+        this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(PowerUpType.values().length)];
     }
 
     public PowerUp(World world){

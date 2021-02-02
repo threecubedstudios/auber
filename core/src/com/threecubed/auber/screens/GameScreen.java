@@ -42,6 +42,7 @@ public class GameScreen extends ScreenAdapter {
     ui = new GameUi(game);
 
     world = new World(game, demoMode);
+    world.ui = ui;
 
     for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
       world.queueEntityAdd(new Infiltrator(world));

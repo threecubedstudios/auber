@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
 
+import java.util.ArrayList;
+
 
 public class GameUi {
   private static final int CHARGE_METER_WIDTH = 20;
@@ -27,12 +29,17 @@ public class GameUi {
 
   private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
 
+  private static final Vector2 MESSAGES_POSITION = new Vector2(Gdx.graphics.getWidth()/2, 50f);
+  private static final int MESSAGE_DURATION = 200;  //Measured in calls of update, not seconds.
+
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
   private Sprite arrowSprite;
   private Color blindedColor = new Color(0f, 0f, 0f, 1f);
 
   private BitmapFont uiFont = new BitmapFont();
+
+  private ArrayList<Message> messages = new ArrayList<>();
 
   public GameUi(AuberGame game) {
     arrowSprite = game.atlas.createSprite("arrow2");
@@ -57,6 +64,7 @@ public class GameUi {
     drawHealthbar(world, screenBatch);
     drawHealthWarnings(world, screenBatch);
     drawSystemWarnings(world, screenBatch);
+    drawMessages(world, screenBatch);
   }
 
   /**
@@ -174,5 +182,43 @@ public class GameUi {
     }
     uiFont.setColor(Color.WHITE);
     screenBatch.end();
+  }
+
+  private class Message {
+    String text;
+    int timeToDisplay;
+    int remainingTime;
+
+    public Message(String text, int timeToDisplay){
+      this.text = text;
+      this.timeToDisplay = timeToDisplay;
+      this.remainingTime = timeToDisplay;
+    }
+  }
+
+  private void drawMessages(World world, SpriteBatch screenBatch){
+    screenBatch.begin();
+    uiFont.setColor(Color.WHITE);
+    int offset = 0;
+
+    int i = 0;
+    while (i < messages.size()){
+      Message message = messages.get(i);
+      if (message.remainingTime < 0){
+        messages.remove(i);
+      } else {
+        message.remainingTime -= 1;
+        uiFont.draw(screenBatch, message.text, MESSAGES_POSITION.x,
+                MESSAGES_POSITION.y + offset);
+        offset += 25f;
+        i++;
+      }
+    }
+    screenBatch.end();
+  }
+
+  public void queueMessage(String text){
+    Message message = new Message(text, MESSAGE_DURATION);
+    messages.add(message);
   }
 }

@@ -17,6 +17,8 @@ import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import com.threecubed.auber.screens.GameScreen;
+import com.threecubed.auber.ui.GameUi;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -32,6 +34,7 @@ import java.util.Random;
  * */
 public class World {
   private AuberGame game;
+  public GameUi ui;
 
   public Player player;
   public int infiltratorCount;

@@ -1,5 +1,7 @@
 package com.threecubed.auber.entities;
 
+import java.util.TimerTask;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
@@ -37,6 +39,8 @@ public class Player extends GameEntity {
 	public boolean confused = false;
 	public boolean slowed = false;
 	public boolean blinded = false;
+
+	public boolean isStunShot = false;
 
 	/**
 	 * True if the player is visible to the user and enemies, False otherwise
@@ -198,7 +202,7 @@ public class Player extends GameEntity {
 
 			batch.begin();
 		}
-		
+
 		if (isVisible) {
 			super.render(batch, camera);
 		}
@@ -233,6 +237,12 @@ public class Player extends GameEntity {
 						if (entity instanceof Npc) {
 							Npc npc = (Npc) entity;
 							npc.handleTeleporterShot(world);
+							
+							if (entity instanceof Infiltrator && isStunShot) {
+								handleStunShot((Infiltrator) entity);
+								isStunShot = false;
+							}
+							
 						}
 						break;
 					}
@@ -250,4 +260,21 @@ public class Player extends GameEntity {
 		}
 		return output;
 	}
+
+	/**
+	 * Handles when the player stun shoots the infiltrator
+	 * 
+	 * @param infiltrator
+	 */
+	private void handleStunShot(final Infiltrator infiltrator) {
+		infiltrator.speed = 0;
+
+		new Timer().scheduleTask(new Timer.Task() {
+			@Override
+			public void run() {
+				infiltrator.speed = 0.8f;
+			}
+		}, 5000f);
+	}
+
 }

@@ -144,7 +144,7 @@ public class Infiltrator extends Npc {
 	}
 
 	private boolean playerNearby(World world) {
-		if (world.demoMode) {
+		if (world.demoMode || !world.player.isVisible) {
 			return false;
 		}
 		Circle infiltratorSight = new Circle(position, World.INFILTRATOR_SIGHT_RANGE);
@@ -155,11 +155,13 @@ public class Infiltrator extends Npc {
 	}
 
 	private void fireProjectileAtPlayer(World world) {
-		Vector2 projectileVelocity = new Vector2(world.player.position.x - position.x,
-				world.player.position.y - position.y);
-		projectileVelocity.setLength(World.INFILTRATOR_PROJECTILE_SPEED);
-		Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,
-				Projectile.CollisionActions.randomAction(), world);
-		world.queueEntityAdd(projectile);
+		if (world.player.isVisible) {
+			Vector2 projectileVelocity = new Vector2(world.player.position.x - position.x,
+					world.player.position.y - position.y);
+			projectileVelocity.setLength(World.INFILTRATOR_PROJECTILE_SPEED);
+			Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,
+					Projectile.CollisionActions.randomAction(), world);
+			world.queueEntityAdd(projectile);
+		}
 	}
 }

@@ -38,6 +38,11 @@ public class Player extends GameEntity {
 	public boolean slowed = false;
 	public boolean blinded = false;
 
+	/**
+	 * True if the player is visible to the user and enemies, False otherwise
+	 */
+	public boolean isVisible = false;
+
 	private ShapeRenderer rayRenderer = new ShapeRenderer();
 
 	public Player(float x, float y, World world) {
@@ -193,7 +198,10 @@ public class Player extends GameEntity {
 
 			batch.begin();
 		}
-		super.render(batch, camera);
+		
+		if (isVisible) {
+			super.render(batch, camera);
+		}
 	}
 
 	/**

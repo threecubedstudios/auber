@@ -1,5 +1,8 @@
 package com.threecubed.auber.entities.playerpowerups;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -27,7 +30,12 @@ public abstract class PlayerPowerUp {
 	 * The millisecond cooldown of how long the player must wait between uses of the
 	 * powerup
 	 */
-	protected long cooldownMs;
+	protected int cooldownMs;
+
+	/**
+	 * The millisecond duration for the actions effects, -1 if there is no duration
+	 */
+	protected int durationMs;
 	
 	/**
 	 * The code of the keyboard letter used to initiate the power up
@@ -38,19 +46,21 @@ public abstract class PlayerPowerUp {
 	 * The player that has procured the power up
 	 */
 	protected Player player;
-
+	
 	/**
 	 * The power up's constructer
 	 * 
 	 * @param sprite
 	 * @param position
 	 * @param cooldownMs
+	 * @param durationMs
 	 * @param keyCode
 	 */
-	public PlayerPowerUp(Sprite sprite, Vector2 position, long cooldownMs, int keyCode) {
+	public PlayerPowerUp(Sprite sprite, Vector2 position, int cooldownMs, int durationMs, int keyCode) {
 		this.sprite = sprite;
 		this.position = position;
 		this.cooldownMs = cooldownMs;
+		this.durationMs = durationMs;
 		this.keyCode = keyCode;
 	}
 
@@ -82,6 +92,15 @@ public abstract class PlayerPowerUp {
 	public void activate() {
 		doAction();
 		nextActivatableTimeMs = System.currentTimeMillis() + cooldownMs;
+		
+		if (durationMs != -1) {
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					reverseAction();
+				}
+			}, durationMs);
+		}
 	}
 
 	/**
@@ -103,5 +122,10 @@ public abstract class PlayerPowerUp {
 	 * Performs the action of the power up
 	 */
 	protected abstract void doAction();
+	
+	/**
+	 * Retracts the actions performed by the power up
+	 */
+	protected abstract void reverseAction();
 
 }

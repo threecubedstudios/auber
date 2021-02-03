@@ -157,7 +157,7 @@ public class Infiltrator extends Npc {
   }
 
   private void fireProjectileAtPlayer(World world) {
-    Vector2 projectileVelocity = new Vector2(world.player.position.x - position.x,
+	Vector2 projectileVelocity = new Vector2(world.player.position.x - position.x,
                                              world.player.position.y - position.y);
     projectileVelocity.setLength(World.INFILTRATOR_PROJECTILE_SPEED);
     Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,

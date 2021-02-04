@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
+import com.threecubed.auber.files.FileHandler;
+import com.threecubed.auber.files.SaveCategory;
 
 
 /**
@@ -15,7 +17,8 @@ import com.threecubed.auber.World;
  * them until caught by the {@link Player}.
  *
  * @author Daniel O'Brien
- * @version 1.0
+ * @author Joshua Cottrell
+ * @version 2.0
  * @since 1.0
  * */
 public class Infiltrator extends Npc {
@@ -44,6 +47,7 @@ public class Infiltrator extends Npc {
     super(world);
     navigateToRandomSystem(world);
     unexposedSprite = new Sprite(sprite);
+	FileHandler.addSaveable(this);
   }
 
   @Override
@@ -164,4 +168,27 @@ public class Infiltrator extends Npc {
         Projectile.CollisionActions.randomAction(), world);
     world.queueEntityAdd(projectile);
   } 
+  
+  @Override
+	public String getSaveData() {
+		int exposed = this.exposed ? 1 : 0;
+		return super.getSaveData() + "," + exposed;
+	}
+
+	@Override
+	public void loadSaveData(String data) {
+		super.loadSaveData(data);
+
+		String[] atomicData = data.split(",");
+
+		boolean exposed = atomicData[3].equalsIgnoreCase("1");
+
+		this.exposed = exposed;
+	}
+
+	@Override
+	public SaveCategory getCategory() {
+		return SaveCategory.INFILTRATOR;
+	}
+  
 }

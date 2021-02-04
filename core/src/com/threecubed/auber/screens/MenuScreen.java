@@ -71,6 +71,44 @@ public class MenuScreen extends ScreenAdapter {
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
   }
+  
+    public enum Difficulty {
+    EASY(20, 4, 8, 10f),
+    MEDIUM(15, 6, 16, 7.5f),
+    HARD(10, 8, 24, 5f);
+
+    private final int POWER_UP_COUNT;
+    private final int MAX_INFILTRATORS;
+    private final int NPC_COUNT;
+    private final float SYSTEM_BREAK_TIME;
+
+
+    Difficulty(int POWER_UP_COUNT, int MAX_INFILTRATORS, int NPC_COUNT, float SYSTEM_BREAK_TIME ){
+      this.POWER_UP_COUNT = POWER_UP_COUNT;
+      this.MAX_INFILTRATORS = MAX_INFILTRATORS;
+      this.NPC_COUNT = NPC_COUNT;
+      this.SYSTEM_BREAK_TIME = SYSTEM_BREAK_TIME;
+    }
+
+    public static int getPOWER_UP_COUNT() {
+
+      return POWER_UP_COUNT;
+    }
+    public static int getMAX_INFILTRATORS() {
+
+      return MAX_INFILTRATORS;
+    }
+    public static int getNPC_COUNT() {
+
+      return NPC_COUNT;
+    }
+
+    public static float getSYSTEM_BREAK_TIME() {
+
+      return SYSTEM_BREAK_TIME;
+    }
+  }
+
 
   @Override
   public void render(float deltaTime) {

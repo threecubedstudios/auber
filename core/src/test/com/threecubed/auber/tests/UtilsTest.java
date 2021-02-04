@@ -1,4 +1,4 @@
-package com.threecubed.auber;
+package com.threecubed.auber.tests;
 
 import static org.junit.Assert.assertTrue;
 

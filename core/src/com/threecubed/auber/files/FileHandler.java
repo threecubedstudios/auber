@@ -76,7 +76,7 @@ public class FileHandler {
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir") + "/" + path));
 		fileChooser.showOpenDialog(null);
 
-		game.setScreen(new GameScreen(game, false));
+		game.setScreen(new GameScreen(game, false, "easyButton"));
 		FileHandler.load(fileChooser.getSelectedFile());
 	}
 	

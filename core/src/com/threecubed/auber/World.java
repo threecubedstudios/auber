@@ -24,7 +24,7 @@ import com.threecubed.auber.files.SaveCategory;
 import com.threecubed.auber.files.Saveable;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
-import com.threecubed.auber.screens.GameScreen;
+import com.threecubed.auber.screens.MenuScreen;
 
 /**
  * The world class stores information related to what is happening within the
@@ -443,7 +443,7 @@ public class World implements Saveable {
 			if (!demoMode) {
 				game.setScreen(new GameOverScreen(game, false));
 			} else {
-				game.setScreen(new GameScreen(game, true));
+				game.setScreen(new MenuScreen(game));
 			}
 		} else if (infiltratorCount <= 0) {
 			game.setScreen(new GameOverScreen(game, true));

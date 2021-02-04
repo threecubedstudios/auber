@@ -42,6 +42,7 @@ public class World implements Saveable {
 	public int infiltratorCount;
 
 	public boolean demoMode = false;
+	public String difficulty;
 
 	/** Number of infiltrators added, including defeated ones. */
 	public int infiltratorsAddedCount = 0;
@@ -154,7 +155,7 @@ public class World implements Saveable {
 	/** The speed at which infiltrator projectiles should travel. */
 	public static final float INFILTRATOR_PROJECTILE_SPEED = 4f;
 	/** Maximum infiltrators in a full game of Auber (including defated ones). */
-	public static final int MAX_INFILTRATORS = 8;
+	public static int MAX_INFILTRATORS;
 	/**
 	 * The interval at which the infiltrator should attack the player when exposed.
 	 */
@@ -165,7 +166,7 @@ public class World implements Saveable {
 	 * Max infiltrators alive at a given point, Should always be greater or equal to
 	 * {@link World#MAX_INFILTRATORS}.
 	 */
-	public static final int MAX_INFILTRATORS_IN_GAME = 3;
+	public static int MAX_INFILTRATORS_IN_GAME = 2;
 
 	/**
 	 * The amount of variance there should be between the speeds of different NPCs.
@@ -248,9 +249,10 @@ public class World implements Saveable {
 	 * @param game     The game object
 	 * @param demoMode Whether to run the game in demo mode
 	 */
-	public World(AuberGame game, boolean demoMode) {
+	public World(AuberGame game, boolean demoMode, String difficulty) {
 		this(game);
 		this.demoMode = demoMode;
+		this.difficulty = difficulty;
 		if (demoMode) {
 			camera.setToOrtho(false, 1920, 1080);
 			TiledMapTileLayer layer = ((TiledMapTileLayer) map.getLayers().get(2));
@@ -258,6 +260,18 @@ public class World implements Saveable {
 			player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;
 			player.sprite.setColor(1f, 1f, 1f, 0f);
 		}
+		switch(difficulty) {
+			case "easyButton":
+				MAX_INFILTRATORS = 4;
+				break;
+			case "mediumButton":
+				MAX_INFILTRATORS = 6;
+				break;
+			case "hardButton":
+				MAX_INFILTRATORS = 8;
+				break;
+		}
+			
 	}
 
 	public void addEntity(GameEntity entity) {

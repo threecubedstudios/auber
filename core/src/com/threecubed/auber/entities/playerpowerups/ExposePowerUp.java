@@ -30,7 +30,7 @@ public class ExposePowerUp extends PlayerPowerUp {
 	 * @param range
 	 */
 	public ExposePowerUp(Sprite sprite, Vector2 position, int cooldownMs, World world, int range) {
-		super(sprite, position, cooldownMs, -1, Keys.E);
+		super(sprite, position, cooldownMs, -1, Keys.Z);
 		this.world = world;
 		this.range = range;
 	}

@@ -29,7 +29,8 @@ public abstract class GameEntity {
   public Sprite sprite;
 
   public float speed = 0.4f;
-  public float maxSpeed = 2f;
+  public float boostedSpeed = 0.55f;
+  public float maxSpeed = 2.5f;
   public float friction = 0.9f;
 
   public Vector2 position;

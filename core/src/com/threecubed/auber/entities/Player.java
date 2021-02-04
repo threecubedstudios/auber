@@ -36,6 +36,7 @@ public class Player extends GameEntity {
   public float health = 1;
 
   public boolean escapeConfusion = false;
+  public boolean speedBoost = false;
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
@@ -88,17 +89,33 @@ public class Player extends GameEntity {
         velocity.set(-velocity.x, -velocity.y);
       }
 
-      if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-        velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
-      }
-      if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-        velocity.x = Math.max(velocity.x - speed + speedModifier, -maxSpeed);
-      }
-      if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-        velocity.y = Math.max(velocity.y - speed + speedModifier, -maxSpeed);
-      }
-      if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-        velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
+      //Change the velocity when Auber encounter the speed boost power-up
+      if (speedBoost) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+          velocity.y = (velocity.y + boostedSpeed - speedModifier);
+       }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+          velocity.x = (velocity.x - boostedSpeed + speedModifier);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+          velocity.y = (velocity.y - boostedSpeed + speedModifier);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+          velocity.x = (velocity.x + boostedSpeed - speedModifier);
+        }
+      }else {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+          velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+          velocity.x = Math.max(velocity.x - speed + speedModifier, -maxSpeed);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+          velocity.y = Math.max(velocity.y - speed + speedModifier, -maxSpeed);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+          velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
+        }
       }
 
 
@@ -272,6 +289,14 @@ public class Player extends GameEntity {
         world.ui.queueMessage("Escape Confusion already acquired");
       }
       escapeConfusion = true;
+    }
+    else if (powerUpType == PowerUp.PowerUpType.SPEED_BOOST){
+      if (!speedBoost){
+        world.ui.queueMessage("Speed Boost Acquired");
+      }else{
+        world.ui.queueMessage("Speed Boost already acquired");
+      }
+      speedBoost = true;
     }
   }
 }

@@ -45,7 +45,7 @@ public class Player extends GameEntity {
 	/**
 	 * True if the player is visible to the user and enemies, False otherwise
 	 */
-	public boolean isVisible = false;
+	public boolean isVisible = true;
 
 	private ShapeRenderer rayRenderer = new ShapeRenderer();
 

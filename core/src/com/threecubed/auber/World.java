@@ -198,7 +198,6 @@ public class World implements Saveable {
 	public World(AuberGame game) {
 		this.game = game;
 		atlas = game.atlas;
-		
 
 		// Configure the camera
 		camera.setToOrtho(false, 480, 270);
@@ -444,7 +443,7 @@ public class World implements Saveable {
 			if (!demoMode) {
 				game.setScreen(new GameOverScreen(game, false));
 			} else {
-				game.setScreen(new GameScreen(game, true,difficulty));
+				game.setScreen(new GameScreen(game, true));
 			}
 		} else if (infiltratorCount <= 0) {
 			game.setScreen(new GameOverScreen(game, true));

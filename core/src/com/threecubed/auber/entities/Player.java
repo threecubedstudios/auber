@@ -261,10 +261,13 @@ public class Player extends GameEntity {
   }
 
   /**
-   * Causes the player to recieve the benefit of a specific power up.
+   * Causes the player to receive the benefit of a specific power up.
    * @param powerUpType The type of power up to be given to the player.
    */
   public void receivePowerUp(PowerUp.PowerUpType powerUpType){
+
+    //If player receives escape confusion, they are given the appropriate message depending on if they already have it
+    // and the appropriate boolean is set to true
     if(powerUpType == PowerUp.PowerUpType.ESCAPE_CONFUSION){
       if(!escapeConfusion){
         world.ui.queueMessage("Escape Confusion acquired");

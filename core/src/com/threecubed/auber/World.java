@@ -17,6 +17,8 @@ import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
 import com.threecubed.auber.screens.GameOverScreen;
 import com.threecubed.auber.screens.GameScreen;
+import com.threecubed.auber.ui.GameUi;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -32,6 +34,7 @@ import java.util.Random;
  * */
 public class World {
   private AuberGame game;
+  public GameUi ui;
 
   public Player player;
   public int infiltratorCount;
@@ -177,10 +180,13 @@ public class World {
   public static final float NPC_FLEE_MULTIPLIER = 1.2f;
   /** The shortest distance an NPC should move from its current position when fleeing. */
   public static final float NPC_MIN_FLEE_DISTANCE = 80f;
-  /** The distance an NPC can here the teleporter ray shoot from. */
+  /** The distance an NPC can hear the teleporter ray shoot from. */
   public static final float NPC_EAR_STRENGTH = 80f;
   /** The number of NPCs in the game. */
   public static final int NPC_COUNT = 24;
+
+  /** The number or power ups in the game. */
+  public static final int POWER_UP_COUNT = 10;
 
   public static enum SystemStates {
     WORKING,

@@ -409,7 +409,7 @@ public class Save() {
             save.entityPositionY.add(entity.getCenterY());
             save.entityType.add(entity.entityType);
         }
-        save.health = Player.getHealth();
+        save.health = Player.health;
         return save;
     }
 

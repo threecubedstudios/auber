@@ -178,31 +178,31 @@ public class GameUi {
 	 * @param screenBatch
 	 */
 	private void drawPowerUps(World world, SpriteBatch screenBatch) {
-	  screenBatch.begin();
-	  
-	  int ctr = 0;
-	  
-	  for (GameEntity entity : world.getEntities()) {
-		  if (entity instanceof PlayerPowerUp) {
-			  PlayerPowerUp powerUp = (PlayerPowerUp) entity;
-			  
-			  if (!powerUp.isCollected()) {
-				  uiFont.setColor(Color.GRAY);
-			  } else if (powerUp.isActive()) {
-				  uiFont.setColor(Color.BLUE);
-			  } else if (powerUp.canActivate()) {
-				  uiFont.setColor(Color.GREEN);
-			  } else {
-				  uiFont.setColor(Color.RED);
-			  }
-			  
-			  uiFont.draw(screenBatch, powerUp.name, 10, 600 + ctr * 20);
-			  ctr += 1;
-		  }
-	  }
-	  
-	  uiFont.setColor(Color.WHITE);
-	  screenBatch.end();
-  }
+		screenBatch.begin();
+
+		int ctr = 0;
+
+		for (GameEntity entity : world.getEntities()) {
+			if (entity instanceof PlayerPowerUp) {
+				PlayerPowerUp powerUp = (PlayerPowerUp) entity;
+
+				if (!powerUp.isCollected()) {
+					uiFont.setColor(Color.GRAY);
+				} else if (powerUp.isActive()) {
+					uiFont.setColor(Color.BLUE);
+				} else if (powerUp.canActivate()) {
+					uiFont.setColor(Color.GREEN);
+				} else {
+					uiFont.setColor(Color.RED);
+				}
+
+				uiFont.draw(screenBatch, powerUp.name, 10, 600 + ctr * 20);
+				ctr += 1;
+			}
+		}
+
+		uiFont.setColor(Color.WHITE);
+		screenBatch.end();
+	}
 
 }

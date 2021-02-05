@@ -11,20 +11,20 @@ public class SpeedPowerUp extends PlayerPowerUp {
 	 * 
 	 * @param sprite
 	 * @param position
-	 * @param cooldownMs
-	 * @param durationMs
 	 */
-	public SpeedPowerUp(Sprite sprite, Vector2 position, int cooldownMs, int durationMs) {
-		super("Speed", sprite, position, cooldownMs, durationMs, Keys.V);
+	public SpeedPowerUp(Sprite sprite, Vector2 position) {
+		super("Speed", sprite, position, 5000, 3000, Keys.V);
 	}
 
 	@Override
 	protected void doAction() {
-		player.speed = 0.8f;
+		player.maxSpeed = 5f;
+		player.speed = 5f;
 	}
 
 	@Override
 	protected void reverseAction() {
+		player.maxSpeed = 2f;
 		player.speed = 0.4f;
 	}
 

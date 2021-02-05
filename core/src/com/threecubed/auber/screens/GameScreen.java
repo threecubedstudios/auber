@@ -1,5 +1,8 @@
 package com.threecubed.auber.screens;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -7,7 +10,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
@@ -61,13 +69,34 @@ public class GameScreen extends ScreenAdapter {
 			world.queueEntityAdd(new Civilian(world));
 		}
 
-		world.queueEntityAdd(new ExposePowerUp(world.atlas.createSprite("player"), new Vector2(0, 0), 5000, world, 5));
-		world.queueEntityAdd(new InvisibilityPowerUp(world.atlas.createSprite("player"), new Vector2(0, 0), 5000, 3000));
-		world.queueEntityAdd(new ShieldPowerUp(world.atlas.createSprite("player"), new Vector2(0, 0), 5000, 1));
-		world.queueEntityAdd(new SpeedPowerUp(world.atlas.createSprite("player"), new Vector2(0, 0), 5000, 3000));
-		world.queueEntityAdd(new StunShotPowerUp(world.atlas.createSprite("player"), new Vector2(0, 0), 5000, 3000));
+		List<Vector2> systemPos = getInteractablesPos();
+		
+		world.queueEntityAdd(new ExposePowerUp(world.atlas.createSprite("player"), world, systemPos.get(0)));
+		world.queueEntityAdd(new InvisibilityPowerUp(world.atlas.createSprite("player"), systemPos.get(1)));
+		world.queueEntityAdd(new ShieldPowerUp(world.atlas.createSprite("player"), systemPos.get(2)));
+		world.queueEntityAdd(new SpeedPowerUp(world.atlas.createSprite("player"), systemPos.get(3)));
+		world.queueEntityAdd(new StunShotPowerUp(world.atlas.createSprite("player"), systemPos.get(4)));
 
 		stars = game.atlas.createSprite("stars");
+	}
+
+	/**
+	 * @return The positions of the interactables in the map
+	 */
+	private List<Vector2> getInteractablesPos() {
+		List<Vector2> positions = new ArrayList<Vector2>();
+
+		MapLayer interactionLayer = World.map.getLayers().get("object_layer");
+		MapObjects objects = interactionLayer.getObjects();
+
+		for (MapObject object : objects) {
+			if (object instanceof RectangleMapObject) {
+		        Rectangle rect = ((RectangleMapObject) object).getRectangle();
+				positions.add(new Vector2(rect.x, rect.y));
+			}
+		}
+
+		return positions;
 	}
 
 	@Override

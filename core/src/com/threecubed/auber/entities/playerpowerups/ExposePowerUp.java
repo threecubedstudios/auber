@@ -24,15 +24,13 @@ public class ExposePowerUp extends PlayerPowerUp {
 	 * The constructor of the expose power up
 	 * 
 	 * @param sprite
-	 * @param position
-	 * @param cooldownMs
 	 * @param world
-	 * @param range
+	 * @param position
 	 */
-	public ExposePowerUp(Sprite sprite, Vector2 position, int cooldownMs, World world, int range) {
-		super("Expose Infiltrators", sprite, position, cooldownMs, -1, Keys.Z);
+	public ExposePowerUp(Sprite sprite, World world, Vector2 position) {
+		super("Expose Infiltrators", sprite, position, 5000, -1, Keys.Z);
 		this.world = world;
-		this.range = range;
+		this.range = 100;
 	}
 
 	@Override
@@ -43,7 +41,7 @@ public class ExposePowerUp extends PlayerPowerUp {
 			if (entity instanceof Infiltrator && exposeArea.contains(entity.position)) {
 				Infiltrator infiltrator = (Infiltrator) entity;
 
-				if (!infiltrator.exposed) {
+				if (!infiltrator.exposed && infiltrator.aiEnabled) {
 					infiltrator.handleTeleporterShot(world);
 				}
 			}

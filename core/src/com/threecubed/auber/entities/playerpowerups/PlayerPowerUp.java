@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.World;
 import com.threecubed.auber.entities.GameEntity;
@@ -78,6 +79,16 @@ public abstract class PlayerPowerUp extends GameEntity {
 	
 	@Override
 	public void update(World world) {
+		Circle collectArea = new Circle(position, 10f);
+
+		if (!isCollected() && collectArea.contains(world.player.position)) {
+			collect(world.player);
+		}
+		
+	}
+	
+	public int getKeyCode() {
+		return keyCode;
 	}
 
 	/**

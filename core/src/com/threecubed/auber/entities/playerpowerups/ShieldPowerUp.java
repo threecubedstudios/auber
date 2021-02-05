@@ -17,11 +17,9 @@ public class ShieldPowerUp extends PlayerPowerUp {
 	 * 
 	 * @param sprite
 	 * @param position
-	 * @param cooldownMs
-	 * @param durationMs
 	 */
-	public ShieldPowerUp(Sprite sprite, Vector2 position, int cooldownMs, int durationMs) {
-		super("Shield", sprite, position, cooldownMs, durationMs, Keys.Z);
+	public ShieldPowerUp(Sprite sprite, Vector2 position) {
+		super("Shield", sprite, position, 5000, 3000, Keys.C);
 		this.range = 1;
 	}
 

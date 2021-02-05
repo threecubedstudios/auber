@@ -43,6 +43,7 @@ public class Player extends GameEntity {
 
   public Player(float x, float y, World world) {
     super(x, y, world.atlas.createSprite("player"));
+    setEntityType(3);
   }
 
   /**
@@ -248,5 +249,9 @@ public class Player extends GameEntity {
       alpha += 0.1f;
     }
     return output;
+  }
+
+  public static float getHealth(){
+    return health;
   }
 }

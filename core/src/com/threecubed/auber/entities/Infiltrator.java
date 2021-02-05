@@ -31,6 +31,7 @@ public class Infiltrator extends Npc {
    * */
   public Infiltrator(float x, float y, World world) {
     super(x, y, world);
+    setEntityType(2);
     navigateToRandomSystem(world);
 
   }
@@ -44,6 +45,7 @@ public class Infiltrator extends Npc {
     super(world);
     navigateToRandomSystem(world);
     unexposedSprite = new Sprite(sprite);
+    setEntityType(2);
   }
 
   @Override

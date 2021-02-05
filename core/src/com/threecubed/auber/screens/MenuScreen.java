@@ -28,6 +28,7 @@ public class MenuScreen extends ScreenAdapter {
 
   Button playButton;
   Button demoButton;
+  Button loadButton;
   OrthogonalTiledMapRenderer renderer;
   Sprite background;
   Sprite instructions;
@@ -70,6 +71,18 @@ public class MenuScreen extends ScreenAdapter {
     demoButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
+
+    Runnable onLoadClick = new Runnable() {
+      @Override
+      public void run() {
+        game.setScreen(new GameScreen(game, false));
+      }
+    };
+
+    loadButton = new Button(
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 300f),
+        1f, game.atlas.createSprite("demoButton"), game, onLoadClick);
+
   }
 
   @Override
@@ -100,6 +113,7 @@ public class MenuScreen extends ScreenAdapter {
 
     playButton.render(spriteBatch);
     demoButton.render(spriteBatch);
+    loadButton.render(spriteBatch);
 
     spriteBatch.end();
   }

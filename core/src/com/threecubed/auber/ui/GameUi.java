@@ -184,6 +184,10 @@ public class GameUi {
     screenBatch.end();
   }
 
+
+  /**
+   * Represents a message to be displayed in the message system
+   */
   private class Message {
     String text;
     int timeToDisplay;
@@ -196,6 +200,12 @@ public class GameUi {
     }
   }
 
+  /**
+   * When called, removes any expired messages from the list, and draws all others.
+   *
+   * @param world The world object
+   * @param screenBatch The batch to draw to
+   */
   private void drawMessages(World world, SpriteBatch screenBatch){
     screenBatch.begin();
     uiFont.setColor(Color.WHITE);
@@ -217,6 +227,12 @@ public class GameUi {
     screenBatch.end();
   }
 
+
+  /**
+   * Adds a given message to the list of messages to display, with the default duration.
+   *
+   * @param text String containing message to be displayed
+   */
   public void queueMessage(String text){
     Message message = new Message(text, MESSAGE_DURATION);
     messages.add(message);

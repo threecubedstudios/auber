@@ -36,6 +36,7 @@ public class Player extends GameEntity {
   public float health = 1;
 
   public boolean escapeConfusion = false;
+  public boolean reduceChargeTime = false;
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
@@ -88,6 +89,14 @@ public class Player extends GameEntity {
         velocity.set(-velocity.x, -velocity.y);
       }
 
+      // Decide ahead of time which charge rate to use
+      float chargeRateActual;
+      if(reduceChargeTime) {
+        chargeRateActual = World.AUBER_CHARGE_RATE_FAST;
+      }else{
+        chargeRateActual = World.AUBER_CHARGE_RATE;
+      }
+
       if (Gdx.input.isKeyPressed(Input.Keys.W)) {
         velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
       }
@@ -101,13 +110,16 @@ public class Player extends GameEntity {
         velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
       }
 
-
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && teleporterRayCoordinates.isZero()) {
         world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge
-            + World.AUBER_CHARGE_RATE, 1f);
+                + chargeRateActual, 1f);
       } else {
-        if (world.auberTeleporterCharge > 0.95f) {
+        if (world.auberTeleporterCharge > 0.9f) {
           world.auberTeleporterCharge = 0;
+          if(reduceChargeTime) {
+            reduceChargeTime = false;
+            world.ui.queueMessage("Reduce Charge Time used");
+          }
 
           // Scare entities
           teleporterRayCoordinates = handleRayCollisions(world);
@@ -138,7 +150,7 @@ public class Player extends GameEntity {
           }, World.AUBER_RAY_TIME);
         } else {
           world.auberTeleporterCharge = Math.max(world.auberTeleporterCharge
-              - World.AUBER_CHARGE_RATE, 0f);
+              - chargeRateActual, 0f);
         }
       }
       if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
@@ -275,6 +287,14 @@ public class Player extends GameEntity {
         world.ui.queueMessage("Escape Confusion already acquired");
       }
       escapeConfusion = true;
+    }
+    else if(powerUpType == PowerUp.PowerUpType.REDUCE_CHARGE_TIME){
+      if(!reduceChargeTime){
+        world.ui.queueMessage("Reduce Charge Time acquired");
+      }else{
+        world.ui.queueMessage("Reduce Charge Time already acquired");
+      }
+      reduceChargeTime = true;
     }
   }
 }

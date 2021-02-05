@@ -63,7 +63,7 @@ public class World {
   public static ArrayList<RectangleMapObject> systems = new ArrayList<>();
   public RectangleMapObject medbay;
   public ArrayList<float[]> spawnLocations = new ArrayList<>();
-  public  static HashMap<String, Enum<SystemStates>> systemStatesMap;
+  public static HashMap<String, Enum<SystemStates>> systemStatesMap;
 
   public final Random randomNumberGenerator = new Random();
 

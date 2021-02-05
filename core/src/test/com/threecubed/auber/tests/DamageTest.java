@@ -1,7 +1,6 @@
 package com.threecubed.auber.tests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +39,7 @@ public class DamageTest {
     playerMock.position = new Vector2(0,0);
     Difficulty.damageMultiplier = 1;
     projectileMock.update(worldMock);
-    assertTrue("message", worldMock.player.health == 0.8f);
-
+    assertEquals("player's health is : " + worldMock.player.health,
+            0.8f, worldMock.player.health, 0.0);
   }
 }

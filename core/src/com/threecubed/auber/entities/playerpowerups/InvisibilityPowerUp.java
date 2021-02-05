@@ -14,7 +14,7 @@ public class InvisibilityPowerUp extends PlayerPowerUp {
 	 * @param cooldownMs
 	 */
 	public InvisibilityPowerUp(Sprite sprite, Vector2 position, int cooldownMs, int durationMs) {
-		super(sprite, position, cooldownMs, durationMs, Keys.X);
+		super("Invisibilty", sprite, position, cooldownMs, durationMs, Keys.X);
 	}
 
 	@Override

@@ -7,19 +7,11 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.threecubed.auber.World;
+import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 
-public abstract class PlayerPowerUp {
-
-	/**
-	 * The sprite of the power up
-	 */
-	protected Sprite sprite;
-
-	/**
-	 * The position of the power up
-	 */
-	private Vector2 position;
+public abstract class PlayerPowerUp extends GameEntity {
 
 	/**
 	 * The timestamp of when the player can next use the power up
@@ -46,6 +38,16 @@ public abstract class PlayerPowerUp {
 	 * The player that has procured the power up
 	 */
 	protected Player player;
+
+	/**
+	 * True if the power up is currently active, False otherwise
+	 */
+	private boolean isActive = false;
+	
+	/**
+	 * The name of the power up
+	 */
+	public String name;
 	
 	/**
 	 * The power up's constructer
@@ -56,7 +58,9 @@ public abstract class PlayerPowerUp {
 	 * @param durationMs
 	 * @param keyCode
 	 */
-	public PlayerPowerUp(Sprite sprite, Vector2 position, int cooldownMs, int durationMs, int keyCode) {
+	public PlayerPowerUp(String name, Sprite sprite, Vector2 position, int cooldownMs, int durationMs, int keyCode) {
+		super(position.x, position.y, sprite);
+		this.name = name;
 		this.sprite = sprite;
 		this.position = position;
 		this.cooldownMs = cooldownMs;
@@ -64,19 +68,32 @@ public abstract class PlayerPowerUp {
 		this.keyCode = keyCode;
 	}
 
-	/**
-	 * Renders the powerup to the screen, if it hasn't been collected
-	 * 
-	 * @param batch
-	 * @param camera
-	 */
+	@Override
 	public void render(Batch batch, Camera camera) {
-		if (player == null) {
+		if (!isCollected()) {
 			sprite.setPosition(position.x, position.y);
 			sprite.draw(batch);
 		}
 	}
+	
+	@Override
+	public void update(World world) {
+	}
 
+	/**
+	 * @return True if the player has collected the power up, False otherwise
+	 */
+	public boolean isCollected() {
+		return player != null;
+	}
+	
+	/**
+	 * @return {@link #isActive}
+	 */
+	public boolean isActive() {
+		return isActive;
+	}
+	
 	/**
 	 * Fired when the player collects the power up
 	 * 
@@ -94,10 +111,12 @@ public abstract class PlayerPowerUp {
 		nextActivatableTimeMs = System.currentTimeMillis() + cooldownMs;
 		
 		if (durationMs != -1) {
+			isActive = true;
 			new Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {
 					reverseAction();
+					isActive = false;
 				}
 			}, durationMs);
 		}

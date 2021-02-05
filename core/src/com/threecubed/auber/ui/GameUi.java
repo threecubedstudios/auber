@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
+import com.threecubed.auber.entities.GameEntity;
+import com.threecubed.auber.entities.playerpowerups.PlayerPowerUp;
 
 public class GameUi {
 	private static final int CHARGE_METER_WIDTH = 20;
@@ -56,6 +58,7 @@ public class GameUi {
 		drawHealthbar(world, screenBatch);
 		drawHealthWarnings(world, screenBatch);
 		drawSystemWarnings(world, screenBatch);
+		drawPowerUps(world, screenBatch);
 	}
 
 	/**
@@ -167,5 +170,39 @@ public class GameUi {
 		uiFont.setColor(Color.WHITE);
 		screenBatch.end();
 	}
+
+	/**
+	 * Draws the power up text to the UI
+	 * 
+	 * @param world
+	 * @param screenBatch
+	 */
+	private void drawPowerUps(World world, SpriteBatch screenBatch) {
+	  screenBatch.begin();
+	  
+	  int ctr = 0;
+	  
+	  for (GameEntity entity : world.getEntities()) {
+		  if (entity instanceof PlayerPowerUp) {
+			  PlayerPowerUp powerUp = (PlayerPowerUp) entity;
+			  
+			  if (!powerUp.isCollected()) {
+				  uiFont.setColor(Color.GRAY);
+			  } else if (powerUp.isActive()) {
+				  uiFont.setColor(Color.BLUE);
+			  } else if (powerUp.canActivate()) {
+				  uiFont.setColor(Color.GREEN);
+			  } else {
+				  uiFont.setColor(Color.RED);
+			  }
+			  
+			  uiFont.draw(screenBatch, powerUp.name, 10, 600 + ctr * 20);
+			  ctr += 1;
+		  }
+	  }
+	  
+	  uiFont.setColor(Color.WHITE);
+	  screenBatch.end();
+  }
 
 }

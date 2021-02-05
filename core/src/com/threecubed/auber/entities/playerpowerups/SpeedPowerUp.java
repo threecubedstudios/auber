@@ -15,7 +15,7 @@ public class SpeedPowerUp extends PlayerPowerUp {
 	 * @param durationMs
 	 */
 	public SpeedPowerUp(Sprite sprite, Vector2 position, int cooldownMs, int durationMs) {
-		super(sprite, position, cooldownMs, durationMs, Keys.V);
+		super("Speed", sprite, position, cooldownMs, durationMs, Keys.V);
 	}
 
 	@Override

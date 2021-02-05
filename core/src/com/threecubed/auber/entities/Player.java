@@ -44,11 +44,6 @@ public class Player extends GameEntity {
 	 * True if the player is visible to the user and enemies, False otherwise
 	 */
 	public boolean isVisible = true;
-
-	/**
-	 * Shields the player from infiltator projectiles when active
-	 */
-	public ProjectileShield shield = new ProjectileShield(1);
 	
 	private ShapeRenderer rayRenderer = new ShapeRenderer();
 
@@ -65,8 +60,6 @@ public class Player extends GameEntity {
 	@Override
 	public void update(World world) {
 		if (!world.demoMode) {
-			shield.update(this, world);
-			
 			if (Gdx.input.isKeyJustPressed(Input.Keys.Q) || health <= 0) {
 				position.set(World.MEDBAY_COORDINATES[0], World.MEDBAY_COORDINATES[1]);
 				confused = false;

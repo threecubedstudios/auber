@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class StunShotPowerUp extends PlayerPowerUp {
 
 	public StunShotPowerUp(Sprite sprite, Vector2 position, int cooldownMs, int keyCode) {
-		super(sprite, position, cooldownMs, -1, Keys.B);
+		super("Stun Shot", sprite, position, cooldownMs, -1, Keys.B);
 	}
 
 	@Override

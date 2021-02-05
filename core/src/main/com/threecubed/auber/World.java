@@ -1,5 +1,6 @@
 package com.threecubed.auber;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -35,6 +36,7 @@ import java.util.Random;
 public class World {
   private AuberGame game;
 
+
   public DataManager dataManager;
 
   public Player player;
@@ -52,6 +54,7 @@ public class World {
   public OrthographicCamera camera = new OrthographicCamera();
 
   public static final TiledMap map = new TmxMapLoader().load("map.tmx");
+
   public static final TiledMapTileSet tileset = map.getTileSets().getTileSet(0);
   public TextureAtlas atlas;
 

@@ -141,4 +141,7 @@ public class PowerUp extends GameEntity {
         break;
     }
   }
+  public boolean isActive() {
+    return this.active;
+  }
 }

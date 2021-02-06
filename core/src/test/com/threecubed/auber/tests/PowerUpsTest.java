@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.GdxTestRunner;
 import com.threecubed.auber.PowerUp;
 import com.threecubed.auber.Utils;
@@ -18,6 +20,7 @@ import com.threecubed.auber.PowerUp.Type;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Infiltrator;
 import com.threecubed.auber.entities.Player;
+import com.threecubed.auber.pathfinding.NavigationMesh;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -97,6 +100,18 @@ public class PowerUpsTest {
     assertTrue("Infiltrator should be exposed", i.exposed);
     p.deactivate(worldMock);
     assertFalse("Power up effect should end", i.exposed);
+  } 
+
+  @Test
+  public void updateCollisionTest() throws Exception {
+    worldMock.atlas = new TextureAtlas("auber.atlas");
+    playerMock.position = new Vector2(0,0);
+    worldMock.navigationMesh = new NavigationMesh((TiledMapTileLayer) World.map.getLayers().get("navigation_layer"));
+    worldMock.player = playerMock;
+
+    PowerUp p = new PowerUp(0, 0, worldMock, Type.DETECT);
+    p.update(worldMock);
+    assertTrue("The Power up should be active", p.isActive());
   } 
 
 }

@@ -1,6 +1,5 @@
 package com.threecubed.auber;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -68,7 +67,7 @@ public class World {
   public final Random randomNumberGenerator = new Random();
 
   // ------------------NAVIGATION----------------
-  public final NavigationMesh navigationMesh = new NavigationMesh(
+  public NavigationMesh navigationMesh = new NavigationMesh(
       (TiledMapTileLayer) map.getLayers().get("navigation_layer")
       );
   public ArrayList<float[]> fleePoints = new ArrayList<>();

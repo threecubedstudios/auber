@@ -92,6 +92,10 @@ public class GameUi {
     shapeRenderer.begin(ShapeType.Filled);
     shapeRenderer.rect(CHARGE_METER_POSITION.x + 160f, CHARGE_METER_POSITION.y, CHARGE_METER_WIDTH,
         chargeMeterHeight);
+    // Draw background (fill remaining space)
+    shapeRenderer.setColor(Color.DARK_GRAY);
+    shapeRenderer.rect(CHARGE_METER_POSITION.x + 160f, CHARGE_METER_POSITION.y+chargeMeterHeight, CHARGE_METER_WIDTH,
+            CHARGE_METER_MAX_HEIGHT-chargeMeterHeight);
     shapeRenderer.end();
   }
 
@@ -105,17 +109,22 @@ public class GameUi {
     float healthbarHeight = world.player.health * HEALTHBAR_MAX_HEIGHT;
 
     // Set the healthbar colour based on amount of health
-    if (healthbarHeight > CHARGE_METER_MAX_HEIGHT * 0.8f) {
+    if (healthbarHeight > HEALTHBAR_MAX_HEIGHT * 0.8f) {
       shapeRenderer.setColor(Color.GREEN);
-    } else if (healthbarHeight > CHARGE_METER_MAX_HEIGHT * 0.5) {
+    } else if (healthbarHeight > HEALTHBAR_MAX_HEIGHT * 0.5) {
       shapeRenderer.setColor(Color.ORANGE);
     } else {
       shapeRenderer.setColor(Color.RED);
     }
 
     shapeRenderer.begin(ShapeType.Filled);
+    // Draw the bar
     shapeRenderer.rect(HEALTHBAR_POSITION.x + 60f, HEALTHBAR_POSITION.y, HEALTHBAR_WIDTH,
         healthbarHeight);
+    // Draw background (fill remaining space)
+    shapeRenderer.setColor(Color.DARK_GRAY);
+    shapeRenderer.rect(HEALTHBAR_POSITION.x + 60f, HEALTHBAR_POSITION.y+healthbarHeight, HEALTHBAR_WIDTH,
+        HEALTHBAR_MAX_HEIGHT-healthbarHeight);
     shapeRenderer.end();
   }
 

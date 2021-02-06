@@ -64,7 +64,7 @@ public class World {
   public ArrayList<float[]> spawnLocations = new ArrayList<>();
   public static HashMap<String, Enum<SystemStates>> systemStatesMap;
 
-  public final Random randomNumberGenerator = new Random();
+  public Random randomNumberGenerator = new Random();
 
   // ------------------NAVIGATION----------------
   public NavigationMesh navigationMesh = new NavigationMesh(

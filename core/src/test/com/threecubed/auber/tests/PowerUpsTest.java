@@ -14,7 +14,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.GdxTestRunner;
 import com.threecubed.auber.PowerUp;
-import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.PowerUp.Type;
 import com.threecubed.auber.entities.GameEntity;
@@ -87,6 +86,7 @@ public class PowerUpsTest {
   @Test
   public void detectTest() throws Exception {
     worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.randomNumberGenerator = new Random();
     worldMock.player = playerMock;
 
     Infiltrator i = new Infiltrator(0, 0, worldMock);
@@ -95,7 +95,6 @@ public class PowerUpsTest {
 
     PowerUp p = new PowerUp(0, 0, worldMock, Type.DETECT);
     when(worldMock.getEntities()).thenReturn(entities);
-    when(worldMock.randomNumberGenerator).thenReturn(new Random()); 
     p.activate(worldMock);
     assertTrue("Infiltrator should be exposed", i.exposed);
     p.deactivate(worldMock);

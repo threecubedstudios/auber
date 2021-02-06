@@ -93,7 +93,6 @@ public class Infiltrator extends Npc {
     }
 
     if (!exposed) {
-      exposed = true;
       fireProjectileAtPlayer(world);
       expose(world);   
       state = States.FLEEING;
@@ -119,11 +118,12 @@ public class Infiltrator extends Npc {
 
   public void expose(World world) {
     sprite = exposedSprite;
-    
+    exposed = true;
   }
 
   public void unexpose(World world) {
     sprite = unexposedSprite;
+    exposed = false;
   }
 
   /**

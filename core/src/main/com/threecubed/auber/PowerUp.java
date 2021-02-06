@@ -118,7 +118,7 @@ public class PowerUp extends GameEntity {
     used = true;
     switch (powerType) {
       case IMMUNITY:
-        world.player.immune = true;
+        world.player.immune = false;
         break;
       case INVISIBILITY:
         world.player.invisible = false;

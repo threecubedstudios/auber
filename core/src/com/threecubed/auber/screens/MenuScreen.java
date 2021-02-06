@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
+import com.threecubed.auber.save.Save;
 import com.threecubed.auber.ui.Button;
 
 
@@ -75,7 +76,9 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onLoadClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, false));
+        //game.setScreen(new GameScreen(game, false));
+        Save save = new Save();
+        save.LoadJson();
       }
     };
 

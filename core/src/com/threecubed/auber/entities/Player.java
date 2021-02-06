@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.save.Save;
 
 
 /**
@@ -62,6 +63,12 @@ public class Player extends GameEntity {
         confused = false;
         slowed = false;
         teleporterRayCoordinates.setZero();
+      }
+
+      //Save while press G
+      if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+        new Save().SaveJson(world);
+
       }
 
       // Increment Auber's health if in medbay

@@ -24,7 +24,7 @@ public class PowerUp extends GameEntity{
 //        SPEED_BOOST,
         REDUCE_CHARGE_TIME,
 //        STRONGER_RAY,
-//        REDUCE_DAMAGE,
+        ONE_USE_SHIELD,
         ESCAPE_CONFUSION,
     }
 

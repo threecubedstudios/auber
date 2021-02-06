@@ -37,6 +37,7 @@ public class Player extends GameEntity {
 
   public boolean escapeConfusion = false;
   public boolean reduceChargeTime = false;
+  public boolean strongerRay = false;
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
@@ -295,6 +296,14 @@ public class Player extends GameEntity {
         world.ui.queueMessage("Reduce Charge Time already acquired");
       }
       reduceChargeTime = true;
+    }
+    else if(powerUpType == PowerUp.PowerUpType.STRONGER_RAY){
+      if(!strongerRay){
+        world.ui.queueMessage("Stronger Ray acquired");
+      }else{
+        world.ui.queueMessage("Stronger Ray already acquired");
+      }
+      strongerRay = true;
     }
   }
 }

@@ -5,7 +5,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
 import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.GdxTestRunner;
 import com.threecubed.auber.World;
@@ -27,18 +29,22 @@ public class DamageTest {
   Player playerMock = mock(Player.class);
   @Mock
   Infiltrator infiltratorMock = mock(Infiltrator.class);
-  @Mock
-  Projectile projectileMock = mock(Projectile.class);
   
   @Test
   public void maxHealth() throws Exception{
     assertNotNull(worldMock);
-    worldMock.player = playerMock;
-    worldMock.player.health = 1f;
-    projectileMock.position = new Vector2(0,0);
+    playerMock.immune = false;    
+    playerMock.health = 1f;
+    playerMock.playerTimer = new Timer();
     playerMock.position = new Vector2(0,0);
+    worldMock.atlas = new TextureAtlas("auber.atlas");
+    playerMock.sprite = worldMock.atlas.createSprite("player"); 
+    worldMock.player = playerMock;
+
     Difficulty.damageMultiplier = 1;
-    projectileMock.update(worldMock);
+
+    Projectile p = new Projectile(0, 0, new Vector2(0,0), infiltratorMock, CollisionActions.BLIND, worldMock);  
+    p.update(worldMock);
     assertEquals("player's health is : " + worldMock.player.health,
             0.8f, worldMock.player.health, 0.0);
   }

@@ -23,7 +23,7 @@ public class PowerUp extends GameEntity{
     public enum PowerUpType{
 //        SPEED_BOOST,
         REDUCE_CHARGE_TIME,
-//        STRONGER_RAY,
+        STRONGER_RAY,
         ONE_USE_SHIELD,
         ESCAPE_CONFUSION,
     }

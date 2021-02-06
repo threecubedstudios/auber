@@ -71,11 +71,11 @@ public class GameScreen extends ScreenAdapter {
 
 		List<Vector2> systemPos = getInteractablesPos();
 		
-		world.queueEntityAdd(new ExposePowerUp(world.atlas.createSprite("player"), world, systemPos.get(0)));
-		world.queueEntityAdd(new InvisibilityPowerUp(world.atlas.createSprite("player"), systemPos.get(1)));
-		world.queueEntityAdd(new ShieldPowerUp(world.atlas.createSprite("player"), systemPos.get(2)));
-		world.queueEntityAdd(new SpeedPowerUp(world.atlas.createSprite("player"), systemPos.get(3)));
-		world.queueEntityAdd(new StunShotPowerUp(world.atlas.createSprite("player"), systemPos.get(4)));
+		world.queueEntityAdd(new ExposePowerUp(world.atlas.createSprite("ExposePU"), world, systemPos.get(0)));
+		world.queueEntityAdd(new InvisibilityPowerUp(world.atlas.createSprite("InvisibilityPU"), systemPos.get(1)));
+		world.queueEntityAdd(new ShieldPowerUp(world.atlas.createSprite("ShieldPU"), systemPos.get(2)));
+		world.queueEntityAdd(new SpeedPowerUp(world.atlas.createSprite("SpeedPU"), systemPos.get(3)));
+		world.queueEntityAdd(new StunShotPowerUp(world.atlas.createSprite("StunShotPU"), systemPos.get(4)));
 
 		stars = game.atlas.createSprite("stars");
 	}

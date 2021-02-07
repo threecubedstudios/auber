@@ -38,6 +38,8 @@ public class Player extends GameEntity {
 
   public boolean escapeConfusion = false;
   public boolean reduceChargeTime = false;
+  public boolean oneUseShield = false;
+  public boolean strongerRay = false;
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
@@ -286,7 +288,7 @@ public class Player extends GameEntity {
    */
   public void receivePowerUp(PowerUp.PowerUpType powerUpType){
 
-    //If player receives escape confusion, they are given the appropriate message depending on if they already have it
+    //Player is given the appropriate message depending on if they already have the power-up
     // and the appropriate boolean is set to true
     if(powerUpType == PowerUp.PowerUpType.ESCAPE_CONFUSION){
       if(!escapeConfusion){
@@ -303,6 +305,22 @@ public class Player extends GameEntity {
         world.ui.queueMessage("Reduce Charge Time already acquired");
       }
       reduceChargeTime = true;
+    }
+    else if(powerUpType == PowerUp.PowerUpType.ONE_USE_SHIELD){
+      if(!oneUseShield){
+        world.ui.queueMessage("Single-Use Shield acquired");
+      }else{
+        world.ui.queueMessage("Single-Use Shield already acquired");
+      }
+      oneUseShield = true;
+    }
+    else if(powerUpType == PowerUp.PowerUpType.STRONGER_RAY){
+      if(!strongerRay){
+        world.ui.queueMessage("Stronger Ray acquired");
+      }else{
+        world.ui.queueMessage("Stronger Ray already acquired");
+      }
+      strongerRay = true;
     }
   }
 }

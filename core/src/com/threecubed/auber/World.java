@@ -76,7 +76,7 @@ public class World {
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
   /** The rate at which the teleporter ray charges. */
-  public static final float AUBER_CHARGE_RATE = 0.04f;
+  public static final float AUBER_CHARGE_RATE = 0.03f;
   /** The rate at which the teleporter ray charges when powered up. */
   public static final float AUBER_CHARGE_RATE_FAST = 0.1f;
   /** The time the ray should visibly render for. */

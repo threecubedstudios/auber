@@ -72,6 +72,7 @@ public class Projectile extends GameEntity {
   }
 
   private void handleCollisionWithPlayer(World world) {
+    // Debuff the player
     switch (collisionAction) {
       case CONFUSE:
         confusePlayer(world);
@@ -85,7 +86,14 @@ public class Projectile extends GameEntity {
       default:
         break;
     }
-    world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE;
+
+    // Only do damage to the player if they don't have the shield power-up
+    if(!world.player.oneUseShield) {
+      world.player.health -= World.INFILTRATOR_PROJECTILE_DAMAGE;
+    }else{
+      world.player.oneUseShield = false;
+      world.ui.queueMessage("Single-Use Shield used");
+    }
   }
 
   private void confusePlayer(final World world) {

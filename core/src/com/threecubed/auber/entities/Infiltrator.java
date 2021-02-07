@@ -84,7 +84,21 @@ public class Infiltrator extends Npc {
       }
     }
 
-    if (!exposed) {
+
+    //If the player has the stronger ray power-up, we act as if the infiltrator is already exposed.
+    if(world.player.strongerRay){
+      world.ui.queueMessage("Stronger Ray used on infiltrator");
+      world.player.strongerRay = false;
+      exposed = true;
+    }
+
+    if(exposed) {
+      position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
+              World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
+      position.y = Utils.randomFloatInRange(world.randomNumberGenerator,
+              World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
+      aiEnabled = false;
+    } else {
       exposed = true;
       fireProjectileAtPlayer(world);
       sprite = world.atlas.createSprite("infiltrator");
@@ -100,12 +114,6 @@ public class Infiltrator extends Npc {
           }
         }
       }, World.INFILTRATOR_FIRING_INTERVAL, World.INFILTRATOR_FIRING_INTERVAL);
-    } else {
-      position.x = Utils.randomFloatInRange(world.randomNumberGenerator,
-          World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
-      position.y = Utils.randomFloatInRange(world.randomNumberGenerator,
-          World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
-      aiEnabled = false;    
     }
   }
 

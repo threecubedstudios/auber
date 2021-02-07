@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.ui.GameUi;
 
 
 /**
@@ -32,11 +33,13 @@ public class Player extends GameEntity {
   public Timer playerTimer = new Timer();
   private Vector2 teleporterRayCoordinates = new Vector2();
 
-  /** Health of Auber - varies between 1 and 0. */
+  /**
+   * Health of Auber - varies between 1 and 0.
+   */
   public float health = 1;
 
   public boolean escapeConfusion = false;
-  public boolean speedBoost = false;
+  public static boolean speedBoost = false;
   public boolean confused = false;
   public boolean slowed = false;
   public boolean blinded = false;
@@ -52,7 +55,7 @@ public class Player extends GameEntity {
    * Handle player controls such as movement, interaction and firing the teleporing gun.
    *
    * @param world The game world
-   * */
+   */
   @Override
   public void update(World world) {
     this.world = world;
@@ -77,7 +80,7 @@ public class Player extends GameEntity {
       }
 
       //If the player has the escape confusion power-up and is confused, set confusion back to false.
-      if (confused && escapeConfusion){
+      if (confused && escapeConfusion) {
         confused = false;
         escapeConfusion = false;
         world.ui.queueMessage("Escape confusion used");
@@ -93,7 +96,7 @@ public class Player extends GameEntity {
       if (speedBoost) {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
           velocity.y = (velocity.y + boostedSpeed - speedModifier);
-       }
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
           velocity.x = (velocity.x - boostedSpeed + speedModifier);
         }
@@ -103,7 +106,7 @@ public class Player extends GameEntity {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
           velocity.x = (velocity.x + boostedSpeed - speedModifier);
         }
-      }else {
+      } else {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
           velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
         }
@@ -121,7 +124,7 @@ public class Player extends GameEntity {
 
       if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && teleporterRayCoordinates.isZero()) {
         world.auberTeleporterCharge = Math.min(world.auberTeleporterCharge
-            + World.AUBER_CHARGE_RATE, 1f);
+                + World.AUBER_CHARGE_RATE, 1f);
       } else {
         if (world.auberTeleporterCharge > 0.95f) {
           world.auberTeleporterCharge = 0;
@@ -130,9 +133,9 @@ public class Player extends GameEntity {
           teleporterRayCoordinates = handleRayCollisions(world);
           for (GameEntity entity : world.getEntities()) {
             float entityDistance = NavigationMesh.getEuclidianDistance(
-                new float[] {teleporterRayCoordinates.x, teleporterRayCoordinates.y},
-                new float[] {entity.position.x, entity.position.y}
-                );
+                    new float[]{teleporterRayCoordinates.x, teleporterRayCoordinates.y},
+                    new float[]{entity.position.x, entity.position.y}
+            );
             if (entityDistance < World.NPC_EAR_STRENGTH && entity instanceof Npc) {
               if (entity instanceof Infiltrator) {
                 Infiltrator infiltrator = (Infiltrator) entity;
@@ -155,7 +158,7 @@ public class Player extends GameEntity {
           }, World.AUBER_RAY_TIME);
         } else {
           world.auberTeleporterCharge = Math.max(world.auberTeleporterCharge
-              - World.AUBER_CHARGE_RATE, 0f);
+                  - World.AUBER_CHARGE_RATE, 0f);
         }
       }
       if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
@@ -172,8 +175,8 @@ public class Player extends GameEntity {
 
               String linkedTeleporterId = properties.get("linked_teleporter", String.class);
               RectangleMapObject linkedTeleporter = (RectangleMapObject) objects.get(
-                  linkedTeleporterId
-                  );
+                      linkedTeleporterId
+              );
               velocity.setZero();
               position.x = linkedTeleporter.getRectangle().getX();
               position.y = linkedTeleporter.getRectangle().getY();
@@ -192,14 +195,14 @@ public class Player extends GameEntity {
       rotation = (float) (Math.toDegrees(Math.atan2(
               (mousePosition.y - getCenterY()),
               (mousePosition.x - getCenterX()))
-            ) - 90f);
+      ) - 90f);
 
       // Handle the confused debuff
       if (confused) {
         velocity.set(-velocity.x, -velocity.y);
       }
 
-      move(velocity, World.map);  
+      move(velocity, World.map);
     }
   }
 
@@ -207,9 +210,9 @@ public class Player extends GameEntity {
    * Overrides the GameEntity render method to render the player's teleporter raygun, as well
    * as the player itself.
    *
-   * @param batch The batch to draw to
+   * @param batch  The batch to draw to
    * @param camera The world's camera
-   * */
+   */
   @Override
   public void render(Batch batch, Camera camera) {
     if (!teleporterRayCoordinates.isZero()) {
@@ -219,8 +222,8 @@ public class Player extends GameEntity {
       rayRenderer.setProjectionMatrix(camera.combined);
       rayRenderer.begin(ShapeType.Filled);
       rayRenderer.rectLine(getCenterX(), getCenterY(),
-          teleporterRayCoordinates.x, teleporterRayCoordinates.y, 0.5f,
-          World.rayColorA, World.rayColorB);
+              teleporterRayCoordinates.x, teleporterRayCoordinates.y, 0.5f,
+              World.rayColorA, World.rayColorB);
       rayRenderer.end();
 
       batch.begin();
@@ -233,7 +236,7 @@ public class Player extends GameEntity {
    *
    * @param world The game world
    * @return The coordinates the ray hit
-   * */
+   */
   private Vector2 handleRayCollisions(World world) {
     Vector2 output = new Vector2();
 
@@ -264,10 +267,10 @@ public class Player extends GameEntity {
 
       // Check for tile collisions
       TiledMapTileLayer collisionLayer = (TiledMapTileLayer) World.map.getLayers()
-          .get("collision_layer");
+              .get("collision_layer");
       Cell targetCell = collisionLayer.getCell(
-          (int) output.x / collisionLayer.getTileWidth(),
-          (int) output.y / collisionLayer.getTileHeight()
+              (int) output.x / collisionLayer.getTileWidth(),
+              (int) output.y / collisionLayer.getTileHeight()
       );
       if (targetCell != null) {
         rayIntersected = true;
@@ -279,24 +282,24 @@ public class Player extends GameEntity {
 
   /**
    * Causes the player to recieve the benefit of a specific power up.
+   *
    * @param powerUpType The type of power up to be given to the player.
    */
-  public void receivePowerUp(PowerUp.PowerUpType powerUpType){
-    if(powerUpType == PowerUp.PowerUpType.ESCAPE_CONFUSION){
-      if(!escapeConfusion){
+  public void receivePowerUp(PowerUp.PowerUpType powerUpType) {
+    if (powerUpType == PowerUp.PowerUpType.ESCAPE_CONFUSION) {
+      if (!escapeConfusion) {
         world.ui.queueMessage("Escape Confusion acquired");
-      }else{
+      } else {
         world.ui.queueMessage("Escape Confusion already acquired");
       }
       escapeConfusion = true;
-    }
-    else if (powerUpType == PowerUp.PowerUpType.SPEED_BOOST){
-      if (!speedBoost){
-        world.ui.queueMessage("Speed Boost Acquired");
-      }else{
-        world.ui.queueMessage("Speed Boost already acquired");
+    } else if (powerUpType == PowerUp.PowerUpType.SPEED_BOOST) {
+      if (!speedBoost) {
+        world.ui.queueSpeedBoost("Speed Boost Acquired");
+      } else {
+        world.ui.queueSpeedBoost("Speed Boost already acquired");
       }
       speedBoost = true;
+      }
     }
   }
-}

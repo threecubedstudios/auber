@@ -35,7 +35,7 @@ public class HostileTeleport {
 
     i.handleTeleporterShot(worldMock);
     assertFalse("AI should be disabled", i.aiEnabled);
-    assertTrue("", (World.BRIG_BOUNDS[0][0] <= i.position.x) &&  (i.position.x <= World.BRIG_BOUNDS[1][0]) &&
+    assertTrue("Infiltrator should be in the brig", (World.BRIG_BOUNDS[0][0] <= i.position.x) &&  (i.position.x <= World.BRIG_BOUNDS[1][0]) &&
     (World.BRIG_BOUNDS[0][1] <= i.position.y) &&  (i.position.y <= World.BRIG_BOUNDS[1][1]));
   }
 }

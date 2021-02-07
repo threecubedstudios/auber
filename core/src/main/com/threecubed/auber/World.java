@@ -220,7 +220,7 @@ public class World {
       queueEntityAdd(player);
       this.player = player;
     } else {
-      Player player = new Player(64f, 64f, this);
+      Player player = generatePlayer();
       queueEntityAdd(player);
       this.player = player;
     }
@@ -425,6 +425,10 @@ public class World {
         }
       }
     }
+  }
+
+  public Player generatePlayer(){
+    return new Player(64,64, this);
   }
 
   /**

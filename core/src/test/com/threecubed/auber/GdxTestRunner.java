@@ -25,8 +25,12 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
+
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -41,7 +45,13 @@ public class GdxTestRunner extends BlockJUnit4ClassRunner implements Application
 		HeadlessApplicationConfiguration conf = new HeadlessApplicationConfiguration();
 
 		new HeadlessApplication(this, conf);
+		Gdx.gl30 = mock(GL30.class);
+		Gdx.gl20 = mock(GL20.class);
 		Gdx.gl = mock(GL20.class);
+
+		Gdx.graphics = mock(Graphics.class);
+		when(Gdx.graphics.getWidth()).thenReturn(1000);
+		when(Gdx.graphics.getHeight()).thenReturn(1000);
 	}
 
 	@Override

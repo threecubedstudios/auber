@@ -75,7 +75,7 @@ public class World {
   /** Coordinates for the bottom left and top right tiles of the brig. */
   public static final float[][] BRIG_BOUNDS = {{240f, 608f}, {352f, 640f}};
   /** Coordinates for the medbay teleporter. */
-  public static final float[] MEDBAY_COORDINATES = {96f, 640f};
+  public static float[] MEDBAY_COORDINATES = {96f, 640f};
 
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;

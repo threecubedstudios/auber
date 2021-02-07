@@ -40,6 +40,7 @@ public class World {
 
   public Player player;
   public int infiltratorCount;
+  public static boolean userWon = true;
 
   public boolean demoMode = false;
 
@@ -208,6 +209,7 @@ public class World {
     this.dataManager = new DataManager("aubergame");
     systemStatesMap = new HashMap<>();
     atlas = game.atlas;
+
 
     // Configure the camera
     camera.setToOrtho(false, 480, 270);
@@ -486,4 +488,20 @@ public class World {
       game.setScreen(new GameOverScreen(game, true));
     }
   }
+
+  /**
+   * simplified check for end state. only used with test module.
+   * @param test Boolean
+   * @return Boolean user win or not
+   */
+  public boolean checkForEndState(boolean test){
+    if (systems.size() == 0 ) {
+      userWon = false;
+    } else if (infiltratorCount <= 0) {
+      userWon = true;
+    }
+    return userWon;
+  }
+
+
 }

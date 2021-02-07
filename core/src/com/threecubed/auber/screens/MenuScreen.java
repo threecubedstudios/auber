@@ -54,7 +54,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onPlayClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, false));
+        game.setScreen(new GameScreen(game, false, false));
       }
     };
 
@@ -65,7 +65,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, true));
+        game.setScreen(new GameScreen(game, true, false));
       }
     };
 
@@ -76,9 +76,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onLoadClick = new Runnable() {
       @Override
       public void run() {
-        //game.setScreen(new GameScreen(game, false));
-        Save save = new Save();
-        save.LoadJson();
+        game.setScreen(new GameScreen(game, false, true));
       }
     };
 
@@ -95,7 +93,7 @@ public class MenuScreen extends ScreenAdapter {
       Gdx.graphics.setFullscreenMode(currentDisplayMode);
     }
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-      game.setScreen(new GameScreen(game, true));
+      game.setScreen(new GameScreen(game, true, false));
     }
 
     // Set the background color

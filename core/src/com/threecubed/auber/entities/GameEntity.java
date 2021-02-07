@@ -35,7 +35,7 @@ public abstract class GameEntity {
   public Vector2 position;
   public Vector2 velocity;
   public float rotation = 0f;
-  //1=Civilian, 2=Infiltrator, 3=Player, 4=Projectile
+  //1=Civilian, 2=Infiltrator, 3=Player, 4=Projectile, 5=PowerUp
   public int entityType;
 
   private float[][] collisionOffsets;

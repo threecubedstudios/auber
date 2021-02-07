@@ -40,38 +40,17 @@ public class Save {
 
         Json json = new Json();
         Save save = CreatSave(world);
-        String jsonStrX = json.toJson(save.entityPositionX);
-        FileHandle fileX = Gdx.files.local("entityPositionX.json");
-        String jsonStrY = json.toJson(save.entityPositionY);
-        FileHandle fileY = Gdx.files.local("entityPositionX.json");
-        String jsonStrT = json.toJson(save.entityPositionX);
-        FileHandle fileT = Gdx.files.local("entityType.json");
+        String jsonStr = json.toJson(save);
+        FileHandle file = Gdx.files.local("save.json");
         //True means append, false means overwrite.
-        fileX.writeString(jsonStrX, false);
-        fileY.writeString(jsonStrY, false);
-        fileT.writeString(jsonStrT, false);
+        file.writeString(jsonStr, false);
     }
 
-    public void LoadJson(){
-        FileHandle fileX = Gdx.files.local("entityPositionX.json");
-        FileHandle fileY = Gdx.files.local("entityPositionX.json");
-        FileHandle fileT = Gdx.files.local("entityType.json");
-//        String save = file.readString();
+    public JsonValue LoadJson(){
+        FileHandle file = Gdx.files.local("save.json");
         JsonReader json = new JsonReader();
-        JsonValue positionX = json.parse(fileX);
-        JsonValue positionY = json.parse(fileY);
-        JsonValue positionT = json.parse(fileT);
-        //Save save1 = json.fromJson(String, save);
-        //entityPositionX = json.fromJson(float.class, .class);
-        //JsonValue entityPositionX = base.get("entityPositionX");
-        //JsonValue entityPositionY = base.get("entityPositionY");
-        //JsonValue entityType = base.get("entityType");
-
-        //System.out.print(entityPositionX);
-        JsonValue eachPositionX = positionX.child().next;
-        System.out.print(eachPositionX);
-
-
+        JsonValue save = json.parse(file);
+        return save;
     }
 
 }

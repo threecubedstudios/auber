@@ -51,4 +51,18 @@ public class TeleportTest {
 
   }
 
+  @Test
+  public void invalidTeleportTest() {
+    worldMock.atlas = new TextureAtlas("auber.atlas");
+    Player p = new Player(0f, 0f,worldMock);
+
+    p.sprite.setPosition(p.position.x, p.position.y);
+    p.teleport();
+    assertNotEquals("Player should not teleport", new Vector2(448,112), p.position);
+    assertNotEquals("Player should not teleport", new Vector2(560,640), p.position);
+    assertNotEquals("Player should not teleport", new Vector2(96, 640), p.position);
+  }
+
+
+
 }

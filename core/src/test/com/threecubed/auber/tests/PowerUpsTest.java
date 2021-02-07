@@ -24,6 +24,7 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.internal.util.reflection.Whitebox;
 
 @RunWith(GdxTestRunner.class)
 public class PowerUpsTest {
@@ -86,7 +87,7 @@ public class PowerUpsTest {
   @Test
   public void detectTest() throws Exception {
     worldMock.atlas = new TextureAtlas("auber.atlas");
-    worldMock.randomNumberGenerator = new Random();
+    Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     worldMock.player = playerMock;
 
     Infiltrator i = new Infiltrator(0, 0, worldMock);

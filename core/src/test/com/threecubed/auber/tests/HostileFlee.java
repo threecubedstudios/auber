@@ -20,6 +20,7 @@ import com.threecubed.auber.pathfinding.NavigationMesh;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.internal.util.reflection.Whitebox;
 
 
 @RunWith(GdxTestRunner.class)
@@ -34,7 +35,7 @@ public class HostileFlee {
   public void validFlee() throws Exception {
     worldMock.atlas = new TextureAtlas("auber.atlas");
     worldMock.navigationMesh = new NavigationMesh((TiledMapTileLayer) World.map.getLayers().get("navigation_layer"));
-    worldMock.randomNumberGenerator = new Random();
+    Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     Infiltrator i = new Infiltrator(0,0,worldMock);
     playerMock.position = new Vector2(0,0);
     worldMock.player = playerMock;

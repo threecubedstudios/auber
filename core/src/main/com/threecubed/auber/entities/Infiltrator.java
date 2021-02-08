@@ -23,6 +23,7 @@ import com.threecubed.auber.screens.MenuScreen;
 public class Infiltrator extends Npc {
   public static boolean canSabotage = true;  
   public boolean exposed = false;
+  public boolean arrested = false;
   Sprite unexposedSprite;
   Sprite exposedSprite;
 
@@ -113,6 +114,7 @@ public class Infiltrator extends Npc {
       position.y = Utils.randomFloatInRange(world.randomNumberGenerator,
           World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
       aiEnabled = false;    
+      arrested = true;
     }
   }
 

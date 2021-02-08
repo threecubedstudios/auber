@@ -22,9 +22,9 @@ public class PowerUp extends GameEntity{
 
     public enum PowerUpType{
         SPEED_BOOST,
-//        REDUCE_CHARGE_TIME,
-//        STRONGER_RAY,
-//        REDUCE_DAMAGE,
+        REDUCE_CHARGE_TIME,
+        STRONGER_RAY,
+        ONE_USE_SHIELD,
         ESCAPE_CONFUSION,
     }
 
@@ -38,9 +38,16 @@ public class PowerUp extends GameEntity{
     public PowerUp(float x, float y, World world) {
         super(x, y, world.atlas.createSprite("projectile"));
         this.used = false;
+        //Every power up has a random type
         this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(PowerUpType.values().length)];
     }
 
+
+    /**
+     * Initialise the power up item, which will pick a random type, and locate itself at 0,0
+     *
+     *    @param world The game world
+     */
     public PowerUp(World world){
         this(0, 0, world);
         moveToRandomLocation(world);

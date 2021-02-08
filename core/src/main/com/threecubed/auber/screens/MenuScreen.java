@@ -107,12 +107,9 @@ public class MenuScreen extends ScreenAdapter {
     };
 
     difficultySprites = new ArrayList<Sprite>();
-    //difficultySprites.add(game.atlas.createSprite("easyButton"));
-    //difficultySprites.add(game.atlas.createSprite("mediumButton"));
-    //difficultySprites.add(game.atlas.createSprite("hardButton"));
-    difficultySprites.add(game.atlas.createSprite("playButton"));
-    difficultySprites.add(game.atlas.createSprite("playButton"));
-    difficultySprites.add(game.atlas.createSprite("playButton"));
+    difficultySprites.add(game.atlas.createSprite("easyButton"));
+    difficultySprites.add(game.atlas.createSprite("mediumButton"));
+    difficultySprites.add(game.atlas.createSprite("hardButton"));
 
     difficultyButton = new Button(
       new Vector2(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 2f),

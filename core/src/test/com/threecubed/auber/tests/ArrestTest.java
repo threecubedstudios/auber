@@ -63,8 +63,8 @@ public class ArrestTest {
     GameScreen.enemyTrack = new HashMap<Infiltrator,Integer>();
 
     p.update(worldMock);
-    assertTrue("Infiltrator should be exposed", i.exposed);    
-    assertTrue("Infiltrator should be fleeing", i.state == States.FLEEING);
+    assertTrue("Infiltrator should be exposed", i.exposed);
+    assertSame("Infiltrator should be fleeing", i.state, States.FLEEING);
   }
 
   @Test

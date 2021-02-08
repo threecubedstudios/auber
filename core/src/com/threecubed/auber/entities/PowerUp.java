@@ -19,9 +19,10 @@ public class PowerUp extends GameEntity{
     private boolean used;
     private float playerDetectRadius = 10f;
     public PowerUpType type;
+    public static final int SPEED_BOOST_DURATION = 500; //Measured in calls of update, not seconds.
 
     public enum PowerUpType{
-//        SPEED_BOOST,
+        SPEED_BOOST,
         REDUCE_CHARGE_TIME,
         STRONGER_RAY,
         ONE_USE_SHIELD,

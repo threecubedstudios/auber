@@ -1,5 +1,7 @@
 package com.threecubed.auber.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.World;
+import com.threecubed.auber.Difficulty.Mode;
 import com.threecubed.auber.ui.Button;
 
 
@@ -40,6 +43,7 @@ public class MenuScreen extends ScreenAdapter {
   public static boolean continueGame = false;
   Difficulty.Mode difficulty; 
   Boolean isDifficultyButtonTouched = false; 
+  ArrayList<Sprite> difficultySprites; 
 
   /**
    * Instantiate the screen with the {@link AuberGame} object. Set the title and button up to be
@@ -83,7 +87,6 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onContinueClick = new Runnable() {
       @Override
       public void run() {
-
         Preferences pre = Gdx.app.getPreferences("aubergame");
         continueGame = pre.getString("markForSaving", null) != null;
         game.setScreen(new GameScreen(game, false, difficulty));
@@ -93,7 +96,7 @@ public class MenuScreen extends ScreenAdapter {
 
     continueButton = new Button(
             new Vector2(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 2f - 3 * 150f),
-            1f, game.atlas.createSprite("playButton"), game, onContinueClick);
+            1f, game.atlas.createSprite("continueButton"), game, onContinueClick);
 
     Runnable onDifficultyClick = new Runnable() {
       @Override
@@ -101,13 +104,20 @@ public class MenuScreen extends ScreenAdapter {
         if (!isDifficultyButtonTouched) {
           isDifficultyButtonTouched = true;
           difficulty = difficulty.next();
+          difficultyButton.setSprite(difficultySprites.get(difficulty.getValue())); 
         }       
       }
     };
 
+    difficultySprites = new ArrayList<Sprite>();
+    difficultySprites.add(game.atlas.createSprite("easyButton"));
+    difficultySprites.add(game.atlas.createSprite("mediumButton"));
+    difficultySprites.add(game.atlas.createSprite("hardButton"));
+
     difficultyButton = new Button(
       new Vector2(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 2f),
-      1f, game.atlas.createSprite("playButton"), game, onDifficultyClick);
+      1f, difficultySprites.get(difficulty.getValue()), game, onDifficultyClick);
+
   }
 
   @Override

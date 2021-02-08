@@ -150,6 +150,7 @@ public class GameScreen extends ScreenAdapter {
    *
    * */
   public void save(){
+    dataManager.preferences.putString("markForSaving","saved");
     dataManager.saveInfiltratorData();
     dataManager.savePlayerData(world);
     dataManager.saveSystemData();

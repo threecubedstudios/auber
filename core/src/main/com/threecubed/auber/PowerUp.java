@@ -64,11 +64,14 @@ public class PowerUp extends GameEntity {
         break;
       case FIREWALL:
         Infiltrator.canSabotage = false;
+        world.player.firewall = true;
         break;
       case SPEED:
         world.player.speed *= 1.5;
+        world.player.speedUp = true;
         break;
       case DETECT:
+      world.player.detect = true;
         for (GameEntity e : world.getEntities()) {
           if (e instanceof Infiltrator) {
             ((Infiltrator) e).expose(world);
@@ -118,7 +121,7 @@ public class PowerUp extends GameEntity {
     used = true;
     switch (powerType) {
       case IMMUNITY:
-        world.player.immune = true;
+        world.player.immune = false;
         break;
       case INVISIBILITY:
         world.player.invisible = false;
@@ -126,11 +129,14 @@ public class PowerUp extends GameEntity {
         break;
       case FIREWALL:
         Infiltrator.canSabotage = true;
+        world.player.firewall = false;
         break;
       case SPEED:
         world.player.speed /= 1.5;
+        world.player.speedUp = false; 
         break;
       case DETECT:
+      world.player.detect = false;
         for (GameEntity e : world.getEntities()) {
           if (e instanceof Infiltrator) {
             ((Infiltrator) e).unexpose(world);

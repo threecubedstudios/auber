@@ -31,9 +31,8 @@ public class GameUi {
   private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
 
   private static final Vector2 MESSAGES_POSITION = new Vector2(Gdx.graphics.getWidth()/2, 50f);
-  private static final Vector2 SPEED_BOOST_DURATION_POSITION = new Vector2(Gdx.graphics.getWidth()/2, 100f);
+  //private static final Vector2 SPEED_BOOST_DURATION_POSITION = new Vector2(Gdx.graphics.getWidth()/2, 100f);
   private static final int MESSAGE_DURATION = 200;  //Measured in calls of update, not seconds.
-  private static final int SPEED_BOOST_DURATION = 500; //Measured in calls of update, not seconds.
 
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -43,7 +42,6 @@ public class GameUi {
   private BitmapFont uiFont = new BitmapFont();
 
   private ArrayList<Message> messages = new ArrayList<>();
-  private ArrayList<SpeedBoostDuration> speedBoost = new ArrayList<>();
 
   public GameUi(AuberGame game) {
     arrowSprite = game.atlas.createSprite("arrow2");
@@ -69,7 +67,7 @@ public class GameUi {
     drawHealthWarnings(world, screenBatch);
     drawSystemWarnings(world, screenBatch);
     drawMessages(world, screenBatch);
-    displaySpeedBoostDuration(world, screenBatch);
+    //displaySpeedBoostDuration(world, screenBatch);
   }
 
   /**
@@ -214,40 +212,6 @@ public class GameUi {
     }
   }
 
-  private class SpeedBoostDuration {
-    String text;
-    int timeToDisplay;
-    int remainingTime;
-
-    public SpeedBoostDuration(String text, int timeToDisplay){
-      this.text = text;
-      this.timeToDisplay = timeToDisplay;
-      this.remainingTime = timeToDisplay;
-    }
-  }
-
-  private void displaySpeedBoostDuration(World world, SpriteBatch screenBatch){
-    screenBatch.begin();
-    uiFont.setColor(Color.WHITE);
-    int offset = 0;
-
-    int i = 0;
-    while (i < speedBoost.size()){
-      SpeedBoostDuration speedBoostDuration = speedBoost.get(i);
-      if (speedBoostDuration.remainingTime < 0){
-        speedBoost.remove(i);
-        Player.speedBoost = false;
-      } else {
-        speedBoostDuration.remainingTime -= 1;
-        uiFont.draw(screenBatch, speedBoostDuration.text, SPEED_BOOST_DURATION_POSITION.x,
-                SPEED_BOOST_DURATION_POSITION.y + offset);
-        offset += 25f;
-        i++;
-      }
-    }
-    screenBatch.end();
-  }
-
   /**
    * When called, removes any expired messages from the list, and draws all others.
    *
@@ -275,7 +239,6 @@ public class GameUi {
     screenBatch.end();
   }
 
-
   /**
    * Adds a given message to the list of messages to display, with the default duration.
    *
@@ -284,10 +247,5 @@ public class GameUi {
   public void queueMessage(String text){
     Message message = new Message(text, MESSAGE_DURATION);
     messages.add(message);
-  }
-
-  public void queueSpeedBoost(String text){
-    SpeedBoostDuration speedBoostDuration = new SpeedBoostDuration(text, SPEED_BOOST_DURATION);
-    speedBoost.add(speedBoostDuration);
   }
 }

@@ -39,7 +39,7 @@ public class Player extends GameEntity {
   public float health = 1;
 
   public boolean escapeConfusion = false;
-  public static boolean speedBoost = false;
+  public boolean speedBoost = false;
   public boolean reduceChargeTime = false;
   public boolean oneUseShield = false;
   public boolean strongerRay = false;
@@ -122,6 +122,7 @@ public class Player extends GameEntity {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
           velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
         }
+      }
       // Decide ahead of time which charge rate to use
       float chargeRateActual;
       if(reduceChargeTime) {
@@ -307,14 +308,6 @@ public class Player extends GameEntity {
         world.ui.queueMessage("Escape Confusion already acquired");
       }
       escapeConfusion = true;
-    } else if (powerUpType == PowerUp.PowerUpType.SPEED_BOOST) {
-      if (!speedBoost) {
-        world.ui.queueSpeedBoost("Speed Boost Acquired");
-      } else {
-        world.ui.queueSpeedBoost("Speed Boost already acquired");
-      }
-      speedBoost = true;
-      }
     }
     else if(powerUpType == PowerUp.PowerUpType.REDUCE_CHARGE_TIME){
       if(!reduceChargeTime){
@@ -339,6 +332,24 @@ public class Player extends GameEntity {
         world.ui.queueMessage("Stronger Ray already acquired");
       }
       strongerRay = true;
+    }
+    else if(powerUpType == PowerUp.PowerUpType.SPEED_BOOST) {
+      if (!speedBoost) {
+        world.ui.queueMessage("Speed Boost acquired");
+        speedBoost = true;
+
+        // Start a timer to reset the speed boost
+        world.player.playerTimer.scheduleTask(new Task() {
+          @Override
+          public void run() {
+            world.player.speedBoost = false;
+            world.ui.queueMessage("Speed Boost expired");
+          }
+        }, World.AUBER_SPEED_BOOST_DURATION);
+      } else {
+        world.ui.queueMessage("Speed Boost already acquired");
+        // To avoid conflicts with the timer, acquiring a new speed boost powerup just does nothing.
+      }
     }
   }
 }

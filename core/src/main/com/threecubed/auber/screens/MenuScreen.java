@@ -3,6 +3,7 @@ package com.threecubed.auber.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -82,8 +83,11 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onContinueClick = new Runnable() {
       @Override
       public void run() {
-        continueGame = true;
+
+        Preferences pre = Gdx.app.getPreferences("aubergame");
+        continueGame = pre.getString("markForSaving", null) != null;
         game.setScreen(new GameScreen(game, false, difficulty));
+
       }
     };
 

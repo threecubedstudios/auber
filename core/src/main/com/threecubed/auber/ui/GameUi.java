@@ -24,7 +24,7 @@ public class GameUi {
   private static final int HEALTHBAR_MAX_HEIGHT = 100;
 
   private static final Vector2 HEALTH_WARNINGS_POSITION = new Vector2(350f, 70f);
-  private static final Vector2 POWER_NAME_POSITION = new Vector2(50f, 100f);
+  private static final Vector2 POWER_NAME_POSITION = new Vector2(50f, 150f);
   private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
 
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -157,8 +157,8 @@ public class GameUi {
       POWER_NAME_POSITION.y + 40f);
     }
     if (world.player.speedUp) {
-      uiFont.draw(screenBatch, "SPEED", HEALTH_WARNINGS_POSITION.x,
-          HEALTH_WARNINGS_POSITION.y + 60f);
+      uiFont.draw(screenBatch, "SPEED", POWER_NAME_POSITION.x,
+      POWER_NAME_POSITION.y + 60f);
     }
     if (world.player.detect) {
       uiFont.draw(screenBatch, "DETECT", POWER_NAME_POSITION.x,

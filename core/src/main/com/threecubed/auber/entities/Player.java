@@ -42,6 +42,9 @@ public class Player extends GameEntity {
 
   public Boolean immune = false;
   public Boolean invisible = false;
+  public Boolean firewall = false;
+  public Boolean speedUp = false;
+  public Boolean detect = false;
 
   private ShapeRenderer rayRenderer = new ShapeRenderer();
 

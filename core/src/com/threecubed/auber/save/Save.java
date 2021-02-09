@@ -27,23 +27,20 @@ public class Save {
 
 
 
-    public Save CreatSave(World world, GameUi ui){
+    public Save CreatSave(World world){
         Save save = new Save();
         for (GameEntity entity : world.getEntities()) {
             save.entityPositionX.add(entity.getCenterX());
             save.entityPositionY.add(entity.getCenterY());
             save.entityType.add(entity.entityType);
         }
-
-
-        ui.queueMessage("Saved Successfully!");
         return save;
     }
 
-    public void SaveJson(World world, GameUi ui){
+    public void SaveJson(World world){
 
         Json json = new Json();
-        Save save = CreatSave(world, ui);
+        Save save = CreatSave(world);
         String jsonStr = json.toJson(save);
         FileHandle file = Gdx.files.local("save.json");
         //True means append, false means overwrite.

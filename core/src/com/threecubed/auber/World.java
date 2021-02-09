@@ -459,7 +459,4 @@ public class World {
     }
   }
 
-  public GameUi getUI(){
-    return ui;
-  }
 }

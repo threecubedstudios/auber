@@ -75,7 +75,8 @@ public class Player extends GameEntity {
 
       //Save while press G
       if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
-        new Save().SaveJson(world, world.getUI());
+        new Save().SaveJson(world);
+        world.ui.queueMessage("Saved Successfully!");
       }
 
       // Increment Auber's health if in medbay

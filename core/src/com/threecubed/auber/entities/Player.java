@@ -15,14 +15,12 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.pathfinding.NavigationMesh;
-<<<<<<< HEAD
 import com.threecubed.auber.save.Save;
-=======
 import com.threecubed.auber.ui.GameUi;
->>>>>>> master
 
 
 /**
@@ -77,8 +75,7 @@ public class Player extends GameEntity {
 
       //Save while press G
       if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
-        new Save().SaveJson(world);
-
+        new Save().SaveJson(world, world.getUI());
       }
 
       // Increment Auber's health if in medbay

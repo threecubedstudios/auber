@@ -458,4 +458,8 @@ public class World {
       game.setScreen(new GameOverScreen(game, true));
     }
   }
+
+  public GameUi getUI(){
+    return ui;
+  }
 }

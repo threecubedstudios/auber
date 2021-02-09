@@ -7,10 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.badlogic.gdx.utils.Json;
+import com.threecubed.auber.ui.GameUi;
 
 import java.util.*;
 
@@ -25,7 +27,7 @@ public class Save {
 
 
 
-    public Save CreatSave(World world){
+    public Save CreatSave(World world, GameUi ui){
         Save save = new Save();
         for (GameEntity entity : world.getEntities()) {
             save.entityPositionX.add(entity.getCenterX());
@@ -33,13 +35,15 @@ public class Save {
             save.entityType.add(entity.entityType);
         }
 
+
+        ui.queueMessage("Saved Successfully!");
         return save;
     }
 
-    public void SaveJson(World world){
+    public void SaveJson(World world, GameUi ui){
 
         Json json = new Json();
-        Save save = CreatSave(world);
+        Save save = CreatSave(world, ui);
         String jsonStr = json.toJson(save);
         FileHandle file = Gdx.files.local("save.json");
         //True means append, false means overwrite.

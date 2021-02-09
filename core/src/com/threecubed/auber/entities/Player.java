@@ -84,12 +84,6 @@ public class Player extends GameEntity {
         health += World.AUBER_HEAL_RATE;
         health = Math.min(1f, health);
       }
-      // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged,
-      // hence the * 2
-      float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
-      if (slowed) {
-        velocity.scl(0.5f);
-      }
 
       //If the player has the escape confusion power-up and is confused, set confusion back to false.
       if (confused && escapeConfusion) {
@@ -98,40 +92,43 @@ public class Player extends GameEntity {
         world.ui.queueMessage("Escape confusion used");
       }
 
-      // Flip the velocity before new velocity calculated if confused. Otherwise, second iteration
-      // of flipped velocity will cancel out the first
-      if (confused) {
-        velocity.set(-velocity.x, -velocity.y);
+      // Slow down Auber when they charge their weapon. Should be stopped when weapon half charged,
+      // hence the * 2
+      float speedModifier = Math.min(world.auberTeleporterCharge * speed * 2, speed);
+
+      // Get directional input, converted to numbers (True -> 1, False -> 0)
+      int keyPressedUp = (Gdx.input.isKeyPressed(Input.Keys.W)) ? 1 : 0;
+      int keyPressedDn = (Gdx.input.isKeyPressed(Input.Keys.S)) ? 1 : 0;
+      int keyPressedLf = (Gdx.input.isKeyPressed(Input.Keys.A)) ? 1 : 0;
+      int keyPressedRt = (Gdx.input.isKeyPressed(Input.Keys.D)) ? 1 : 0;
+      // Use directional inputs to create a vector, then normalise it (direction preserved, length = 1)
+      Vector2 inputResult = new Vector2(keyPressedRt - keyPressedLf, keyPressedUp - keyPressedDn);
+      inputResult.nor();
+      // Reverse input if confused
+      if(confused) {
+        inputResult.scl(-1f);
+      }
+      if(speedBoost) {
+        inputResult.scl(2f);
       }
 
-      //Change the velocity when Auber encounter the speed boost power-up
-      if (speedBoost) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-          velocity.y = (velocity.y + boostedSpeed - speedModifier);
+      if(inputResult.len() != 0) {
+        // Add the 'speed' (really acceleration) to the vector in the direction defined by inputResult
+        velocity.add(inputResult.scl(speed - speedModifier));
+
+        // Clamp the length (magnitude) of the velocity to the appropriate max speed
+        float maxSpeedActual = maxSpeed;
+        if(speedBoost) {
+          maxSpeedActual = maxSpeedBoosted;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-          velocity.x = (velocity.x - boostedSpeed + speedModifier);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-          velocity.y = (velocity.y - boostedSpeed + speedModifier);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-          velocity.x = (velocity.x + boostedSpeed - speedModifier);
-        }
-      } else {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-          velocity.y = Math.min(velocity.y + speed - speedModifier, maxSpeed);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-          velocity.x = Math.max(velocity.x - speed + speedModifier, -maxSpeed);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-          velocity.y = Math.max(velocity.y - speed + speedModifier, -maxSpeed);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-          velocity.x = Math.min(velocity.x + speed - speedModifier, maxSpeed);
+        velocity.clamp(0, maxSpeedActual);
+
+        // Final modifiers to speed (debuffs and powerups)
+        if (slowed) {
+          velocity.scl(0.5f);
         }
       }
+
       // Decide ahead of time which charge rate to use
       float chargeRateActual;
       if(reduceChargeTime) {
@@ -219,11 +216,7 @@ public class Player extends GameEntity {
               (mousePosition.x - getCenterX()))
       ) - 90f);
 
-      // Handle the confused debuff
-      if (confused) {
-        velocity.set(-velocity.x, -velocity.y);
-      }
-
+      // Move, finally
       move(velocity, World.map);
     }
   }

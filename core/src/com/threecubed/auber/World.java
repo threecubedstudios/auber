@@ -177,7 +177,7 @@ public class World {
    * Max infiltrators alive at a given point, Should always be greater or equal to
    * {@link World#MAX_INFILTRATORS}.
    * */
-  public static final int MAX_INFILTRATORS_IN_GAME = 3;
+  public static final int MAX_INFILTRATORS_IN_GAME = 4;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
   public static final float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
@@ -190,7 +190,7 @@ public class World {
   /** The distance an NPC can hear the teleporter ray shoot from. */
   public static final float NPC_EAR_STRENGTH = 80f;
   /** The number of NPCs in the game. */
-  public static final int NPC_COUNT = 40;
+  public static final int NPC_COUNT = 24;
 
   /** The number or power ups in the game. */
   public static final int POWER_UP_COUNT = 15;

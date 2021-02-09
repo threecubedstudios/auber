@@ -30,6 +30,7 @@ public abstract class GameEntity {
 
   public float speed = 0.4f;
   public float maxSpeed = 2.5f;
+  public float maxSpeedBoosted = 4f;
   public float friction = 0.9f;
 
   public Vector2 position;

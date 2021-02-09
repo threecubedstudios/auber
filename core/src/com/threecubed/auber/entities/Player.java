@@ -108,10 +108,26 @@ public class Player extends GameEntity {
       if(confused) {
         inputResult.scl(-1f);
       }
-      // Add the 'speed' (really acceleration) to the vector in the direction defined by inputResult
-      velocity.add(inputResult.scl(speed - speedModifier));
-      // Clamp the length (magnitude) of the velocity to the max speed
-      velocity.clamp(0, maxSpeed);
+      if(speedBoost) {
+        inputResult.scl(2f);
+      }
+
+      if(inputResult.len() != 0) {
+        // Add the 'speed' (really acceleration) to the vector in the direction defined by inputResult
+        velocity.add(inputResult.scl(speed - speedModifier));
+
+        // Clamp the length (magnitude) of the velocity to the appropriate max speed
+        float maxSpeedActual = maxSpeed;
+        if(speedBoost) {
+          maxSpeedActual = maxSpeedBoosted;
+        }
+        velocity.clamp(0, maxSpeedActual);
+
+        // Final modifiers to speed (debuffs and powerups)
+        if (slowed) {
+          velocity.scl(0.5f);
+        }
+      }
 
       // Decide ahead of time which charge rate to use
       float chargeRateActual;
@@ -199,14 +215,6 @@ public class Player extends GameEntity {
               (mousePosition.y - getCenterY()),
               (mousePosition.x - getCenterX()))
       ) - 90f);
-
-      // Final modifiers to speed (debuffs and powerups)
-      if (slowed) {
-        velocity.scl(0.5f);
-      }
-      if(speedBoost) {
-        velocity.scl(2f);
-      }
 
       // Move, finally
       move(velocity, World.map);

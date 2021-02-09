@@ -28,9 +28,9 @@ public class MenuScreen extends ScreenAdapter {
   AuberGame game;
 
   public static Difficulty difficulty;
-  Button hardButton;
-  Button mediumButton;
-  Button easyButton;
+//  Button hardButton;
+//  Button mediumButton;
+//  Button easyButton;
   Button playButton;
   Button demoButton;
   Button loadButton;
@@ -48,6 +48,7 @@ public class MenuScreen extends ScreenAdapter {
    * */
   public MenuScreen(final AuberGame game) {
     this.game = game;
+    difficulty = Difficulty.EASY;
 
     spriteBatch = new SpriteBatch();
 
@@ -77,38 +78,39 @@ public class MenuScreen extends ScreenAdapter {
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
 
-    Runnable onEasyClick = new Runnable() {
-      @Override
-      public void run() {
-        difficulty = Difficulty.EASY;
-      }
-    };
+//    Runnable onEasyClick = new Runnable() {
+//      @Override
+//      public void run() {
+//        difficulty = Difficulty.EASY;
+//      }
+//    };
+//
+//    easyButton = new Button(
+//            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+//            1f, game.atlas.createSprite("easyButton"), game, onEasyClick);
+//
+//    Runnable onMediumClick = new Runnable() {
+//      @Override
+//      public void run() {
+//        difficulty = Difficulty.MEDIUM;
+//      }
+//    };
+//
+//    mediumButton = new Button(
+//            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+//            1f, game.atlas.createSprite("mediumButton"), game, onMediumClick);
+//
+//    Runnable onHardClick = new Runnable() {
+//      @Override
+//      public void run() {
+//        difficulty = Difficulty.HARD;
+//      }
+//    };
+//
+//    hardButton = new Button(
+//            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+//            1f, game.atlas.createSprite("hardButton"), game, onHardClick);
 
-    easyButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
-            1f, game.atlas.createSprite("easyButton"), game, onEasyClick);
-
-    Runnable onMediumClick = new Runnable() {
-      @Override
-      public void run() {
-        difficulty = Difficulty.MEDIUM;
-      }
-    };
-
-    mediumButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
-            1f, game.atlas.createSprite("mediumButton"), game, onMediumClick);
-
-    Runnable onHardClick = new Runnable() {
-      @Override
-      public void run() {
-        difficulty = Difficulty.HARD;
-      }
-    };
-
-    hardButton = new Button(
-            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
-            1f, game.atlas.createSprite("hardButton"), game, onHardClick);
     Runnable onLoadClick = new Runnable() {
       @Override
       public void run() {

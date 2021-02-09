@@ -26,7 +26,7 @@ public class MenuScreen extends ScreenAdapter {
   World world;
   AuberGame game;
 
-  Difficulty mode;
+  public static Difficulty difficulty;
   Button hardButton;
   Button mediumButton;
   Button easyButton;
@@ -78,7 +78,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onEasyClick = new Runnable() {
       @Override
       public void run() {
-        mode = Difficulty.EASY;
+        difficulty = Difficulty.EASY;
       }
     };
 
@@ -89,7 +89,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onMediumClick = new Runnable() {
       @Override
       public void run() {
-        mode = Difficulty.MEDIUM;
+        difficulty = Difficulty.MEDIUM;
       }
     };
 
@@ -100,7 +100,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onHardClick = new Runnable() {
       @Override
       public void run() {
-        mode = Difficulty.HARD;
+        difficulty = Difficulty.HARD;
       }
     };
 
@@ -127,20 +127,20 @@ public class MenuScreen extends ScreenAdapter {
       this.SYSTEM_BREAK_TIME = SYSTEM_BREAK_TIME;
     }
 
-    public static int getPOWER_UP_COUNT() {
+    public int getPOWER_UP_COUNT() {
 
       return POWER_UP_COUNT;
     }
-    public static int getMAX_INFILTRATORS() {
+    public int getMAX_INFILTRATORS() {
 
       return MAX_INFILTRATORS;
     }
-    public static int getNPC_COUNT() {
+    public int getNPC_COUNT() {
 
       return NPC_COUNT;
     }
 
-    public static float getSYSTEM_BREAK_TIME() {
+    public float getSYSTEM_BREAK_TIME() {
 
       return SYSTEM_BREAK_TIME;
     }

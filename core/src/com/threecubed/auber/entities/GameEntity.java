@@ -29,12 +29,15 @@ public abstract class GameEntity {
   public Sprite sprite;
 
   public float speed = 0.4f;
-  public float maxSpeed = 2f;
+  public float maxSpeed = 2.5f;
+  public float maxSpeedBoosted = 4f;
   public float friction = 0.9f;
 
   public Vector2 position;
   public Vector2 velocity;
   public float rotation = 0f;
+  //1=Civilian, 2=Infiltrator, 3=Player, 4=Projectile, 5=PowerUp
+  public int entityType;
 
   private float[][] collisionOffsets;
 
@@ -190,4 +193,7 @@ public abstract class GameEntity {
   public Vector2 getCenter() {
     return new Vector2(getCenterX(), getCenterY());
   }
+
+  public void setEntityType(int type){entityType = type;}
 }
+

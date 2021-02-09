@@ -12,12 +12,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.JsonValue;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.save.Save;
 import com.threecubed.auber.screens.GameOverScreen;
 import com.threecubed.auber.screens.GameScreen;
 import com.threecubed.auber.screens.MenuScreen;
+import com.threecubed.auber.ui.GameUi;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,11 +36,13 @@ import java.util.Random;
  * */
 public class World {
   private AuberGame game;
+  public GameUi ui;
 
   public Player player;
   public int infiltratorCount;
 
   public boolean demoMode = false;
+  public boolean ifLoad = false;
 
   /** Number of infiltrators added, including defeated ones. */
   public int infiltratorsAddedCount = 0;
@@ -74,11 +79,15 @@ public class World {
   // --------------------AUBER-------------------
   public float auberTeleporterCharge = 0f;
   /** The rate at which the teleporter ray charges. */
-  public static final float AUBER_CHARGE_RATE = 0.05f;
+  public static final float AUBER_CHARGE_RATE = 0.03f;
+  /** The rate at which the teleporter ray charges when powered up. */
+  public static final float AUBER_CHARGE_RATE_FAST = 0.1f;
   /** The time the ray should visibly render for. */
   public static final float AUBER_RAY_TIME = 0.25f;
   /** The time a debuff should last for (with the exception of blindness). */
   public static final float AUBER_DEBUFF_TIME = 5f;
+  /** The time the speed boost power-up should last for */
+  public static final float AUBER_SPEED_BOOST_DURATION = 4f;
   /** The rate at which auber should heal. */
   public static final float AUBER_HEAL_RATE = 0.005f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);
@@ -157,18 +166,18 @@ public class World {
   /** The distance the infiltrator can see. Default: 5 tiles */
   public static final float INFILTRATOR_SIGHT_RANGE = 80f;
   /** The speed at which infiltrator projectiles should travel. */
-  public static final float INFILTRATOR_PROJECTILE_SPEED = 4f;
+  public static final float INFILTRATOR_PROJECTILE_SPEED = 1f;
   /** Maximum infiltrators in a full game of Auber (including defated ones). */
   public static final int MAX_INFILTRATORS =  MenuScreen.difficulty.getMAX_INFILTRATORS();
   /** The interval at which the infiltrator should attack the player when exposed. */
-  public static final float INFILTRATOR_FIRING_INTERVAL = 5f;
+  public static final float INFILTRATOR_FIRING_INTERVAL = 3f;
   /** The damage a projectile should do. */
   public static final float INFILTRATOR_PROJECTILE_DAMAGE = 0.2f;
   /**
    * Max infiltrators alive at a given point, Should always be greater or equal to
    * {@link World#MAX_INFILTRATORS}.
    * */
-  public static final int MAX_INFILTRATORS_IN_GAME = 3;
+  public static final int MAX_INFILTRATORS_IN_GAME = 4;
 
   /** The amount of variance there should be between the speeds of different NPCs. */
   public static final float[] NPC_SPEED_VARIANCE = {0.8f, 1.2f};
@@ -250,15 +259,26 @@ public class World {
    * @param game The game object
    * @param demoMode Whether to run the game in demo mode
    * */
-  public World(AuberGame game, boolean demoMode) {
+  public World(AuberGame game, boolean demoMode, boolean ifLoad) {
     this(game);
     this.demoMode = demoMode;
+    this.ifLoad = ifLoad;
     if (demoMode) {
       camera.setToOrtho(false, 1920, 1080);
       TiledMapTileLayer layer = ((TiledMapTileLayer) map.getLayers().get(2));
       player.position.x = (layer.getWidth() * layer.getTileWidth()) / 2;
       player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;
       player.sprite.setColor(1f, 1f, 1f, 0f);
+    }
+    if (ifLoad){
+      Save save = new Save();
+      JsonValue savedValues = save.loadJson();
+      for (int i = 0; i < savedValues.get("entityPositionX").size; i++){
+        if(savedValues.get("entityType").asFloatArray()[i] == 3){
+          player.position.x = savedValues.get("entityPositionX").asFloatArray()[i];
+          player.position.y = savedValues.get("entityPositionY").asFloatArray()[i];
+        }
+      }
     }
   }
 
@@ -432,10 +452,11 @@ public class World {
       if (!demoMode) {
         game.setScreen(new GameOverScreen(game, false));
       } else {
-        game.setScreen(new GameScreen(game, true));
+        game.setScreen(new GameScreen(game, true, false));
       }
     } else if (infiltratorCount <= 0) {
       game.setScreen(new GameOverScreen(game, true));
     }
   }
+
 }

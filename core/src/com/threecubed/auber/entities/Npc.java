@@ -28,6 +28,7 @@ public abstract class Npc extends GameEntity {
   private Vector2 targetDirection = new Vector2();
   private NavigationMesh navigationMesh;
 
+
   protected float maxSpeed = 1.3f;
 
   private static String[] textureNames = {"alienA", "alienB", "alienC"};
@@ -189,11 +190,17 @@ public abstract class Npc extends GameEntity {
   protected void navigateToRandomSystem(World world) {
     if (!world.systems.isEmpty()) {
       state = States.NAVIGATING;
-      RectangleMapObject system = world.systems.get(
-          Utils.randomIntInRange(world.randomNumberGenerator,
-            0, world.systems.size() - 1));
 
-      updatePath(system.getRectangle().getX(), system.getRectangle().getY(), world);
+      RectangleMapObject system = world.systems.get(
+              Utils.randomIntInRange(world.randomNumberGenerator,
+                      0, world.systems.size() - 1));
+      float sysX = system.getRectangle().getX();
+      float sysY = system.getRectangle().getY();
+
+      if (world.getSystemState(sysX, sysY) != World.SystemStates.DESTROYED) {
+        updatePath(sysX, sysY, world);
+        return;
+      }
     }
   }
 

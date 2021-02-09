@@ -1,4 +1,4 @@
-# Auber | 3³ Studios
+# Auber | 3³ Studios x Team Zanetta
 
 ## Licenses
 ## Contributing

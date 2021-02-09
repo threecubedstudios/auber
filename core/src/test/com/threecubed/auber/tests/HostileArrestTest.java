@@ -43,7 +43,8 @@ public class HostileArrestTest {
     worldMock.medbay = new RectangleMapObject();
     worldMock.navigationMesh = nav;
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
-    
+    World.systems = new ArrayList<RectangleMapObject>();
+
     Infiltrator i = new Infiltrator(0,0,worldMock);
     i.position = new Vector2(0,0);
     ArrayList<GameEntity> entities = new ArrayList<GameEntity>();
@@ -69,7 +70,8 @@ public class HostileArrestTest {
     worldMock.medbay = new RectangleMapObject();
     worldMock.navigationMesh = nav;
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
-    
+    World.systems = new ArrayList<RectangleMapObject>();
+
     Infiltrator i = new Infiltrator(0,0,worldMock);
     i.position = new Vector2(0,0);
     ArrayList<GameEntity> entities = new ArrayList<GameEntity>();
@@ -95,6 +97,7 @@ public class HostileArrestTest {
     worldMock.medbay = new RectangleMapObject();
     worldMock.navigationMesh = nav;
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
+    World.systems = new ArrayList<RectangleMapObject>();
     
     Infiltrator i = new Infiltrator(0,0,worldMock);
     i.position = new Vector2(0,0);

@@ -90,6 +90,7 @@ public class MenuScreen extends ScreenAdapter {
         Preferences pre = Gdx.app.getPreferences("aubergame");
         continueGame = pre.getString("markForSaving", null) != null;
         game.setScreen(new GameScreen(game, false, difficulty));
+
       }
     };
 

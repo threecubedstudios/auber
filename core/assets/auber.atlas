@@ -1,5 +1,5 @@
-auber.png
-size: 1920, 2039
+auber-0.png
+size: 1000, 1802
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -40,37 +40,58 @@ arrow2
   index: -1
 auber_logo
   rotate: false
-  xy: 862, 100
+  xy: 0, 1159
   size: 1000, 643
   orig: 1000, 643
   offset: 0, 0
   index: -1
 continueButton
   rotate: false
-  xy: 110, 0
+  xy: 302, 0
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 demoButton
   rotate: false
-  xy: 410, 0
+  xy: 602, 0
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 easyButton
   rotate: false
-  xy: 710, 0
+  xy: 0, 100
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
+Firewalll
+  rotate: false
+  xy: 110, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 hardButton
   rotate: false
-  xy: 1010, 0
+  xy: 300, 100
   size: 300, 100
   orig: 300, 100
+  offset: 0, 0
+  index: -1
+HighlightsInfiltrators
+  rotate: false
+  xy: 142, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Immunity
+  rotate: false
+  xy: 174, 0
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
 infiltrator
@@ -82,21 +103,35 @@ infiltrator
   index: -1
 instructions
   rotate: false
-  xy: 0, 100
+  xy: 0, 300
   size: 862, 859
   orig: 862, 859
   offset: 0, 0
   index: -1
+Invisible
+  rotate: false
+  xy: 206, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+Invisible2
+  rotate: false
+  xy: 238, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 mediumButton
   rotate: false
-  xy: 1310, 0
+  xy: 600, 100
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
   index: -1
 playButton
   rotate: false
-  xy: 1610, 0
+  xy: 0, 200
   size: 300, 100
   orig: 300, 100
   offset: 0, 0
@@ -115,9 +150,22 @@ projectile
   orig: 8, 8
   offset: 0, 0
   index: -1
+Speed_Increase
+  rotate: false
+  xy: 270, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+
+auber-1.png
+size: 1920, 1080
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
 stars
   rotate: false
-  xy: 0, 959
+  xy: 0, 0
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0

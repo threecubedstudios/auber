@@ -6,10 +6,8 @@ import static org.mockito.Mockito.mock;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.threecubed.auber.Difficulty;
 import com.threecubed.auber.GdxTestRunner;
 import com.threecubed.auber.World;
-import com.threecubed.auber.Difficulty.Mode;
 import com.threecubed.auber.entities.Player;
 
 import org.junit.Test;

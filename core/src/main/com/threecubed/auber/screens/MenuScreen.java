@@ -76,6 +76,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
+        continueGame = false;
         game.setScreen(new GameScreen(game, true, difficulty));
       }
     };

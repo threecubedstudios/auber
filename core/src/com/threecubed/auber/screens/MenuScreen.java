@@ -82,7 +82,7 @@ public class MenuScreen extends ScreenAdapter {
 
     loadButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 300f),
-        1f, game.atlas.createSprite("demoButton"), game, onLoadClick);
+        1f, game.atlas.createSprite("loadButton"), game, onLoadClick);
 
   }
 

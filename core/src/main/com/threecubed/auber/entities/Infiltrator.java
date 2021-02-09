@@ -11,6 +11,8 @@ import com.threecubed.auber.Utils;
 import com.threecubed.auber.World;
 import com.threecubed.auber.screens.MenuScreen;
 
+import java.time.LocalDateTime;
+
 
 /**
  * The infiltrator is the enemy of the game, it will navigate from system to system and sabotage
@@ -23,6 +25,7 @@ import com.threecubed.auber.screens.MenuScreen;
 public class Infiltrator extends Npc {
   public static boolean canSabotage = true;  
   public boolean exposed = false;
+  public boolean arrested = false;
   Sprite unexposedSprite;
   Sprite exposedSprite;
 
@@ -38,7 +41,6 @@ public class Infiltrator extends Npc {
     if (!MenuScreen.continueGame) {
       navigateToRandomSystem(world);
     }
-
 
   }
 
@@ -112,7 +114,8 @@ public class Infiltrator extends Npc {
           World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
       position.y = Utils.randomFloatInRange(world.randomNumberGenerator,
           World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
-      aiEnabled = false;    
+      aiEnabled = false;  
+      arrested = true;
     }
   }
 
@@ -129,7 +132,7 @@ public class Infiltrator extends Npc {
   /**
    * Attack a system nearby to the infiltrator.
    * */
-  private void attackNearbySystem(final World world) {
+  public void attackNearbySystem(final World world) {
     state = States.ATTACKING_SYSTEM;
 
     final RectangleMapObject system = getNearbyObjects(World.map);
@@ -172,7 +175,7 @@ public class Infiltrator extends Npc {
     }
     Circle infiltratorSight = new Circle(position, World.INFILTRATOR_SIGHT_RANGE);
     if (infiltratorSight.contains(world.player.position)) {
-      return true && !world.player.invisible;
+      return !world.player.invisible;
     }
     return false;
   }
@@ -184,5 +187,13 @@ public class Infiltrator extends Npc {
     Projectile projectile = new Projectile(getCenterX(), getCenterY(), projectileVelocity, this,
         Projectile.CollisionActions.randomAction(), world);
     world.queueEntityAdd(projectile);
-  } 
+  }
+
+  public float timer(World world, Vector2 systemPosition){
+    int start = LocalDateTime.now().getSecond();
+    attackNearbySystem(world);
+    int end = LocalDateTime.now().getSecond();
+    return (float) (end - start);
+  }
+
 }

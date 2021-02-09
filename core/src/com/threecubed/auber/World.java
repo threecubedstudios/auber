@@ -86,6 +86,8 @@ public class World {
   public static final float AUBER_RAY_TIME = 0.25f;
   /** The time a debuff should last for (with the exception of blindness). */
   public static final float AUBER_DEBUFF_TIME = 5f;
+  /** The time the speed boost power-up should last for */
+  public static final float AUBER_SPEED_BOOST_DURATION = 4f;
   /** The rate at which auber should heal. */
   public static final float AUBER_HEAL_RATE = 0.005f;
   public static final Color rayColorA = new Color(0.106f, 0.71f, 0.714f, 1f);

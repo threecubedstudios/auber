@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
+import com.threecubed.auber.entities.Player;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class GameUi {
   private static final Vector2 SYSTEM_WARNINGS_POSITION = new Vector2(1750f, 50f);
 
   private static final Vector2 MESSAGES_POSITION = new Vector2(Gdx.graphics.getWidth()/2, 50f);
+  //private static final Vector2 SPEED_BOOST_DURATION_POSITION = new Vector2(Gdx.graphics.getWidth()/2, 100f);
   private static final int MESSAGE_DURATION = 200;  //Measured in calls of update, not seconds.
 
   private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -65,6 +67,7 @@ public class GameUi {
     drawHealthWarnings(world, screenBatch);
     drawSystemWarnings(world, screenBatch);
     drawMessages(world, screenBatch);
+    //displaySpeedBoostDuration(world, screenBatch);
   }
 
   /**
@@ -235,7 +238,6 @@ public class GameUi {
     }
     screenBatch.end();
   }
-
 
   /**
    * Adds a given message to the list of messages to display, with the default duration.

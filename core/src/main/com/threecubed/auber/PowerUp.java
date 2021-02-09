@@ -16,11 +16,18 @@ import com.threecubed.auber.entities.Infiltrator;
 public class PowerUp extends GameEntity {
   /** Identifies the type of power up. */
   public enum Type {
-    IMMUNITY,
-    INVISIBILITY,
-    FIREWALL,
-    SPEED,
-    DETECT,
+    IMMUNITY(0),
+    INVISIBILITY(1),
+    FIREWALL(2),
+    SPEED(3),
+    DETECT(4);
+    private int value;
+    private Type(int value) {
+      this.value = value;
+    } 
+    public int getValue() {
+      return value; 
+    }
   }
 
   private Type powerType;
@@ -28,6 +35,7 @@ public class PowerUp extends GameEntity {
   private float timer;
   private boolean active;
   private boolean used;
+  private static String[] spriteNames = {"Immunity", "Invisible", "Firewalll", "Speed_Increase", "HighlightsInfiltrators"};
 
   /** 
    * Initialises power up.
@@ -38,7 +46,7 @@ public class PowerUp extends GameEntity {
    * @param powerType the type of power up it is.  
   */
   public PowerUp(final float x, final float y, final World world, final Type powerType) {
-    super(x, y, world.atlas.createSprite("projectile"));
+    super(x, y, world.atlas.createSprite(spriteNames[powerType.value]));
     this.powerType = powerType;
     duration = 10f;
     active = false;

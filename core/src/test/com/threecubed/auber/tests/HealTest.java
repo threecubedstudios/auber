@@ -22,7 +22,7 @@ public class HealTest {
 
   @Test
   public void validHeal() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.camera = new OrthographicCamera();
 
     Player p = new Player(0, 0, worldMock);
@@ -35,7 +35,7 @@ public class HealTest {
 
   @Test
   public void invalidHeal() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.camera = new OrthographicCamera();
 
     Player p = new Player(96f, 640f, worldMock);
@@ -48,7 +48,7 @@ public class HealTest {
 
   @Test
   public void fullHeal() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.camera = new OrthographicCamera();
 
     Player p = new Player(0, 0, worldMock);

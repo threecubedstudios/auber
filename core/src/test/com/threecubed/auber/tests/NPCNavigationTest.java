@@ -35,7 +35,7 @@ public class NPCNavigationTest {
   
   @Test
   public void stepTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     
     World.systems = new ArrayList<RectangleMapObject>();
@@ -54,7 +54,7 @@ public class NPCNavigationTest {
 
   @Test
   public void navigateToSystemTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     
     World.systems = new ArrayList<RectangleMapObject>();
@@ -67,7 +67,7 @@ public class NPCNavigationTest {
 
   @Test
   public void navigateToFleePointTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     
     float[] f = {560,640};
@@ -83,7 +83,7 @@ public class NPCNavigationTest {
 
   @Test
   public void moveToRandomLocationTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     
     worldMock.navigationMesh = new NavigationMesh((TiledMapTileLayer) World.map.getLayers().get("navigation_layer"));
@@ -97,7 +97,7 @@ public class NPCNavigationTest {
 
   @Test
   public void navigateToFurthestPointTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     
     worldMock.navigationMesh = new NavigationMesh((TiledMapTileLayer) World.map.getLayers().get("navigation_layer"));

@@ -38,7 +38,7 @@ public class HostileArrestTest {
 
   @Test
   public void validFlee() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.camera = new OrthographicCamera();
     worldMock.medbay = new RectangleMapObject();
     worldMock.navigationMesh = nav;
@@ -65,7 +65,7 @@ public class HostileArrestTest {
 
   @Test
   public void invalidFlee() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.camera = new OrthographicCamera();
     worldMock.medbay = new RectangleMapObject();
     worldMock.navigationMesh = nav;
@@ -92,7 +92,7 @@ public class HostileArrestTest {
 
   @Test
   public void validArrest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.camera = new OrthographicCamera();
     worldMock.medbay = new RectangleMapObject();
     worldMock.navigationMesh = nav;

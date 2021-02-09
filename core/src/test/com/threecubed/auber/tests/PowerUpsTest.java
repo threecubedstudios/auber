@@ -37,7 +37,7 @@ public class PowerUpsTest {
   
   @Test
   public void immunityTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.player = playerMock;
 
     PowerUp p = new PowerUp(0, 0, worldMock, Type.IMMUNITY);
@@ -49,7 +49,7 @@ public class PowerUpsTest {
 
   @Test
   public void invisibilityTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.sprite = worldMock.atlas.createSprite("player");
     worldMock.player = playerMock;
 
@@ -62,7 +62,7 @@ public class PowerUpsTest {
 
   @Test
   public void firewallTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.player = playerMock;
 
     PowerUp p = new PowerUp(0, 0, worldMock, Type.FIREWALL);
@@ -74,7 +74,7 @@ public class PowerUpsTest {
 
   @Test
   public void speedTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.speed = 0.4f;
     worldMock.player = playerMock;
 
@@ -87,7 +87,7 @@ public class PowerUpsTest {
 
   @Test
   public void detectTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     World.systems = new ArrayList<RectangleMapObject>();
     worldMock.player = playerMock;
@@ -106,7 +106,7 @@ public class PowerUpsTest {
 
   @Test
   public void updateCollisionTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.position = new Vector2(0,0);
     worldMock.navigationMesh = new NavigationMesh((TiledMapTileLayer) World.map.getLayers().get("navigation_layer"));
     worldMock.player = playerMock;

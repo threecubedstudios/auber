@@ -35,7 +35,7 @@ public class DamageTest {
     playerMock.health = 1f;
     playerMock.playerTimer = new Timer();
     playerMock.position = new Vector2(0,0);
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.sprite = worldMock.atlas.createSprite("player"); 
     worldMock.player = playerMock;
 
@@ -53,7 +53,7 @@ public class DamageTest {
     playerMock.health = 0f;
     playerMock.playerTimer = new Timer();
     playerMock.position = new Vector2(0,0);
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.sprite = worldMock.atlas.createSprite("player"); 
     worldMock.player = playerMock;
 

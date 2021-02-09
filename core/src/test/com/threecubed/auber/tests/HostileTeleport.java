@@ -29,7 +29,7 @@ public class HostileTeleport {
 
   @Test
   public void validHostileTeleport() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas"); 
+    worldMock.atlas = new TextureAtlas("auber_.atlas"); 
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
     World.systems = new ArrayList<RectangleMapObject>();
     Infiltrator i = new Infiltrator(0, 0, worldMock);

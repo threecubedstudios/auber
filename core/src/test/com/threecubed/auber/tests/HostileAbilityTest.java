@@ -35,7 +35,7 @@ public class HostileAbilityTest {
     playerMock.health = 1f;
     playerMock.playerTimer = new Timer();
     playerMock.position = new Vector2(0,0);
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.sprite = worldMock.atlas.createSprite("player"); 
     worldMock.player = playerMock;
     Difficulty.damageMultiplier = 1;
@@ -51,7 +51,7 @@ public class HostileAbilityTest {
     playerMock.health = 1f;
     playerMock.playerTimer = new Timer();
     playerMock.position = new Vector2(0,0);
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.sprite = worldMock.atlas.createSprite("player"); 
     worldMock.player = playerMock;
     Difficulty.damageMultiplier = 1;
@@ -67,7 +67,7 @@ public class HostileAbilityTest {
     playerMock.health = 1f;
     playerMock.playerTimer = new Timer();
     playerMock.position = new Vector2(0,0);
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.sprite = worldMock.atlas.createSprite("player"); 
     worldMock.player = playerMock;
     Difficulty.damageMultiplier = 1;

@@ -21,7 +21,7 @@ public class PlayerSpawnTest {
 
   @Test
   public void spawnTest(){
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     playerMock.position = new Vector2(64,64);
     worldMock.generatePlayer();
     worldMock.player = playerMock;

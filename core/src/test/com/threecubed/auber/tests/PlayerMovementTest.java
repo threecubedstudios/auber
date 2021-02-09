@@ -34,7 +34,7 @@ public class PlayerMovementTest {
 
   @Test
   public void playerLeftInputTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.medbay = new RectangleMapObject();
     worldMock.camera = new OrthographicCamera();
     Player p = new Player(64f, 64f, worldMock);
@@ -47,7 +47,7 @@ public class PlayerMovementTest {
 
   @Test
   public void playerRightInputTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.medbay = new RectangleMapObject();
     worldMock.camera = new OrthographicCamera();
     Player p = new Player(64f, 64f, worldMock);
@@ -60,7 +60,7 @@ public class PlayerMovementTest {
 
   @Test
   public void playerUpInputTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.medbay = new RectangleMapObject();
     worldMock.camera = new OrthographicCamera();
     Player p = new Player(64f, 64f, worldMock);
@@ -73,7 +73,7 @@ public class PlayerMovementTest {
 
   @Test
   public void playerDownInputTest() throws Exception {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     worldMock.medbay = new RectangleMapObject();
     worldMock.camera = new OrthographicCamera();
     Player p = new Player(64f, 64f, worldMock);

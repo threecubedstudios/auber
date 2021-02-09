@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(GdxTestRunner.class)
 public class AssetsTest {
 
-  static final String[] assets = { "auber.atlas", "auber-0.png","auber-1.png",  "map.tmx",
+  static final String[] assets = { "auber_.atlas", "auber-0.png","auber-1.png",  "map.tmx",
           "packer.tpproj", "tileset.png", "tileset.tsx"}; // put all assets' paths which need to be tested
 
   @Test

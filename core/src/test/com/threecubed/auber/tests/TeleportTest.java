@@ -24,7 +24,7 @@ public class TeleportTest {
 
   @Test
   public void medbayTeleportTest() {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Player p = new Player(0,0,worldMock);
     float[] medbayCoords = {96f, 640f};
     World.MEDBAY_COORDINATES = medbayCoords;
@@ -36,7 +36,7 @@ public class TeleportTest {
 
   @Test
   public void generalTeleportTest() {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Player p = new Player(96f, 640f,worldMock);
 
     p.sprite.setPosition(p.position.x, p.position.y);
@@ -53,7 +53,7 @@ public class TeleportTest {
 
   @Test
   public void invalidTeleportTest() {
-    worldMock.atlas = new TextureAtlas("auber.atlas");
+    worldMock.atlas = new TextureAtlas("auber_.atlas");
     Player p = new Player(0f, 0f,worldMock);
 
     p.sprite.setPosition(p.position.x, p.position.y);

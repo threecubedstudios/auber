@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.GdxTestRunner;
@@ -88,6 +89,7 @@ public class PowerUpsTest {
   public void detectTest() throws Exception {
     worldMock.atlas = new TextureAtlas("auber.atlas");
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
+    World.systems = new ArrayList<RectangleMapObject>();
     worldMock.player = playerMock;
 
     Infiltrator i = new Infiltrator(0, 0, worldMock);

@@ -15,26 +15,26 @@ public class DifficultyTest {
   public void EasyTest() throws Exception {
     Difficulty.load(Mode.EASY);
     assertEquals(Mode.EASY, Difficulty.difficultyMode);
-    assertEquals("", 0.5f, Difficulty.damageMultiplier, 0f);    
-    assertEquals("", 0.5f, Difficulty.sabotageMultiplier, 0f);
-    assertEquals("", 0.5f, Difficulty.speedMultiplier, 0f);
+    assertEquals(0.5f, Difficulty.damageMultiplier, 0f);    
+    assertEquals(0.5f, Difficulty.sabotageMultiplier, 0f);
+    assertEquals(0.5f, Difficulty.speedMultiplier, 0f);
   }
 
   @Test
   public void MediumTest() throws Exception {
     Difficulty.load(Mode.MEDIUM);
     assertEquals(Mode.MEDIUM, Difficulty.difficultyMode);
-    assertEquals("", 1f, Difficulty.damageMultiplier, 0f);    
-    assertEquals("", 1f, Difficulty.sabotageMultiplier, 0f);
-    assertEquals("", 1f, Difficulty.speedMultiplier, 0f);
+    assertEquals(1f, Difficulty.damageMultiplier, 0f);    
+    assertEquals(1f, Difficulty.sabotageMultiplier, 0f);
+    assertEquals(1f, Difficulty.speedMultiplier, 0f);
   }
 
   @Test
   public void HardTest() throws Exception {
     Difficulty.load(Mode.HARD);
     assertEquals(Mode.HARD, Difficulty.difficultyMode);
-    assertEquals("", 2f, Difficulty.damageMultiplier, 0f);    
-    assertEquals("", 2f, Difficulty.sabotageMultiplier, 0f);
-    assertEquals("", 2f, Difficulty.speedMultiplier, 0f);
+    assertEquals(2f, Difficulty.damageMultiplier, 0f);    
+    assertEquals(2f, Difficulty.sabotageMultiplier, 0f);
+    assertEquals(2f, Difficulty.speedMultiplier, 0f);
   }
 }

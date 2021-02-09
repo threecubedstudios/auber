@@ -114,7 +114,7 @@ public class Infiltrator extends Npc {
           World.BRIG_BOUNDS[0][0], World.BRIG_BOUNDS[1][0]);
       position.y = Utils.randomFloatInRange(world.randomNumberGenerator,
           World.BRIG_BOUNDS[0][1], World.BRIG_BOUNDS[1][1]);
-      aiEnabled = false;  
+      aiEnabled = false;    
       arrested = true;
     }
   }

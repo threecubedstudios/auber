@@ -4,9 +4,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.threecubed.auber.GdxTestRunner;
 import com.threecubed.auber.World;
 import com.threecubed.auber.entities.Infiltrator;
@@ -29,6 +31,7 @@ public class HostileTeleport {
   public void validHostileTeleport() throws Exception {
     worldMock.atlas = new TextureAtlas("auber.atlas"); 
     Whitebox.setInternalState(worldMock, "randomNumberGenerator", new Random());
+    World.systems = new ArrayList<RectangleMapObject>();
     Infiltrator i = new Infiltrator(0, 0, worldMock);
     i.exposed = true;
 

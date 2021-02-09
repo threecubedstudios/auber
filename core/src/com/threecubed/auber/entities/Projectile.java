@@ -38,6 +38,7 @@ public class Projectile extends GameEntity {
     collisionAction = action;
     this.originEntity = originEntity;
     this.velocity = velocity;
+    setEntityType(4);
   }
 
   /**

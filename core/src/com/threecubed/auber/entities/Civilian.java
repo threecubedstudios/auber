@@ -22,13 +22,17 @@ public class Civilian extends Npc {
    * @param y The y coordinate of the civilian
    * @param world The game world
    * */
+
+
   public Civilian(float x, float y, World world) {
     super(x, y, world);
+    setEntityType(1);
     navigateToRandomSystem(world);
   }
 
   public Civilian(World world) {
     super(world);
+    setEntityType(1);
     navigateToRandomSystem(world);
   }
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.threecubed.auber.AuberGame;
 import com.threecubed.auber.World;
+import com.threecubed.auber.save.Save;
 import com.threecubed.auber.ui.Button;
 
 
@@ -28,6 +29,7 @@ public class MenuScreen extends ScreenAdapter {
 
   Button playButton;
   Button demoButton;
+  Button loadButton;
   OrthogonalTiledMapRenderer renderer;
   Sprite background;
   Sprite instructions;
@@ -52,7 +54,7 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onPlayClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, false));
+        game.setScreen(new GameScreen(game, false, false));
       }
     };
 
@@ -63,13 +65,25 @@ public class MenuScreen extends ScreenAdapter {
     Runnable onDemoClick = new Runnable() {
       @Override
       public void run() {
-        game.setScreen(new GameScreen(game, true));
+        game.setScreen(new GameScreen(game, true, false));
       }
     };
 
     demoButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
+
+    Runnable onLoadClick = new Runnable() {
+      @Override
+      public void run() {
+        game.setScreen(new GameScreen(game, false, true));
+      }
+    };
+
+    loadButton = new Button(
+        new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 300f),
+        1f, game.atlas.createSprite("demoButton"), game, onLoadClick);
+
   }
 
   @Override
@@ -79,7 +93,7 @@ public class MenuScreen extends ScreenAdapter {
       Gdx.graphics.setFullscreenMode(currentDisplayMode);
     }
     if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-      game.setScreen(new GameScreen(game, true));
+      game.setScreen(new GameScreen(game, true, false));
     }
 
     // Set the background color
@@ -100,6 +114,7 @@ public class MenuScreen extends ScreenAdapter {
 
     playButton.render(spriteBatch);
     demoButton.render(spriteBatch);
+    loadButton.render(spriteBatch);
 
     spriteBatch.end();
   }

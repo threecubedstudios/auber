@@ -41,6 +41,7 @@ public class PowerUp extends GameEntity{
         this.used = false;
         //Every power up has a random type
         this.type = PowerUpType.values()[world.randomNumberGenerator.nextInt(PowerUpType.values().length)];
+        setEntityType(5);
     }
 
 
@@ -52,6 +53,7 @@ public class PowerUp extends GameEntity{
     public PowerUp(World world){
         this(0, 0, world);
         moveToRandomLocation(world);
+        setEntityType(5);
     }
 
     /**

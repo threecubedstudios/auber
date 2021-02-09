@@ -12,9 +12,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.JsonValue;
 import com.threecubed.auber.entities.GameEntity;
 import com.threecubed.auber.entities.Player;
 import com.threecubed.auber.pathfinding.NavigationMesh;
+import com.threecubed.auber.save.Save;
 import com.threecubed.auber.screens.GameOverScreen;
 import com.threecubed.auber.screens.GameScreen;
 import com.threecubed.auber.ui.GameUi;
@@ -40,6 +42,7 @@ public class World {
   public int infiltratorCount;
 
   public boolean demoMode = false;
+  public boolean ifLoad = false;
 
   /** Number of infiltrators added, including defeated ones. */
   public int infiltratorsAddedCount = 0;
@@ -256,15 +259,26 @@ public class World {
    * @param game The game object
    * @param demoMode Whether to run the game in demo mode
    * */
-  public World(AuberGame game, boolean demoMode) {
+  public World(AuberGame game, boolean demoMode, boolean ifLoad) {
     this(game);
     this.demoMode = demoMode;
+    this.ifLoad = ifLoad;
     if (demoMode) {
       camera.setToOrtho(false, 1920, 1080);
       TiledMapTileLayer layer = ((TiledMapTileLayer) map.getLayers().get(2));
       player.position.x = (layer.getWidth() * layer.getTileWidth()) / 2;
       player.position.y = (layer.getHeight() * layer.getTileHeight()) / 2;
       player.sprite.setColor(1f, 1f, 1f, 0f);
+    }
+    if (ifLoad){
+      Save save = new Save();
+      JsonValue savedValues = save.LoadJson();
+      for (int i = 0; i < savedValues.get("entityPositionX").size; i++){
+        if(savedValues.get("entityType").asFloatArray()[i] == 3){
+          player.position.x = savedValues.get("entityPositionX").asFloatArray()[i];
+          player.position.y = savedValues.get("entityPositionY").asFloatArray()[i];
+        }
+      }
     }
   }
 
@@ -438,10 +452,11 @@ public class World {
       if (!demoMode) {
         game.setScreen(new GameOverScreen(game, false));
       } else {
-        game.setScreen(new GameScreen(game, true));
+        game.setScreen(new GameScreen(game, true, false));
       }
     } else if (infiltratorCount <= 0) {
       game.setScreen(new GameOverScreen(game, true));
     }
   }
+
 }

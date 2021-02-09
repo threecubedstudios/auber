@@ -39,14 +39,14 @@ public class GameScreen extends ScreenAdapter {
    * @param game The game object
    * @param demoMode Whether the game should run in demo mode
    * */
-  public GameScreen(AuberGame game, boolean demoMode, boolean ifLoad) {
+  public GameScreen(AuberGame game, boolean demoMode, boolean load) {
     this.game = game;
     ui = new GameUi(game);
 
-    world = new World(game, demoMode, ifLoad);
+    world = new World(game, demoMode, load);
     world.ui = ui;
 
-    if(!ifLoad){
+    if(!load){
       for (int i = 0; i < World.MAX_INFILTRATORS_IN_GAME; i++) {
         world.queueEntityAdd(new Infiltrator(world));
         world.infiltratorsAddedCount++;
@@ -60,7 +60,7 @@ public class GameScreen extends ScreenAdapter {
       }
     }else{
       Save save = new Save();
-      JsonValue savedValues = save.LoadJson();
+      JsonValue savedValues = save.loadJson();
       for (int i = 0; i < savedValues.get("entityPositionX").size; i++) {
         //1=Civilian, 2=Infiltrator, 3=Player, 4=Projectile, 5=PowerUp
         //Will print the values saved

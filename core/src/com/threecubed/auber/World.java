@@ -272,7 +272,7 @@ public class World {
     }
     if (ifLoad){
       Save save = new Save();
-      JsonValue savedValues = save.LoadJson();
+      JsonValue savedValues = save.loadJson();
       for (int i = 0; i < savedValues.get("entityPositionX").size; i++){
         if(savedValues.get("entityType").asFloatArray()[i] == 3){
           player.position.x = savedValues.get("entityPositionX").asFloatArray()[i];

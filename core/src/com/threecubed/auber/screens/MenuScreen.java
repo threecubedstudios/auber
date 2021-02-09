@@ -26,6 +26,10 @@ public class MenuScreen extends ScreenAdapter {
   World world;
   AuberGame game;
 
+  Difficulty mode;
+  Button hardButton;
+  Button mediumButton;
+  Button easyButton;
   Button playButton;
   Button demoButton;
   OrthogonalTiledMapRenderer renderer;
@@ -70,6 +74,39 @@ public class MenuScreen extends ScreenAdapter {
     demoButton = new Button(
         new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2 - 150f),
         1f, game.atlas.createSprite("demoButton"), game, onDemoClick);
+
+    Runnable onEasyClick = new Runnable() {
+      @Override
+      public void run() {
+        mode = Difficulty.EASY;
+      }
+    };
+
+    easyButton = new Button(
+            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+            1f, game.atlas.createSprite("easyButton"), game, onEasyClick);
+
+    Runnable onMediumClick = new Runnable() {
+      @Override
+      public void run() {
+        mode = Difficulty.MEDIUM;
+      }
+    };
+
+    mediumButton = new Button(
+            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+            1f, game.atlas.createSprite("mediumButton"), game, onMediumClick);
+
+    Runnable onHardClick = new Runnable() {
+      @Override
+      public void run() {
+        mode = Difficulty.HARD;
+      }
+    };
+
+    hardButton = new Button(
+            new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 2),
+            1f, game.atlas.createSprite("hardButton"), game, onHardClick);
   }
   
     public enum Difficulty {

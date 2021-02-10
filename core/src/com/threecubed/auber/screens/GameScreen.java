@@ -42,7 +42,7 @@ public class GameScreen extends ScreenAdapter {
   public GameScreen(AuberGame game, boolean demoMode, boolean load) {
     this.game = game;
     ui = new GameUi(game);
-
+    ui.queueMessage(MenuScreen.difficulty.toString());
     world = new World(game, demoMode, load);
     world.ui = ui;
 

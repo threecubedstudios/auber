@@ -134,7 +134,6 @@ public class MenuScreen extends ScreenAdapter {
     private final int NPC_COUNT;
     private final float SYSTEM_BREAK_TIME;
 
-
     Difficulty(int POWER_UP_COUNT, int MAX_INFILTRATORS, int NPC_COUNT, float SYSTEM_BREAK_TIME ){
       this.POWER_UP_COUNT = POWER_UP_COUNT;
       this.MAX_INFILTRATORS = MAX_INFILTRATORS;
@@ -161,6 +160,15 @@ public class MenuScreen extends ScreenAdapter {
     }
   }
 
+  public static void setDifficulty(String s){
+    if(s == "EASY"){
+      difficulty = Difficulty.EASY;
+    }else if (s == "MEDIUM"){
+      difficulty = Difficulty.MEDIUM;
+    }else{
+      difficulty = difficulty.HARD;
+    }
+  }
 
   @Override
   public void render(float deltaTime) {

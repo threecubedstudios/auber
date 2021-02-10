@@ -61,6 +61,7 @@ public class GameScreen extends ScreenAdapter {
     }else{
       Save save = new Save();
       JsonValue savedValues = save.loadJson();
+      MenuScreen.setDifficulty(savedValues.get("difficulty").toString());
       for (int i = 0; i < savedValues.get("entityPositionX").size; i++) {
         //1=Civilian, 2=Infiltrator, 3=Player, 4=Projectile, 5=PowerUp
         //Will print the values saved

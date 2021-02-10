@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.threecubed.auber.World;
 import com.threecubed.auber.entities.GameEntity;
 import com.badlogic.gdx.utils.Json;
+import com.threecubed.auber.screens.MenuScreen;
 
 import java.util.*;
 
@@ -18,6 +19,7 @@ public class Save {
     public List<Float> entityPositionX = new ArrayList<Float>();
     public List<Float> entityPositionY = new ArrayList<Float>();
     public List<Integer> entityType = new ArrayList<Integer>();
+    public MenuScreen.Difficulty difficulty;
 
 
 
@@ -28,6 +30,7 @@ public class Save {
             save.entityPositionY.add(entity.getCenterY());
             save.entityType.add(entity.entityType);
         }
+        save.difficulty = MenuScreen.difficulty;
         return save;
     }
 
